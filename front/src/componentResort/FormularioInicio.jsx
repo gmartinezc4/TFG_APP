@@ -32,7 +32,7 @@ function FormularioInicio() {
           </button>
         </div>
         {registrarse && <Registrarse />}
-      </div>
+      </div>h
     </div>
   );
 }
