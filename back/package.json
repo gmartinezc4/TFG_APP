@@ -1,0 +1,21 @@
+{
+  "name": "app_tfg_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./src/app.ts",
+    "dev": "nodemon --config nodemon.json src/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.11.1",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "graphql": "^16.6.0",
+    "mongodb": "^4.12.1",
+    "nodemon": "^2.0.20"
+  }
+}
