@@ -1,8 +1,32 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../context/Context";
+import Modal from "react-modal";
+import RegistrarseModal from "./RegistrarseModal";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    border: "2px",
+    borderColor: "black",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 
 function PaginaInicio() {
   const {registrarseModalHandler, changeRegistrarseModal} = useContext(Context);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   return (
     <div>
@@ -23,12 +47,16 @@ function PaginaInicio() {
           {/* <p className="ml-2">o <a className="text-red-600" href="<Registrarse/>">registrese</a></p>  */}
           <button
             className="ml-2 text-red-600"
-            onClick={() => {changeRegistrarseModal(true)}}
+            onClick={() => {openModal()}}
           >
             registrese
           </button>
         </div>    
       </div>
+      {modalIsOpen && console.log("hola")}
+
+      {modalIsOpen && <RegistrarseModal closeModal={closeModal} modalIsOpen={modalIsOpen} />}
+
     </div>
   );
 }
