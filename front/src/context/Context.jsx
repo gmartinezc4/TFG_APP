@@ -10,7 +10,8 @@ export function ContextProvider(props) {
   const [viewResort, setViewResort] = useState(false);
   const [viewPortal, setViewPortal] = useState(true);
   const [viewWebMaderas, setViewWebMaderas] = useState(false);
-  const [registrarse, setRegistrarse] = useState(false);
+
+  const [registrarseModalHandler, setRegistrarseModal] = useState(false);
 
   function changeViewMaderas(setView) {
     setViewMaderas(setView);
@@ -40,8 +41,10 @@ export function ContextProvider(props) {
     setViewWebMaderas(setView);
   }
 
-  function changeRegistrarse(setView){
-    setRegistrarse(setView);
+
+
+  function changeRegistrarseModal(setView){
+    setRegistrarseModal(setView);
   }
 
   return (
@@ -54,7 +57,9 @@ export function ContextProvider(props) {
         viewResort,
         viewPortal,
         viewWebMaderas,
-        registrarse,
+
+        registrarseModalHandler,
+
         changeViewMaderas,
         changeViewInicio,
         changeViewContacto,
@@ -62,7 +67,8 @@ export function ContextProvider(props) {
         changeViewResort,
         changeViewPortal,
         changeViewWebMaderas,
-        changeRegistrarse,
+
+        changeRegistrarseModal,
       }}
     >
       {props.children}

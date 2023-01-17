@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
-import Registrarse from "./Registrarse";
 import { Context } from "../context/Context";
 
-function FormularioInicio() {
-  const { registrarse, changeRegistrarse } = useContext(Context);
+function PaginaInicio() {
+  const {registrarseModalHandler, changeRegistrarseModal} = useContext(Context);
 
   return (
     <div>
@@ -14,29 +13,26 @@ function FormularioInicio() {
           <input placeholder="Email..." className="rounded  mb-4"></input>
           <label className="font-medium mb-1">Contraseña:</label>
           <input placeholder="Password..." className="rounded mb-4"></input>
-          <label className="font-medium mb-1">Repetir contraseña:</label>
-          <input placeholder="Password..." className="rounded mb-4"></input>
         </form>
         <div className="flex flex-row">
           <button className="bg-slate-300 border-2 rounded ml-4">
-            Iniciar Sesión{" "}
+            Iniciar Sesión
           </button>
           <p className="ml-2">o</p>
 
           {/* <p className="ml-2">o <a className="text-red-600" href="<Registrarse/>">registrese</a></p>  */}
           <button
             className="ml-2 text-red-600"
-            onClick={() => changeRegistrarse(true)}
+            onClick={() => {changeRegistrarseModal(true)}}
           >
             registrese
           </button>
-        </div>
-        {registrarse && <Registrarse />}
+        </div>    
       </div>
     </div>
   );
 }
 
-export default FormularioInicio;
+export default PaginaInicio;
 
 
