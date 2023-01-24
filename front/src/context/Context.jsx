@@ -3,15 +3,11 @@ import React, { createContext, useState } from "react";
 export const Context = createContext(); //contexto
 
 export function ContextProvider(props) {
-  const [viewInicio, setViewInicio] = useState(false);
+  const [viewInicio, setViewInicio] = useState(true);
   const [viewMaderas, setViewMaderas] = useState(false);
   const [viewContacto, setViewContacto] = useState(false);
   const [viewOrigen, setViewOrigen] = useState(false);
-  const [viewResort, setViewResort] = useState(false);
-  const [viewPortal, setViewPortal] = useState(true);
-  const [viewWebMaderas, setViewWebMaderas] = useState(false);
 
-  const [userAutorizado, setUserAutorizado] = useState(false)
 
   function changeViewMaderas(setView) {
     setViewMaderas(setView);
@@ -28,43 +24,19 @@ export function ContextProvider(props) {
   function changeViewOrigen(setView) {
     setViewOrigen(setView);
   }
-  
-  function changeViewResort(setView) {
-    setViewResort(setView);
-  }
-
-  function changeViewPortal(setView) {
-    setViewPortal(setView);
-  }
-
-  function changeViewWebMaderas(setView){
-    setViewWebMaderas(setView);
-  }
-
-  function changeUserAutorizado(setView){
-    setUserAutorizado(setView);
-  }
 
   return (
     <Context.Provider
       value={{
-        viewMaderas,
         viewInicio,
         viewContacto,
         viewOrigen,
-        viewResort,
-        viewPortal,
-        viewWebMaderas,
-        userAutorizado,
+        viewMaderas,
 
-        changeViewMaderas,
         changeViewInicio,
         changeViewContacto,
         changeViewOrigen,
-        changeViewResort,
-        changeViewPortal,
-        changeViewWebMaderas,
-        changeUserAutorizado,
+        changeViewMaderas
       }}
     >
       {props.children}

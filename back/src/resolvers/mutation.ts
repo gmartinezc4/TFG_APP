@@ -25,44 +25,24 @@ export const Mutation = {
         };
     },
 
-    RegistrarUser: async(parent: any, args: {nombre: string, apellido: string, correo: string, password: string}, context: {db: Db}) => {
-        const db = context.db;
-        const {nombre, apellido, correo, password} = args;
-        console.log(nombre)
-        console.log(apellido)
-        console.log(correo)
-        console.log(password)
-        if(nombre == "" || apellido == "" || correo == "" || password == ""){
-            return new ApolloError("Faltan campos por completar");
-        }
+    // RegistrarUser: async(parent: any, args: {nombre: string, apellido: string, correo: string, password: string}, context: {db: Db}) => {
+    //     const db = context.db;
+    //     const {nombre, apellido, correo, password} = args;
+    //     console.log(nombre)
+    //     console.log(apellido)
+    //     console.log(correo)
+    //     console.log(password)
+    //     if(nombre == "" || apellido == "" || correo == "" || password == ""){
+    //         return new ApolloError("Faltan campos por completar");
+    //     }
         
-        const user = await db.collection("Usuarios").findOne({Email: correo});
-        console.log(user);
-        if(!user){
-            await db.collection("Usuarios").insertOne({Nombre: nombre, Apellido: apellido, Email: correo, Password: password});
-            return {nombre, apellido, correo, password}
-        }else{
-            return new ApolloError("El correo ya esta registrado");
-        }     
-    },
-
-    AnadirHabitacion: async(parent: any, args: {nombre: string, descripcion: string, capacidad: string, foto: string, precio: string}, context: {db: Db}) => {
-        const db = context.db;
-        const {nombre, descripcion, capacidad, foto, precio} = args;
-
-        if(nombre == "" || descripcion == "" || capacidad == "" || foto == "" || precio == ""){
-            return new ApolloError("Faltan campos por completar");
-        }
-
-        await db.collection("Habitaciones").insertOne({Nombre: nombre, Descripcion: descripcion, Capacidad: capacidad, Foto: foto, Precio: precio, Reservas: []})
-
-        return {
-            nombre,
-            descripcion,
-            capacidad,
-            foto,
-            precio,
-            Reservas: []
-        }
-    }
+    //     const user = await db.collection("Usuarios").findOne({Email: correo});
+    //     console.log(user);
+    //     if(!user){
+    //         await db.collection("Usuarios").insertOne({Nombre: nombre, Apellido: apellido, Email: correo, Password: password});
+    //         return {nombre, apellido, correo, password}
+    //     }else{
+    //         return new ApolloError("El correo ya esta registrado");
+    //     }     
+    // },
 }

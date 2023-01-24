@@ -13,17 +13,14 @@ function ContenedorMaderas() {
   });
 
   const {
-    changeViewWebMaderas,
-    changeViewMaderas,
     viewMaderas,
+    changeViewMaderas,
     viewInicio,
     changeViewInicio,
     viewContacto,
     changeViewContacto,
     viewOrigen,
     changeViewOrigen,
-    changeViewResort,
-    changeViewPortal,
   } = useContext(Context);
 
   return (
@@ -105,64 +102,33 @@ function ContenedorMaderas() {
               Contacto
             </button>
 
-            <button
-              onClick={() => {
-                changeViewResort(true),
-                  changeViewWebMaderas(false),
-                  changeViewInicio(false),
-                  changeViewContacto(false),
-                  changeViewMaderas(false),
-                  changeViewOrigen(false);
-              }}
-              className="rounded m-3 p-1"
-            >
-              Nuestro Eco Resort
-            </button>
-
-            <button
-              onClick={() => {
-                changeViewPortal(true),
-                  changeViewResort(false),
-                  changeViewInicio(false),
-                  changeViewContacto(false),
-                  changeViewMaderas(false),
-                  changeViewWebMaderas(false);
-              }}
-              className="rounded m-3 p-1"
-            >
-              Portal
-            </button>
           </div>
         </div>
 
-        {viewInicio ? (
+        {viewInicio && (
           <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
             Conocenos
           </h1>
-        ) : (
-          ""
         )}
-        {viewMaderas ? (
+
+        {viewMaderas && (
           <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
             Productos
           </h1>
-        ) : (
-          ""
         )}
-        {viewContacto ? (
+
+        {viewContacto && (
           <h1 className="flex justify-center font-serif text-white font-blond text-7xl mt-8 ml-5">
             Contacto
           </h1>
-        ) : (
-          ""
         )}
-        {viewOrigen ? (
+
+        {viewOrigen && (
           <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
             Origen
           </h1>
-        ) : (
-          ""
         )}
+
       </div>
 
       <Inicio />
