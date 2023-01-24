@@ -1,8 +1,14 @@
 import React, { useContext } from "react";
 import { Context } from "../context/Context";
 import Resort from "./Resort";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
 function ContenedorResort() {
+  const client = new ApolloClient({
+    uri: "http://localhost:4000/",
+    cache: new InMemoryCache(),
+  });
+
   const {
     viewResort,
     changeViewResort,
@@ -13,15 +19,14 @@ function ContenedorResort() {
   } = useContext(Context);
 
   return (
-    <div>
-      <div className="bg-white p-5 h-24">
+    <ApolloProvider client={client}>
+      {/* cabecera  */}
+      <div className="bg-white h-20">
         <div className="flex justify-between text-black font-bold  ">
-          <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"></div>
+          <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-8  "></div>
 
-          <div className="p-5">
+          <div className="p-4">
             <button className="mr-14 ">Inicio</button>
-            <button className="mr-14 ">Habitaciones</button>
-            <button className="mr-14 ">Detalles del Hotel</button>
             <button
               onClick={() => {
                 changeViewResort(false),
@@ -32,22 +37,20 @@ function ContenedorResort() {
             >
               Venta de Madera
             </button>
-            <button
+            <button className="mr-14 "
               onClick={() => {
                 changeViewPortal(true), changeViewResort(false);
               }}
-              className="mr-14 "
             >
               Portal
             </button>
           </div>
-
         </div>
       </div>
 
       <Resort />
 
-    </div>
+    </ApolloProvider>
   );
 }
 
