@@ -2,7 +2,7 @@ import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 
 export const Mutation = {
-    DarAltaMadera: async (parent: any, args: {img: String, name: String, description: String}, context: { db: Db }) => {
+    darAltaMadera: async (parent: any, args: {img: String, name: String, description: String}, context: { db: Db }) => {
         const db = context.db;
         const {img, name, description} = args;
 
@@ -10,7 +10,7 @@ export const Mutation = {
         return { img, name, description}
     },
 
-    BorrarMadera: async(parent: any, args: {id: string}, context: {db: Db}) => {
+    borrarMadera: async(parent: any, args: {id: string}, context: {db: Db}) => {
         const db = context.db;
         const id = args;
 
@@ -24,6 +24,70 @@ export const Mutation = {
             ...madera
         };
     },
+
+    addProducto: async(parent: any, args: {img: string, name: string, stock: string, precio: string}, context: {db: Db}) => {
+        const db = context.db;
+        const {img, name, stock, precio} = args;
+
+        await db.collection("Productos_Venta").insertOne({img, name, stock, precio})
+        return {
+            img,
+            name,
+            stock,
+            precio
+        }
+    },
+
+    venderProducto: async(parent: any, args: {id: string, cantidad: string}, context: {db: Db}) => {
+        const db = context.db;
+        const {id, cantidad} = args;
+        let newStock: number;
+        let importe: number;
+        let importe_freeIVA : number;
+        
+        const productoVendido = await db.collection("Productos_Venta").findOne({_id: new ObjectId(id)})
+
+        if(productoVendido){
+            newStock = parseInt(productoVendido.stock) - parseInt(cantidad);
+            importe = parseInt(cantidad) * parseInt(productoVendido.precio);
+            importe_freeIVA = importe / 1.21;
+
+            if(newStock >= 0){
+                await db.collection("Productos_Venta").updateOne({_id: new ObjectId(id)}, { $set: { stock: newStock.toString() } })
+                await db.collection("Historial_Pedidos").insertOne({id_product: id, name: productoVendido.name, cantidad: cantidad, importe: importe.toString(), importe_freeIVA: importe_freeIVA.toString()});
+                await db.collection("Pedidos_Activos").insertOne({id_product: id, name: productoVendido.name, cantidad: cantidad, importe: importe.toString(), importe_freeIVA: importe_freeIVA.toString()});
+            }else{
+                throw new ApolloError("Cantidad superior a Stock")
+            }
+        }else{
+            throw new ApolloError("El producto no existe", "404");
+        }
+        console.log(newStock)
+        return {
+            ...productoVendido,
+            stock: newStock.toString(),      
+        }
+    },
+
+    addStockProducto: async(parent: any, args: {_id: string, cantidad: string}, context: {db: Db}) => {
+        const db = context.db;
+        const {_id, cantidad} = args;
+        let newStock: number;
+
+        const producto = await db.collection("Productos_Venta").findOne({_id: new ObjectId(_id)})
+
+        if(producto){
+            newStock = parseInt(producto.stock) + parseInt(cantidad);
+            await db.collection("Productos_Venta").updateOne({_id: new ObjectId(_id)}, { $set: { stock: newStock.toString() } })
+        }else{
+            throw new ApolloError("Ese producto no existe");
+        }
+
+        return {
+            ...producto,
+            stock: newStock.toString()
+        }
+    }
 
     // RegistrarUser: async(parent: any, args: {nombre: string, apellido: string, correo: string, password: string}, context: {db: Db}) => {
     //     const db = context.db;

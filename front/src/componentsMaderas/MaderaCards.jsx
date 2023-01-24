@@ -1,6 +1,6 @@
 import React from "react";
-import { ApolloClient, useQuery, gql } from "@apollo/client";
-import dataMaderaCards from '../data/MaderaCardsData'
+import { useQuery, gql } from "@apollo/client";
+import dataMaderaCards from "../data/MaderaCardsData";
 
 const GET_MADERAS = gql`
   query Query {

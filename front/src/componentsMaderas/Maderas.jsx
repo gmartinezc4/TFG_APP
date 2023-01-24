@@ -8,9 +8,7 @@ function Maderas() {
   if (viewMaderas == true) {
     return (
       <div>
-        <div>
-          <MaderaCards />
-        </div>
+        <MaderaCards />
       </div>
     );
   }

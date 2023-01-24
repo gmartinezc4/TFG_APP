@@ -5,7 +5,7 @@ export const Query = {
     getMaderas: async (parent: any, args: any, context: { db: Db }) => {
         const db = context.db;
 
-        const maderas = await context.db.collection("Tipos_Madera").find().toArray();
+        const maderas = await db.collection("Tipos_Madera").find().toArray();
 
         if (maderas) {
             return maderas;
@@ -13,6 +13,18 @@ export const Query = {
             throw new ApolloError("No hay maderas", "403");
         }
     },
+    
+    getProductos: async (parent: any, args: any, context: { db: Db }) => {
+        const db = context.db;
+
+        const productos = await db.collection("Productos_Venta").find().toArray();
+
+        if(productos){
+            return productos;
+        }else{
+            throw new ApolloError("no hay productos", "403");
+        }
+    }
 
     // logIn: async (parent: any, args: { correo: String, password: String }, context: { db: Db }) => {
     //     const db = context.db;

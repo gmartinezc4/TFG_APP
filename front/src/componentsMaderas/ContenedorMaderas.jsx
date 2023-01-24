@@ -5,6 +5,7 @@ import { Context } from "../context/Context";
 import Contacto from "./Contacto";
 import Origen from "./Origen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import ShoppingCart from "./ShoppingCart";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -21,6 +22,8 @@ function ContenedorMaderas() {
     changeViewContacto,
     viewOrigen,
     changeViewOrigen,
+    viewShoppingCart,
+    changeViewShoppingCart,
   } = useContext(Context);
 
   return (
@@ -30,9 +33,10 @@ function ContenedorMaderas() {
           <button
             onClick={() => {
               changeViewInicio(true),
+                changeViewOrigen(false),
                 changeViewMaderas(false),
                 changeViewContacto(false),
-                changeViewOrigen(false);
+                changeViewShoppingCart(false);
             }}
             className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"
           ></button>
@@ -41,9 +45,10 @@ function ContenedorMaderas() {
             <button
               onClick={() => {
                 changeViewInicio(true),
+                  changeViewOrigen(false),
                   changeViewMaderas(false),
                   changeViewContacto(false),
-                  changeViewOrigen(false);
+                  changeViewShoppingCart(false);
               }}
               className={
                 viewInicio
@@ -57,9 +62,10 @@ function ContenedorMaderas() {
             <button
               onClick={() => {
                 changeViewOrigen(true),
-                  changeViewMaderas(false),
                   changeViewInicio(false),
-                  changeViewContacto(false);
+                  changeViewMaderas(false),
+                  changeViewContacto(false),
+                  changeViewShoppingCart(false);
               }}
               className={
                 viewOrigen
@@ -74,8 +80,9 @@ function ContenedorMaderas() {
               onClick={() => {
                 changeViewMaderas(true),
                   changeViewInicio(false),
+                  changeViewOrigen(false),
                   changeViewContacto(false),
-                  changeViewOrigen(false);
+                  changeViewShoppingCart(false);
               }}
               className={
                 viewMaderas
@@ -90,8 +97,9 @@ function ContenedorMaderas() {
               onClick={() => {
                 changeViewContacto(true),
                   changeViewInicio(false),
+                  changeViewOrigen(false),
                   changeViewMaderas(false),
-                  changeViewOrigen(false);
+                  changeViewShoppingCart(false);
               }}
               className={
                 viewContacto
@@ -102,6 +110,22 @@ function ContenedorMaderas() {
               Contacto
             </button>
 
+            <button
+              onClick={() => {
+                changeViewShoppingCart(true),
+                  changeViewInicio(false),
+                  changeViewOrigen(false),
+                  changeViewMaderas(false),
+                  changeViewContacto(false);
+              }}
+              className={
+                viewShoppingCart
+                  ? "text-orange-600  rounded m-3 p-1"
+                  : "hover:text-orange-600 m-3 p-1"
+              }
+            >
+              Carrito
+            </button>
           </div>
         </div>
 
@@ -129,12 +153,19 @@ function ContenedorMaderas() {
           </h1>
         )}
 
+        {viewShoppingCart && (
+          <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
+            Carrito
+          </h1>
+        )}
       </div>
 
       <Inicio />
       <Maderas />
       <Contacto />
       <Origen />
+      <ShoppingCart/>
+      
     </ApolloProvider>
   );
 }
