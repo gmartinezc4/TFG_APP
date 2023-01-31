@@ -28,7 +28,6 @@ export const typeDefs = gql`
     type Query{
         getMaderas: [Maderas!]!
         getProductos: [Product!]!
-        # logIn(correo: String!, password: String!): String
     }
 
     type Mutation{
@@ -37,6 +36,9 @@ export const typeDefs = gql`
         addProducto(img: String!, name: String!, stock: String!, precio: String!): Product!
         venderProducto(id: String!, cantidad: String!): Product!
         addStockProducto(_id: String!, cantidad: String!): Product!
-        # RegistrarUser(nombre: String!, apellido: String!, correo: String!, password: String!): User
+        addProductCesta(_id: String!, cantidad: String!): Product!
+        RegistrarUser(nombre: String!, apellido: String!, correo: String!, password: String!): User
+        logIn(correo: String!, password: String!): String
+        logOut:Boolean! 
     }
 `

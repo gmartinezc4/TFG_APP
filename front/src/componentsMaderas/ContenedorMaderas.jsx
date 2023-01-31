@@ -5,7 +5,8 @@ import { Context } from "../context/Context";
 import Contacto from "./Contacto";
 import Origen from "./Origen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
-import ShoppingCart from "./ShoppingCart";
+import ProductosVenta from "./ProductosVenta";
+import BotonesUser from "./BotonesUser";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -124,39 +125,53 @@ function ContenedorMaderas() {
                   : "hover:text-orange-600 m-3 p-1"
               }
             >
-              Carrito
+              Productos
             </button>
           </div>
         </div>
 
         {viewInicio && (
-          <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-            Conocenos
-          </h1>
+          <div className="">
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
+              Conocenos
+            </h1>
+            <BotonesUser />
+          </div>
         )}
-
         {viewMaderas && (
-          <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-            Productos
-          </h1>
+          <div>
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
+              Maderas
+            </h1>
+            <BotonesUser />
+          </div>
         )}
 
         {viewContacto && (
-          <h1 className="flex justify-center font-serif text-white font-blond text-7xl mt-8 ml-5">
-            Contacto
-          </h1>
+          <div>
+            <h1 className="flex justify-center font-serif text-white font-blond text-7xl mt-8 ml-5">
+              Contacto
+            </h1>
+            <BotonesUser />
+          </div>
         )}
 
         {viewOrigen && (
-          <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-            Origen
-          </h1>
+          <div>
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
+              Origen
+            </h1>
+            <BotonesUser />
+          </div>
         )}
 
         {viewShoppingCart && (
-          <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-            Carrito
-          </h1>
+          <div>
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
+              Carrito
+            </h1>
+            <BotonesUser />
+          </div>
         )}
       </div>
 
@@ -164,8 +179,7 @@ function ContenedorMaderas() {
       <Maderas />
       <Contacto />
       <Origen />
-      <ShoppingCart/>
-      
+      <ProductosVenta />
     </ApolloProvider>
   );
 }

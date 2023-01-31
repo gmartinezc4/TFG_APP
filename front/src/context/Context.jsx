@@ -8,6 +8,7 @@ export function ContextProvider(props) {
   const [viewContacto, setViewContacto] = useState(false);
   const [viewOrigen, setViewOrigen] = useState(false);
   const [viewShoppingCart, setViewShoppingCart] = useState(false)
+  const [reload, setReload] = useState(false);
 
 
   function changeViewMaderas(setView) {
@@ -30,6 +31,10 @@ export function ContextProvider(props) {
     setViewShoppingCart(setView)
   }
 
+  function changeReload(){
+    setReload(!reload);
+  }
+
   return (
     <Context.Provider
       value={{
@@ -44,6 +49,7 @@ export function ContextProvider(props) {
         changeViewOrigen,
         changeViewMaderas,
         changeViewShoppingCart,
+        changeReload,
       }}
     >
       {props.children}

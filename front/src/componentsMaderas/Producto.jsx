@@ -14,7 +14,7 @@ const VENDER_PRODUCTO = gql`
   }
 `;
 
-function Product(props) {
+function Producto(props) {
   const [cantidad, setCantidad] = useState("");
   const [continuarCompra, setContinuarCompra] = useState(false);
   const [venderProductoMutation, { error }] = useMutation(VENDER_PRODUCTO);
@@ -67,8 +67,8 @@ function Product(props) {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                if(cantidad != 0)
-                setContinuarCompra(true);
+                // if(cantidad != 0)
+                 // setContinuarCompra(true);
               }}
             >
               <input
@@ -83,7 +83,7 @@ function Product(props) {
                 required
               ></input>
               <button
-                className="w-64 bg-black text-white p-2 mt-8"
+                className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
                 type="submit"
               >
                 Añadir a la cesta
@@ -94,12 +94,12 @@ function Product(props) {
         </div>
       )}
 
-    {continuarCompra && (
+    {/* {continuarCompra && (
         <ProcesoCompra producto={props.producto} cantidad={cantidad}/>
-    )}
+    )} */}
 
     </div>
   );
 }
 
-export default Product;
+export default Producto;
