@@ -1,5 +1,6 @@
 import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
+import { v4 as uuidv4 } from 'uuid';
 var jwt = require('jsonwebtoken');
 
 export const Mutation = {
@@ -30,12 +31,14 @@ export const Mutation = {
         const db = context.db;
         const { img, name, stock, precio } = args;
 
-        await db.collection("Productos_Venta").insertOne({ img, name, stock, precio })
+        const precioInt: number = parseInt(precio)
+
+        await db.collection("Productos_Venta").insertOne({ img, name, stock, precioInt })
         return {
             img,
             name,
             stock,
-            precio
+            precioInt
         }
     },
 
@@ -50,7 +53,7 @@ export const Mutation = {
 
         if (productoVendido) {
             newStock = parseInt(productoVendido.stock) - parseInt(cantidad);
-            importe = parseInt(cantidad) * parseInt(productoVendido.precio);
+            importe = parseInt(cantidad) * productoVendido.precio;
             importe_freeIVA = importe / 1.21;
 
             if (newStock >= 0) {
@@ -70,6 +73,7 @@ export const Mutation = {
         }
     },
 
+    //sin probar, seguramente me borre todo al hacer el update y me deje solo el stock
     addStockProducto: async (parent: any, args: { _id: string, cantidad: string }, context: { db: Db }) => {
         const db = context.db;
         const { _id, cantidad } = args;
@@ -90,56 +94,79 @@ export const Mutation = {
         }
     },
 
-    addProductCesta: async (parent: any, args: { id: string, cantidad: string }, context: { db: Db }) => {
+    addProductCesta: async (parent: any, args: { id_producto: string, name: string, cantidad: string, tokenUser: string }, context: { db: Db }) => {
         const db = context.db;
-        const { id, cantidad } = args;
+        const { id_producto, name, cantidad, tokenUser } = args;
         let newStock: number;
         let importe: number;
         let importe_freeIVA: number;
+        let hayCarrito: Boolean = false;
 
-        const productoVendido = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(id) })
+        const user = await db.collection("Usuarios").findOne({ token: tokenUser });
+       
+        if (user) {
+            const productoVendido = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(id_producto) })
 
-        if (productoVendido) {
-            newStock = parseInt(productoVendido.stock) - parseInt(cantidad);
-            importe = parseInt(cantidad) * parseInt(productoVendido.precio);
-            importe_freeIVA = importe / 1.21;
+            if (productoVendido) {
+                newStock = parseInt(productoVendido.stock) - parseInt(cantidad);
+                importe = parseInt(cantidad) * parseInt(productoVendido.precio);
+                importe_freeIVA = importe / 1.21;
 
-            if (newStock >= 0) {
-                await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(id) }, { $set: { stock: newStock.toString() } })
+                if (newStock >= 0) {
+                    await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(id_producto) }, { $set: { stock: newStock.toString() } })
 
+                    const carritoUser = await db.collection("Carritos").find({Id_user: user._id.toString()}).toArray();
+
+                    if (carritoUser) {
+                        carritoUser.map(async (e: any) => {
+                            if (e.Id_producto == id_producto) {
+                                hayCarrito = true;
+                                const newCantidad: number = parseInt(e.Cantidad) + parseInt(cantidad);
+                                await db.collection("Carritos").updateOne({ Id_user: user._id.toString(), Id_producto: id_producto  }, { $set: { Cantidad: newCantidad.toString(), PrecioTotal: e.PrecioTotal + importe, PrecioTotal_freeIVA: e.PrecioTotal_freeIVA + importe_freeIVA } });   
+                            }
+                        })
+                    }
+
+                    if (!hayCarrito) {
+                        await db.collection("Carritos").insertOne({ Id_user: user._id.toString(), Id_producto: id_producto, Name: name, Cantidad: cantidad, PrecioTotal: importe, PrecioTotal_freeIVA: importe_freeIVA})
+                    }
+
+                } else {
+                    throw new ApolloError("Cantidad superior a Stock")
+                }
             } else {
-                throw new ApolloError("Cantidad superior a Stock")
+                throw new ApolloError("El producto no existe", "404");
+            }
+
+            return {
+                id_producto,
+                name,
+                cantidad,
+                precioTotal: importe,
+                precioTotal_freeIVA: importe_freeIVA,
             }
         } else {
-            throw new ApolloError("El producto no existe", "404");
-        }
-        console.log(newStock)
-        return {
-            ...productoVendido,
-            stock: newStock.toString(),
+            throw new ApolloError("Error en el usuario", "404");
         }
     },
+
 
     RegistrarUser: async (parent: any, args: { nombre: string, apellido: string, correo: string, password: string }, context: { db: Db }) => {
         const db = context.db;
         const { nombre, apellido, correo, password } = args;
-        console.log(nombre)
-        console.log(apellido)
-        console.log(correo)
-        console.log(password)
+
         if (nombre == "" || apellido == "" || correo == "" || password == "") {
             return new ApolloError("Faltan campos por completar");
         }
 
         const user = await db.collection("Usuarios").findOne({ Email: correo });
-        console.log(user);
+
         if (!user) {
-            const token = jwt.sign({
-                user
-            }, 'este-es-el-seed', { expiresIn: '1h' });
+            const token = uuidv4();
 
             await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: password, token: token });
-            return { nombre, apellido, correo, password }
+            console.log(token)
+            return token;
         } else {
             return new ApolloError("El correo ya esta registrado");
         }
@@ -148,16 +175,14 @@ export const Mutation = {
     logIn: async (parent: any, args: { correo: String, password: String }, context: { db: Db }) => {
         const db = context.db;
         const { correo, password } = args;
-        
+
         const user = await db.collection("Usuarios").findOne({ Email: correo, Password: password });
 
         if (!user) {
             return new ApolloError("Ningun usuario con ese correo está registrado");
 
         } else {
-            const token = jwt.sign({
-                user
-            }, 'este-es-el-seed', { expiresIn: '1h' });
+            const token = uuidv4();
 
             await db.collection("Usuarios").updateOne({ Email: correo, Password: password }, { $set: { token: token } });
             return token;
@@ -170,7 +195,7 @@ export const Mutation = {
         if (!user) {
             throw new ApolloError("User not exist", "USER_NOT_EXIST")
         } else {
-            await db.collection("Usuarios").updateOne({ token: user.token.toString()}, { $set: { token: null } });
+            await db.collection("Usuarios").updateOne({ token: user.token.toString() }, { $set: { token: null } });
             return true;
         }
     }

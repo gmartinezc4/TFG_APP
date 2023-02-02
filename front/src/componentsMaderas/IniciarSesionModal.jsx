@@ -39,10 +39,12 @@ function IniciarSesionModal(props) {
   const [password, setPassword] = useState("");
   const [errorInicioSesion, setErrorInicioSesion] = useState(false);
   const { changeReload } = useContext(Context);
+  
 
   const [login] = useMutation(LOG_IN, {
     onCompleted: (data) => {
       localStorage.setItem("token", data.logIn); //cuando se complete la mutation guardar el token
+      console.log("me loggeo, token: " + localStorage.getItem("token")); 
     },
     onError: (error) => {
       //si hay un error, borrar el token

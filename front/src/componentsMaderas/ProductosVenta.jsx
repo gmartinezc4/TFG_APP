@@ -3,6 +3,7 @@ import { useQuery, gql } from "@apollo/client";
 import Producto from "./Producto";
 import { Context } from "../context/Context";
 import Session from "./Session";
+import { useEffect } from "react";
 
 const GET_PRODUCTOS = gql`
   query Query {
@@ -17,11 +18,12 @@ const GET_PRODUCTOS = gql`
 `;
 
 function ProductosVenta() {
-  const { viewShoppingCart } = useContext(Context);
+  const { viewProductos, token, reload } = useContext(Context);
   const [viewProductSelect, setViewProductSelect] = useState(false);
-  const [product, setProduct] = useState(null);
-  
-  const token = localStorage.getItem("token");
+  const [productId, setProductId] = useState(null);
+
+  useEffect(() => {
+  }), [reload];
 
   const { data, loading, error } = useQuery(GET_PRODUCTOS);
 
@@ -31,7 +33,8 @@ function ProductosVenta() {
   function changeViewProductSelect() {
     setViewProductSelect(false);
   }
-  if (viewShoppingCart == true && token) {
+  
+  if (viewProductos == true && token) {
     return (
       <div>
         <div className="grid grid-cols-3 gap-1 mt-10">
@@ -39,38 +42,35 @@ function ProductosVenta() {
             data?.getProductos.map((p) => (
               <div
                 key={p._id}
-                className="flex justify-center flex-row p-4"
+                className={p.stock <= 0 ? "flex justify-center flex-col p-4 mx-auto hover:opacity-70 bg-red-300" : "flex justify-center flex-col p-4 mx-auto hover:opacity-70"}
                 onClick={() => {
-                  setViewProductSelect(true), setProduct(p);
+                  setViewProductSelect(true), setProductId(p._id);
                 }}
               >
-                <div className="bg-no-repeat bg-contain">
-                  <img className="h-30 w-40 border rounded" src={p.img}></img>
+                <div className="bg-no-repeat bg-contain ">
+                  <img className={p.stock <= 0 ? "h-50 w-60 border rounded opacity-70" : "h-50 w-60 border rounded mb-5"} src={p.img}></img>
                 </div>
-                <div className="flex flex-col ml-4 h-30 w-40">
-                  <div className="font-bold mb-1"> {p.name}</div>
-
-                  <div className="border-b-2 border-black mb-2"></div>
-                  <span className="w-40">Precio: {p.precio} €/kg</span>
-                </div>
+                {p.stock <= 0 && (<div className="mb-3 text-red-700">Producto agotado</div>)}
+                <div className="font-bold mb-1"> {p.name}</div>
+                <span className="w-40">{p.precio} € / kg</span>
               </div>
             ))}
         </div>
 
-        {viewProductSelect &&(
+        {viewProductSelect && (
           <Producto
-            product={product}
+            productId={productId}
             changeViewProductSelect={changeViewProductSelect}
           />
         )}
       </div>
     );
-  }else if(viewShoppingCart == true){
-    return(
+  } else if (viewProductos == true) {
+    return (
       <div>
-        <Session/>
+        <Session />
       </div>
-    )
+    );
   }
 }
 

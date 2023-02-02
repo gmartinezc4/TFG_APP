@@ -9,6 +9,7 @@ export const typeDefs = gql`
     }
 
     type User {
+        _id: ID!
         nombre: String!
         apellido: String!
         correo: String!
@@ -24,10 +25,22 @@ export const typeDefs = gql`
         precio: String!
     }
 
+    type Carrito {
+        _id: ID!
+        id_user: ID!
+        id_producto: ID!
+        name: String!
+        cantidad: String!
+        precioTotal: String!
+        precioTotal_freeIVA: String!
+    }
+
     
     type Query{
         getMaderas: [Maderas!]!
         getProductos: [Product!]!
+        getProducto (id_product: String!): Product!
+        getProductosCarritoUser(token: String!): [Carrito!]
     }
 
     type Mutation{
@@ -36,9 +49,9 @@ export const typeDefs = gql`
         addProducto(img: String!, name: String!, stock: String!, precio: String!): Product!
         venderProducto(id: String!, cantidad: String!): Product!
         addStockProducto(_id: String!, cantidad: String!): Product!
-        addProductCesta(_id: String!, cantidad: String!): Product!
-        RegistrarUser(nombre: String!, apellido: String!, correo: String!, password: String!): User
-        logIn(correo: String!, password: String!): String
+        addProductCesta(id_producto: String!, name: String!, cantidad: String!, tokenUser: String!): Carrito!
+        RegistrarUser(nombre: String!, apellido: String!, correo: String!, password: String!): String!
+        logIn(correo: String!, password: String!): String!
         logOut:Boolean! 
     }
 `

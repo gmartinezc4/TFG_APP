@@ -3,25 +3,8 @@ import { gql, useMutation } from "@apollo/client";
 import RegistrarseModal from "./RegistrarseModal";
 import IniciarSesionModal from "./IniciarSesionModal";
 
-const LOGIN = gql`
-  mutation LogIn($user: String!, $password: String!) {
-    logIn(user: $user, password: $password)
-  }
-`;
-
-const REGISTER = gql`
-  mutation Mutation($user: String!, $password: String!) {
-    register(user: $user, password: $password) {
-      _id
-      user
-      token
-    }
-  }
-`;
 
 function Session() {
-  const [user, setUser] = useState("");
-  const [password, setPassword] = useState("");
   const [modalIsOpenRegistro, setIsOpenRegistro] = useState(false);
   const [modalIsOpenInicioSesion, setIsOpenInicioSesion] = useState(false);
 
@@ -40,34 +23,6 @@ function Session() {
   function closeModalInicioSesion() {
     setIsOpenInicioSesion(false);
   }
-
-  const [login] = useMutation(LOGIN, {
-    onCompleted: (data) => {
-      localStorage.setItem("token", data.logIn); //cuando se complete la mutation guardar el token
-    },
-    onError: (error) => {
-      //si hay un error, borrar el token
-      console.log(error);
-      localStorage.removeItem("token");
-    },
-  });
-
-  const [register] = useMutation(REGISTER, {
-    onCompleted: (data) => {
-      login({
-        variables: {
-          user,
-          password,
-        },
-      });
-      localStorage.setItem("token", data.logIn);
-    },
-    onError: (error) => {
-      //si hay un error, borrar el token
-      console.log(error);
-      localStorage.removeItem("token");
-    },
-  });
 
   return (
     <div>

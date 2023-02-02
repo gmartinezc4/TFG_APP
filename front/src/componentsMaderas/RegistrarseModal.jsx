@@ -26,24 +26,9 @@ const customStyles = {
 };
 
 const REGISTRAR_USER = gql`
-  mutation REGISTRAR_USER(
-    $nombre: String!
-    $apellido: String!
-    $correo: String!
-    $password: String!
-  ) {
-    RegistrarUser(
-      nombre: $nombre
-      apellido: $apellido
-      correo: $correo
-      password: $password
-    ) {
-      nombre
-      apellido
-      correo
-      password
-    }
-  }
+ mutation Mutation($nombre: String!, $apellido: String!, $correo: String!, $password: String!) {
+  RegistrarUser(nombre: $nombre, apellido: $apellido, correo: $correo, password: $password)
+}
 `;
 
 // const GET_USUARIOS = gql`
@@ -73,7 +58,8 @@ function RegistrarseModal(props) {
 
   const [register] = useMutation(REGISTRAR_USER, {
     onCompleted: (data) => {
-      localStorage.setItem("token", data.logIn);    
+      localStorage.setItem("token", data.RegistrarUser); //cuando se complete la mutation guardar el token
+      console.log("me loggeo, token: " + localStorage.getItem("token")); 
     },
     onError: (error) => {
       //si hay un error, borrar el token

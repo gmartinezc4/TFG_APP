@@ -14,10 +14,34 @@ const LOG_OUT = gql`
   }
 `;
 
+const GET_PRODUCTOS_CARRITO_USER = gql`
+  query GetProductosCarritoUser($token: String!) {
+    getProductosCarritoUser(token: $token) {
+      _id
+      cantidad
+      id_producto
+      id_user
+      name
+      precioTotal
+      precioTotal_freeIVA
+    }
+  }
+`;
+
 function BotonesUser() {
-  const token = localStorage.getItem("token");
-  const { changeReload } = useContext(Context);
-  const [OpenSubMenu, setOpenSubMenu] = useState(false);
+  const {
+    changeReload,
+    token,
+    viewShoppingCart,
+    changeViewShoppingCart,
+    changeViewProductos,
+    changeViewInicio,
+    changeViewOrigen,
+    changeViewMaderas,
+    changeViewContacto,
+  } = useContext(Context);
+  const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
+  const [OpenSubMenuCarrito, setOpenSubMenuCarrito] = useState(false);
 
   const [logOut] = useMutation(LOG_OUT, {
     onCompleted: () => {
@@ -32,39 +56,110 @@ function BotonesUser() {
     },
   });
 
+  const { data, loading, error } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
+    variables: {
+      token: token,
+    },
+  });
+
+  if (loading) return <div>Cargando...</div>;
+  if (error) return <div>Error...</div>;
+
   return (
     <div>
       {token && (
         <div className="flex justify-end -mt-10 text-white font-bold mr-8">
-          <button className="bg-[url('/home/guillermo/App_TFG/front/src/assets/carrito.png')] bg-no-repeat bg-cover h-12 w-16 p-2 mr-3"></button>
+          {/* carrito */}
+          <div>
+            <button
+              type="button"
+              className="bg-[url('/home/guillermo/App_TFG/front/src/assets/carrito.png')] bg-no-repeat bg-cover h-12 w-16 p-2 mr-3 hover:opacity-80"
+              onClick={() => {
+                changeViewShoppingCart(true),
+                  changeViewProductos(false),
+                  changeViewInicio(false),
+                  changeViewOrigen(false),
+                  changeViewMaderas(false),
+                  changeViewContacto(false);
+              }}
+            ></button>
+            {data.getProductosCarritoUser.length != 0 && (
+              <span className="-ml-3 mr-4 bg-orange-500 rounded-full  px-3 py-2">
+                <span className="">{data.getProductosCarritoUser.length}</span>{" "}
+              </span>
+            )}
+          </div>
 
+          {/* perfil */}
           <div className="relative inline-block text-left">
             <div>
-                <button type="button" className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fotoPerfil.png')] bg-no-repeat bg-cover h-12 w-16" id="menu-button" aria-expanded="true" aria-haspopup="true" onClick={(() => setOpenSubMenu(!OpenSubMenu))}>
-                
-                
-                {/* <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-                </svg> */}
-                </button>
+              <button
+                type="button"
+                className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fotoPerfil.png')] bg-no-repeat bg-cover h-12 w-16 hover:opacity-80"
+                id="menu-button-perfil"
+                aria-expanded="true"
+                aria-haspopup="true"
+                onClick={() => setOpenSubMenuPerfil(!OpenSubMenuPerfil)}
+              ></button>
             </div>
 
-            {OpenSubMenu && (
-                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
-                    <div className="py-1" role="none">            
-                        <a href="#" className="text-gray-700 block px-4 py-2 text-sm hover:text-orange-600" role="menuitem" tabIndex="-1" id="menu-item-0">Perfil</a>
-                    </div>
-                    <div className="py-1" role="none">
-                        <a href="#" className="text-gray-700 block px-4 py-2 text-sm hover:text-orange-600" role="menuitem" tabIndex="-1" id="menu-item-1">Pedidos</a>
-                    </div>
-                    <div className="py-1" role="none">
-                        <a href="#" className="text-gray-700 block px-4 py-2 text-sm hover:text-orange-600" role="menuitem" tabIndex="-1" id="menu-item-2 on" onClick={() => {logOut()}}>Cerrar Sesión</a>
-                    </div>
+            {OpenSubMenuPerfil && (
+              <div
+                className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="menu-button"
+                tabIndex="-1"
+              >
+                <div className="py-1" role="none">
+                  <a
+                    href="#"
+                    className="text-gray-700 block px-4 py-2 text-sm hover:text-orange-600"
+                    role="menuitem"
+                    tabIndex="-1"
+                    id="menu-item-0"
+                  >
+                    Perfil
+                  </a>
                 </div>
+                <div className="py-1" role="none">
+                  <a
+                    href="#"
+                    className="text-gray-700 block px-4 py-2 text-sm hover:text-orange-600"
+                    role="menuitem"
+                    tabIndex="-1"
+                    id="menu-item-1"
+                  >
+                    Pedidos
+                  </a>
+                </div>
+                <div className="py-1" role="none">
+                  <a
+                    href="#"
+                    className="text-gray-700 block px-4 py-2 text-sm hover:text-orange-600"
+                    role="menuitem"
+                    tabIndex="-1"
+                    id="menu-item-2 on"
+                    onClick={() => {
+                      logOut();
+                      setOpenSubMenuPerfil(false);
+                      setOpenSubMenuCarrito(false);
+                      console.log(
+                        "me desloggeo, token: " + localStorage.getItem("token")
+                      );
+                      localStorage.removeItem("token");
+                      console.log(
+                        "me he desloggeado, token: " +
+                          localStorage.getItem("token")
+                      );
+                    }}
+                  >
+                    Cerrar Sesión
+                  </a>
+                </div>
+              </div>
             )}
-            
           </div>
-          
         </div>
       )}
     </div>

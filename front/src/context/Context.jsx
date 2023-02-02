@@ -7,8 +7,11 @@ export function ContextProvider(props) {
   const [viewMaderas, setViewMaderas] = useState(false);
   const [viewContacto, setViewContacto] = useState(false);
   const [viewOrigen, setViewOrigen] = useState(false);
+  const [viewProductos, setViewProductos] = useState(false);
   const [viewShoppingCart, setViewShoppingCart] = useState(false)
   const [reload, setReload] = useState(false);
+  
+  const token = localStorage.getItem("token");
 
 
   function changeViewMaderas(setView) {
@@ -27,6 +30,10 @@ export function ContextProvider(props) {
     setViewOrigen(setView);
   }
 
+  function changeViewProductos(setView){
+    setViewProductos(setView);
+  }
+
   function changeViewShoppingCart(setView){
     setViewShoppingCart(setView)
   }
@@ -42,12 +49,16 @@ export function ContextProvider(props) {
         viewContacto,
         viewOrigen,
         viewMaderas,
+        viewProductos,
         viewShoppingCart,
+        reload,
+        token,
 
         changeViewInicio,
         changeViewContacto,
         changeViewOrigen,
         changeViewMaderas,
+        changeViewProductos,
         changeViewShoppingCart,
         changeReload,
       }}
