@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery, gql } from "@apollo/client";
-import dataMaderaCards from "../data/MaderaCardsData";
+import dataMaderaCards from "../data/MaderaCardsData";;
 
 const GET_MADERAS = gql`
   query Query {
@@ -16,7 +16,7 @@ const GET_MADERAS = gql`
 function MaderaCards() {
   const { data, loading, error } = useQuery(GET_MADERAS);
 
-  if (loading) return <div>Cargando...</div>;
+  if (loading) return <div></div>;
   if (error) return <div>Error...</div>;
 
   return (

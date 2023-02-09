@@ -1,13 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
+import Cargando from "./Cargando";
 
 const ADD_PRODUCTO_CARRITO = gql`
-  mutation addProductCesta($idProducto: String!, $name: String!, $cantidad: String!, $tokenUser: String!) {
-    addProductCesta(id_producto: $idProducto, name: $name, cantidad: $cantidad, tokenUser: $tokenUser) {
-      id_producto
-      name
+  mutation Mutation($idProducto: String!, $cantidad: String!, $tokenUser: String!) {
+    addProductCesta(id_producto: $idProducto, cantidad: $cantidad, tokenUser: $tokenUser) {
       cantidad
+      id_producto
+      id_user
+      img
+      name
       precioTotal
       precioTotal_freeIVA
   }
@@ -38,7 +41,7 @@ function Producto(props) {
     }
   });
   
-  if (loading) return <div>Cargando...</div>;
+  if (loading) return <div><Cargando /></div>;
   if (error) return <div>Error...</div>;
   
   function actualizarCarrito() {
@@ -46,7 +49,6 @@ function Producto(props) {
     addProductoCarrito({
       variables: {
         idProducto: props.productId,
-        name: data.getProducto.name,
         cantidad: cantidad,
         tokenUser: token,
       },

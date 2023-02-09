@@ -188,7 +188,7 @@ function RegistrarseModal(props) {
             placeholder="Repetir contraseña..."
             value={repPassword}
             onChange={(e) => setRepPassword(e.target.value)}
-            type="text"
+            type="password"
             name="repPassdword"
             autoComplete="off"
           ></input>

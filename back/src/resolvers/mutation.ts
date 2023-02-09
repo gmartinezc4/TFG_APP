@@ -3,6 +3,17 @@ import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 var jwt = require('jsonwebtoken');
 
+type ProductoCarrito = {
+    _id: String,
+    id_user: String,
+    id_producto: String,
+    img: String,
+    name: String,
+    cantidad: String,
+    precioTotal: String,
+    precioTotal_freeIVA: String,
+}
+
 export const Mutation = {
     darAltaMadera: async (parent: any, args: { img: String, name: String, description: String }, context: { db: Db }) => {
         const db = context.db;
@@ -33,43 +44,62 @@ export const Mutation = {
 
         const precioInt: number = parseInt(precio)
 
-        await db.collection("Productos_Venta").insertOne({ img, name, stock, precioInt })
+        await db.collection("Productos_Venta").insertOne({ img, name, stock, precio: precioInt })
         return {
             img,
             name,
             stock,
-            precioInt
+            precio: precioInt
         }
     },
 
-    venderProducto: async (parent: any, args: { id: string, cantidad: string }, context: { db: Db }) => {
+    venderProductos: async (parent: any, args: { id_user: string, nombre: string, apellido: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db }) => {
         const db = context.db;
-        const { id, cantidad } = args;
-        let newStock: number;
-        let importe: number;
-        let importe_freeIVA: number;
+        const { id_user, nombre, apellido, telefono, direccion, masInformacion, codigoPostal, ciudad, pais} = args;
+        let importeFinalPedido: number = 0;
+        let importe_freeIVAFinalPedido: number = 0;
+        let productosPedido: Array<any> = [];
+        let fecha = new Date();
 
-        const productoVendido = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(id) })
+        const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
+        const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+        
+        const carritoUser = await db.collection("Carritos").find({Id_user: id_user.toString()}).toArray();
+        
+        if(carritoUser.length > 0){
+            carritoUser.map(async (p: any) => {
+                productosPedido.push(p);
+                importeFinalPedido = importeFinalPedido +  p.PrecioTotal;
+                importe_freeIVAFinalPedido = importe_freeIVAFinalPedido + p.PrecioTotal_freeIVA;
+                
+                const productStock = await db.collection("Productos_Venta").findOne({_id: new ObjectId(p.Id_producto)});
 
-        if (productoVendido) {
-            newStock = parseInt(productoVendido.stock) - parseInt(cantidad);
-            importe = parseInt(cantidad) * productoVendido.precio;
-            importe_freeIVA = importe / 1.21;
+                let newStock = parseInt(productStock?.stock) - parseInt(p.Cantidad);
+                
+                await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(p.Id_producto) }, { $set: { stock: newStock.toString() } }) 
+            })
+            await db.collection("Carritos").deleteMany({Id_user: id_user});
+            await db.collection("Pedidos_Activos").insertOne({Id_user: id_user, Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido});
+            await db.collection("Historial_Pedidos").insertOne({Id_user: id_user, Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido});
 
-            if (newStock >= 0) {
-                await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(id) }, { $set: { stock: newStock.toString() } })
-                await db.collection("Historial_Pedidos").insertOne({ id_product: id, name: productoVendido.name, cantidad: cantidad, importe: importe.toString(), importe_freeIVA: importe_freeIVA.toString() });
-                await db.collection("Pedidos_Activos").insertOne({ id_product: id, name: productoVendido.name, cantidad: cantidad, importe: importe.toString(), importe_freeIVA: importe_freeIVA.toString() });
-            } else {
-                throw new ApolloError("Cantidad superior a Stock")
+            return {
+                id_user: id_user,
+                estado: "Activo",
+                nombre: nombre,
+                apellido: apellido,
+                telefono: telefono,
+                direccion: direccion,
+                masInformacion: masInformacion,
+                codigoPostal: codigoPostal,
+                ciudad: ciudad,
+                pais: pais,
+                fechaPedido: fechaHoy,
+                fechaRecogida: fechaRecogida,
+                importePedido: importeFinalPedido,
+                importeFreeIvaPedido: importe_freeIVAFinalPedido,
             }
-        } else {
-            throw new ApolloError("El producto no existe", "404");
-        }
-        console.log(newStock)
-        return {
-            ...productoVendido,
-            stock: newStock.toString(),
+        }else{
+            throw new ApolloError("Ha ocurrido un error con el carrito del usuario")
         }
     },
 
@@ -94,14 +124,14 @@ export const Mutation = {
         }
     },
 
-    addProductCesta: async (parent: any, args: { id_producto: string, name: string, cantidad: string, tokenUser: string }, context: { db: Db }) => {
+    addProductCesta: async (parent: any, args: { id_producto: string, cantidad: string, tokenUser: string }, context: { db: Db }) => {
         const db = context.db;
-        const { id_producto, name, cantidad, tokenUser } = args;
+        const { id_producto, cantidad, tokenUser } = args;
         let newStock: number;
         let importe: number;
         let importe_freeIVA: number;
         let hayCarrito: Boolean = false;
-
+        
         const user = await db.collection("Usuarios").findOne({ token: tokenUser });
        
         if (user) {
@@ -111,9 +141,8 @@ export const Mutation = {
                 newStock = parseInt(productoVendido.stock) - parseInt(cantidad);
                 importe = parseInt(cantidad) * parseInt(productoVendido.precio);
                 importe_freeIVA = importe / 1.21;
-
+                console.log(productoVendido.name)
                 if (newStock >= 0) {
-                    await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(id_producto) }, { $set: { stock: newStock.toString() } })
 
                     const carritoUser = await db.collection("Carritos").find({Id_user: user._id.toString()}).toArray();
 
@@ -128,7 +157,7 @@ export const Mutation = {
                     }
 
                     if (!hayCarrito) {
-                        await db.collection("Carritos").insertOne({ Id_user: user._id.toString(), Id_producto: id_producto, Name: name, Cantidad: cantidad, PrecioTotal: importe, PrecioTotal_freeIVA: importe_freeIVA})
+                        await db.collection("Carritos").insertOne({ Id_user: user._id.toString(), Id_producto: id_producto, Img: productoVendido.img, Name: productoVendido.name, Cantidad: cantidad, PrecioTotal: importe, PrecioTotal_freeIVA: importe_freeIVA})
                     }
 
                 } else {
@@ -139,8 +168,10 @@ export const Mutation = {
             }
 
             return {
+                id_user: user._id.toString(),
                 id_producto,
-                name,
+                img: productoVendido.img,
+                name: productoVendido.name,
                 cantidad,
                 precioTotal: importe,
                 precioTotal_freeIVA: importe_freeIVA,
@@ -150,6 +181,19 @@ export const Mutation = {
         }
     },
 
+    deleteProductCesta: async (parent: any, args: { id: string }, context: { db: Db }) => {
+        const db = context.db;
+        const  id  = args.id;
+
+        const carritoUser = await db.collection("Carritos").findOne({ _id: new ObjectId(id) });
+
+        if(carritoUser){
+            await db.collection("Carritos").deleteOne({ _id: new ObjectId(id) });
+            return "Producto eliminado correctamente";
+        }else{
+            throw new ApolloError("ha ocurrido un problema", "500");
+        }
+    },
 
     RegistrarUser: async (parent: any, args: { nombre: string, apellido: string, correo: string, password: string }, context: { db: Db }) => {
         const db = context.db;

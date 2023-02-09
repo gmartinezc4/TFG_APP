@@ -102,7 +102,7 @@ function IniciarSesionModal(props) {
             placeholder="Contraseña..."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            type="text"
+            type="password"
             name="password"
             autoComplete="off"
           ></input>

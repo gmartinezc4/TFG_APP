@@ -7,6 +7,7 @@ import {
   useQuery,
 } from "@apollo/client";
 import { Context } from "../context/Context";
+import Cargando from "./Cargando";
 
 const LOG_OUT = gql`
   mutation Mutation {
@@ -24,24 +25,25 @@ const GET_PRODUCTOS_CARRITO_USER = gql`
       name
       precioTotal
       precioTotal_freeIVA
-    }
+      img
   }
+}
 `;
 
 function BotonesUser() {
   const {
     changeReload,
     token,
-    viewShoppingCart,
     changeViewShoppingCart,
     changeViewProductos,
     changeViewInicio,
     changeViewOrigen,
     changeViewMaderas,
     changeViewContacto,
+    changeViewPedidosPerfil,
+    changeViewHacerPedido,
   } = useContext(Context);
   const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
-  const [OpenSubMenuCarrito, setOpenSubMenuCarrito] = useState(false);
 
   const [logOut] = useMutation(LOG_OUT, {
     onCompleted: () => {
@@ -62,8 +64,9 @@ function BotonesUser() {
     },
   });
 
-  if (loading) return <div>Cargando...</div>;
+  if (loading) return <div></div>;
   if (error) return <div>Error...</div>;
+
 
   return (
     <div>
@@ -81,11 +84,13 @@ function BotonesUser() {
                   changeViewOrigen(false),
                   changeViewMaderas(false),
                   changeViewContacto(false);
+                  changeViewPedidosPerfil(false);
+                  changeViewHacerPedido(false);
               }}
             ></button>
             {data.getProductosCarritoUser.length != 0 && (
               <span className="-ml-3 mr-4 bg-orange-500 rounded-full  px-3 py-2">
-                <span className="">{data.getProductosCarritoUser.length}</span>{" "}
+                <span className="">{data.getProductosCarritoUser.length}</span>
               </span>
             )}
           </div>
@@ -129,6 +134,16 @@ function BotonesUser() {
                     role="menuitem"
                     tabIndex="-1"
                     id="menu-item-1"
+                    onClick={() => {
+                      changeViewPedidosPerfil(true);
+                      changeViewShoppingCart(false),
+                      changeViewProductos(false),
+                      changeViewInicio(false),
+                      changeViewOrigen(false),
+                      changeViewMaderas(false),
+                      changeViewContacto(false);
+                      changeViewHacerPedido(false);
+                    }}
                   >
                     Pedidos
                   </a>
@@ -143,7 +158,6 @@ function BotonesUser() {
                     onClick={() => {
                       logOut();
                       setOpenSubMenuPerfil(false);
-                      setOpenSubMenuCarrito(false);
                       console.log(
                         "me desloggeo, token: " + localStorage.getItem("token")
                       );
