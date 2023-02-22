@@ -17,7 +17,8 @@ const run = async () => {
     resolvers,
     context: async ({ req }) => {
       const token = req.headers.authorization || "";
-      const user = await db.collection("users").findOne({ token });
+      const user = await db.collection("Usuarios").findOne({ token });
+      
       return { 
         db, 
         user 
