@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa";
@@ -7,8 +7,8 @@ import HacerPedido from "./HacerPedido";
 import Cargando from "./Cargando";
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
-  query GetProductosCarritoUser($token: String!) {
-    getProductosCarritoUser(token: $token) {
+  query GetProductosCarritoUser {
+    getProductosCarritoUser {
       _id
       cantidad
       id_producto
@@ -41,17 +41,27 @@ function ShoppingCart() {
     changeViewContacto,
     changeViewHacerPedido,
   } = useContext(Context);
-  const [idProd, setIdProd] = useState("");
 
+  
+  const [idProd, setIdProd] = useState("");
+  
   let importe = 0;
   let importeFreeIva = 0;
   const fechaRecogida = new Date();
 
-  const [deleteProductoCarrito] = useMutation(DELETE_PRODUCTO_CARRITO);
+  const [deleteProductoCarrito] = useMutation(DELETE_PRODUCTO_CARRITO, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+  });
 
   const { data, loading, error } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
-    variables: {
-      token: token,
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
     },
   });
 
@@ -60,6 +70,7 @@ function ShoppingCart() {
 
   function actualizarCarrito() {
     console.log("haciendo mutation");
+    console.log(idProd)
     deleteProductoCarrito({
       variables: {
         deleteProductCestaId: idProd,
@@ -120,7 +131,7 @@ function ShoppingCart() {
                         <button
                           className="flex self-start mt-12 text-gray-400"
                           onClick={() => {
-                            setIdProd(p._id), actualizarCarrito();
+                            setIdProd(p._id),changeReload() ,actualizarCarrito();
                           }}
                         >
                           <div className="flex items-center">

@@ -6,11 +6,14 @@ import Contacto from "./Contacto";
 import Origen from "./Origen";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import ProductosVenta from "./ProductosVenta";
-import BotonesUser from "./BotonesUser";
+import BotonesUserLogged from "./BotonesUserLogged";
 import ShoppingCart from "./ShoppingCart";
 import PedidosPerfil from "./PedidosPerfil";
 import HacerPedido from "./HacerPedido";
 import Cargando from "./Cargando";
+import Session from "./Session";
+import BotonesUserNotLogged from "./BotonesUserNotLogged";
+import Perfil from "./Perfil";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -35,7 +38,14 @@ function ContenedorMaderas() {
     changeViewPedidosPerfil,
     viewHacerPedido,
     changeViewHacerPedido,
+    viewSession,
+    changeViewSession,
     token,
+    changeViewProductSelect,
+    viewPerfil,
+    changeViewPerfil,
+    productIdSelect,
+    productCantidadSelect,
   } = useContext(Context);
 
   return (
@@ -52,6 +62,9 @@ function ContenedorMaderas() {
               changeViewShoppingCart(false);
               changeViewPedidosPerfil(false);
               changeViewHacerPedido(false);
+              changeViewSession(false);
+              changeViewProductSelect(false);
+              changeViewPerfil(false)
             }}
             className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"
           ></button>
@@ -67,6 +80,9 @@ function ContenedorMaderas() {
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
                 changeViewHacerPedido(false);
+                changeViewSession(false);
+                changeViewProductSelect(false);
+                changeViewPerfil(false)
               }}
               className={
                 viewInicio ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -85,6 +101,9 @@ function ContenedorMaderas() {
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
                 changeViewHacerPedido(false);
+                changeViewSession(false);
+                changeViewProductSelect(false);
+                changeViewPerfil(false)
               }}
               className={
                 viewOrigen ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -103,6 +122,9 @@ function ContenedorMaderas() {
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
                 changeViewHacerPedido(false);
+                changeViewSession(false);
+                changeViewProductSelect(false);
+                changeViewPerfil(false)
               }}
               className={
                 viewMaderas ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -121,6 +143,9 @@ function ContenedorMaderas() {
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
                 changeViewHacerPedido(false);
+                changeViewSession(false);
+                changeViewProductSelect(false);
+                changeViewPerfil(false)
               }}
               className={
                 viewContacto ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -139,6 +164,9 @@ function ContenedorMaderas() {
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
                 changeViewHacerPedido(false);
+                changeViewSession(false);
+                changeViewProductSelect(false);
+                changeViewPerfil(false)
               }}
               className={
                 viewProductos ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -152,13 +180,15 @@ function ContenedorMaderas() {
         {viewInicio && (
           <div className="">
             <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Conocenos</h1>
-            {token && <BotonesUser />}
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
         {viewMaderas && (
           <div>
             <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Maderas</h1>
-            {token && <BotonesUser />}
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
 
@@ -167,53 +197,73 @@ function ContenedorMaderas() {
             <h1 className="flex justify-center font-serif text-white font-blond text-7xl mt-8 ml-5">
               Contacto
             </h1>
-            {token && <BotonesUser />}
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
 
         {viewOrigen && (
           <div>
             <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Origen</h1>
-            {token && <BotonesUser />}
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
 
         {viewProductos && (
           <div>
             <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Productos</h1>
-            {token && <BotonesUser />}
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
 
         {viewShoppingCart && (
           <div>
             <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Carrito</h1>
-            {token && <BotonesUser />}
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
 
         {viewPedidosPerfil && (
           <div>
             <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Pedidos</h1>
-            {token && <BotonesUser />}
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
 
         {viewHacerPedido && (
           <div>
-            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Proceso de Compra</h1>
-            {token && <BotonesUser />}
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
+              Proceso de Compra
+            </h1>
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
+          </div>
+        )}
+
+        {viewPerfil && (
+          <div>
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
+              Perfil
+            </h1>
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
           </div>
         )}
       </div>
-         
+
       <Inicio />
       <Maderas />
       <Contacto />
       <Origen />
       <ProductosVenta />
+      {viewSession && <Session productIdSelect={productIdSelect} productCantidadSelect={productCantidadSelect}/>} 
       {token && <ShoppingCart />}
       {token && <PedidosPerfil />}
+      {token && <Perfil />}
     </ApolloProvider>
   );
 }

@@ -1,11 +1,5 @@
-import React, { useContext, useState } from "react";
-import {
-  ApolloClient,
-  InMemoryCache,
-  gql,
-  useMutation,
-  useQuery,
-} from "@apollo/client";
+import React, { useContext, useState, useEffect } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import Cargando from "./Cargando";
 
@@ -16,8 +10,8 @@ const LOG_OUT = gql`
 `;
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
-  query GetProductosCarritoUser($token: String!) {
-    getProductosCarritoUser(token: $token) {
+  query GetProductosCarritoUser {
+    getProductosCarritoUser {
       _id
       cantidad
       id_producto
@@ -26,11 +20,11 @@ const GET_PRODUCTOS_CARRITO_USER = gql`
       precioTotal
       precioTotal_freeIVA
       img
+    }
   }
-}
 `;
 
-function BotonesUser() {
+function BotonesUserLogged() {
   const {
     changeReload,
     token,
@@ -42,10 +36,22 @@ function BotonesUser() {
     changeViewContacto,
     changeViewPedidosPerfil,
     changeViewHacerPedido,
+    changeViewSession,
+    changeViewProductSelect,
+    changeViewPerfil,
+    reload,
   } = useContext(Context);
   const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
 
+  useEffect(() => {}), [reload];
+
   const [logOut] = useMutation(LOG_OUT, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+
     onCompleted: () => {
       localStorage.removeItem("token");
       changeReload();
@@ -59,14 +65,15 @@ function BotonesUser() {
   });
 
   const { data, loading, error } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
-    variables: {
-      token: token,
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
     },
   });
 
   if (loading) return <div></div>;
   if (error) return <div>Error...</div>;
-
 
   return (
     <div>
@@ -83,9 +90,10 @@ function BotonesUser() {
                   changeViewInicio(false),
                   changeViewOrigen(false),
                   changeViewMaderas(false),
-                  changeViewContacto(false);
-                  changeViewPedidosPerfil(false);
-                  changeViewHacerPedido(false);
+                  changeViewContacto(false),
+                changeViewPedidosPerfil(false),
+                changeViewHacerPedido(false),
+                changeViewPerfil(false)
               }}
             ></button>
             {data.getProductosCarritoUser.length != 0 && (
@@ -123,6 +131,17 @@ function BotonesUser() {
                     role="menuitem"
                     tabIndex="-1"
                     id="menu-item-0"
+                    onClick={() => {
+                      changeViewPerfil(true),
+                        changeViewShoppingCart(false),
+                        changeViewProductos(false),
+                        changeViewInicio(false),
+                        changeViewOrigen(false),
+                        changeViewMaderas(false),
+                        changeViewContacto(false),
+                      changeViewPedidosPerfil(false),
+                      changeViewHacerPedido(false)
+                    }}
                   >
                     Perfil
                   </a>
@@ -135,14 +154,17 @@ function BotonesUser() {
                     tabIndex="-1"
                     id="menu-item-1"
                     onClick={() => {
-                      changeViewPedidosPerfil(true);
+                      changeViewPedidosPerfil(true),
                       changeViewShoppingCart(false),
-                      changeViewProductos(false),
+                        changeViewProductos(false),
+                        changeViewProductSelect(false),
                       changeViewInicio(false),
-                      changeViewOrigen(false),
-                      changeViewMaderas(false),
-                      changeViewContacto(false);
-                      changeViewHacerPedido(false);
+                        changeViewOrigen(false),
+                        changeViewMaderas(false),
+                        changeViewContacto(false),
+                      changeViewHacerPedido(false),
+                      changeViewSession(false),
+                      changeViewPerfil(false)
                     }}
                   >
                     Pedidos
@@ -157,15 +179,21 @@ function BotonesUser() {
                     id="menu-item-2 on"
                     onClick={() => {
                       logOut();
-                      setOpenSubMenuPerfil(false);
-                      console.log(
-                        "me desloggeo, token: " + localStorage.getItem("token")
-                      );
+                      setOpenSubMenuPerfil(false),
+                      changeViewPedidosPerfil(false),
+                      changeViewShoppingCart(false),
+                        changeViewProductos(false),
+                        changeViewProductSelect(false),
+                      changeViewInicio(true),
+                        changeViewOrigen(false),
+                        changeViewMaderas(false),
+                        changeViewContacto(false),
+                      changeViewHacerPedido(false),
+                      changeViewSession(false),
+                      changeViewPerfil(false)
+                      console.log("me desloggeo, token: " + localStorage.getItem("token"));
                       localStorage.removeItem("token");
-                      console.log(
-                        "me he desloggeado, token: " +
-                          localStorage.getItem("token")
-                      );
+                      console.log("me he desloggeado, token: " + localStorage.getItem("token"));
                     }}
                   >
                     Cerrar Sesión
@@ -180,4 +208,4 @@ function BotonesUser() {
   );
 }
 
-export default BotonesUser;
+export default BotonesUserLogged;

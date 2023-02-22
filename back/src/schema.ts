@@ -60,17 +60,18 @@ export const typeDefs = gql`
         getMaderas: [Maderas!]!
         getProductos: [Product!]!
         getProducto (id_product: String!): Product!
-        getProductosCarritoUser(token: String!): [Carrito!]
+        getProductosCarritoUser: [Carrito!]
         getPedidosUser(id_user: String!): [Pedido!]!
+        getUser: User!
     }
 
     type Mutation{
         darAltaMadera(img: String!, name: String!, description: String!): Maderas!
         borrarMadera(id: ID!): Maderas!
         addProducto(img: String!, name: String!, stock: String!, precio: String!): Product!
-        venderProductos(id_user: String!, nombre: String!, apellido: String!, telefono: String!, direccion: String!, masInformacion: String!, codigoPostal: String!, ciudad: String!, pais: String!): Pedido!
+        venderProductos(nombre: String!, apellido: String!, telefono: String!, direccion: String!, masInformacion: String!, codigoPostal: String!, ciudad: String!, pais: String!): Pedido!
         addStockProducto(_id: String!, cantidad: String!): Product!
-        addProductCesta(id_producto: String!, cantidad: String!, tokenUser: String!): Carrito!
+        addProductCesta(id_producto: String!, cantidad: String!): Carrito!
         deleteProductCesta(id: ID!): String!
         RegistrarUser(nombre: String!, apellido: String!, correo: String!, password: String!): String!
         logIn(correo: String!, password: String!): String!

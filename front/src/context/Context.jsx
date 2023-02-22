@@ -8,13 +8,18 @@ export function ContextProvider(props) {
   const [viewContacto, setViewContacto] = useState(false);
   const [viewOrigen, setViewOrigen] = useState(false);
   const [viewProductos, setViewProductos] = useState(false);
+  const [viewProductSelect, setViewProductSelect] = useState(false);
   const [viewShoppingCart, setViewShoppingCart] = useState(false);
   const [viewPedidosPerfil, setViewPedidosPerfil] = useState(false);
   const [viewHacerPedido, setViewHacerPedido] = useState(false);
+  const [viewSession, setViewSession] = useState(false);
   const [reload, setReload] = useState(false);
-  
-  const token = localStorage.getItem("token");
+  const [viewPerfil, setViewPerfil] = useState(false);
 
+  const [productIdSelect, setProductIdSelect] = useState("");
+  const [productCantidadSelect, setProductCantidadSelect] = useState("");
+
+  const token = localStorage.getItem("token");
 
   function changeViewMaderas(setView) {
     setViewMaderas(setView);
@@ -32,23 +37,43 @@ export function ContextProvider(props) {
     setViewOrigen(setView);
   }
 
-  function changeViewProductos(setView){
+  function changeViewProductos(setView) {
     setViewProductos(setView);
   }
 
-  function changeViewShoppingCart(setView){
-    setViewShoppingCart(setView)
+  function changeViewProductSelect(setView){
+    setViewProductSelect(setView);
   }
 
-  function changeViewPedidosPerfil(setView){
+  function changeViewShoppingCart(setView) {
+    setViewShoppingCart(setView);
+  }
+
+  function changeViewPedidosPerfil(setView) {
     setViewPedidosPerfil(setView);
   }
 
-  function changeViewHacerPedido(setView){
+  function changeViewHacerPedido(setView) {
     setViewHacerPedido(setView);
   }
 
-  function changeReload(){
+  function changeViewSession(setView) {
+    setViewSession(setView);
+  }
+
+  function changeViewPerfil(setView){
+    setViewPerfil(setView);
+  }
+
+  function changeProductIdSelect(setId){
+    setProductIdSelect(setId)
+  }
+
+  function changeProductCantidadSelect(setCantidad){
+    setProductCantidadSelect(setCantidad)
+  }
+
+  function changeReload() {
     setReload(!reload);
   }
 
@@ -60,21 +85,31 @@ export function ContextProvider(props) {
         viewOrigen,
         viewMaderas,
         viewProductos,
+        viewProductSelect,
         viewShoppingCart,
         viewPedidosPerfil,
         viewHacerPedido,
+        viewSession,
+        viewPerfil,
         reload,
         token,
+        productIdSelect,
+        productCantidadSelect,
 
         changeViewInicio,
         changeViewContacto,
         changeViewOrigen,
         changeViewMaderas,
         changeViewProductos,
+        changeViewProductSelect,
         changeViewShoppingCart,
         changeViewPedidosPerfil,
         changeViewHacerPedido,
+        changeViewSession,
+        changeViewPerfil,
         changeReload,
+        changeProductIdSelect,
+        changeProductCantidadSelect,
       }}
     >
       {props.children}

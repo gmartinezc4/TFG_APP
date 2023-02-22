@@ -6,7 +6,6 @@ import { BsCashStack } from "react-icons/bs";
 
 const VENDER_PRODUCTOS = gql`
   mutation VenderProducto(
-    $idUser: String!
     $nombre: String!
     $apellido: String!
     $telefono: String!
@@ -17,7 +16,6 @@ const VENDER_PRODUCTOS = gql`
     $pais: String!
   ) {
     venderProductos(
-      id_user: $idUser
       nombre: $nombre
       apellido: $apellido
       telefono: $telefono
@@ -67,7 +65,13 @@ function HacerPedido(props) {
   const [ciudad, setCiudad] = useState("");
   const [pais, setPais] = useState("");
 
-  const [confirmarPedido] = useMutation(VENDER_PRODUCTOS);
+  const [confirmarPedido] = useMutation(VENDER_PRODUCTOS, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+  });
 
   let importe = 0;
   let importeFreeIva = 0;
@@ -77,7 +81,6 @@ function HacerPedido(props) {
     console.log("antes de mutation vender productos");
     confirmarPedido({
       variables: {
-        idUser: props.productos[0].id_user,
         nombre: nombre,
         apellido: apellido,
         telefono: numTelefono,
