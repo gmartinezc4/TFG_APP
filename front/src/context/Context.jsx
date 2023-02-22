@@ -3,14 +3,23 @@ import React, { createContext, useState } from "react";
 export const Context = createContext(); //contexto
 
 export function ContextProvider(props) {
-  const [viewInicio, setViewInicio] = useState(false);
+  const [viewInicio, setViewInicio] = useState(true);
   const [viewMaderas, setViewMaderas] = useState(false);
   const [viewContacto, setViewContacto] = useState(false);
   const [viewOrigen, setViewOrigen] = useState(false);
-  const [viewResort, setViewResort] = useState(false);
-  const [viewPortal, setViewPortal] = useState(true);
-  const [viewWebMaderas, setViewWebMaderas] = useState(false);
-  const [registrarse, setRegistrarse] = useState(false);
+  const [viewProductos, setViewProductos] = useState(false);
+  const [viewProductSelect, setViewProductSelect] = useState(false);
+  const [viewShoppingCart, setViewShoppingCart] = useState(false);
+  const [viewPedidosPerfil, setViewPedidosPerfil] = useState(false);
+  const [viewHacerPedido, setViewHacerPedido] = useState(false);
+  const [viewSession, setViewSession] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [viewPerfil, setViewPerfil] = useState(false);
+
+  const [productIdSelect, setProductIdSelect] = useState("");
+  const [productCantidadSelect, setProductCantidadSelect] = useState("");
+
+  const token = localStorage.getItem("token");
 
   function changeViewMaderas(setView) {
     setViewMaderas(setView);
@@ -27,42 +36,80 @@ export function ContextProvider(props) {
   function changeViewOrigen(setView) {
     setViewOrigen(setView);
   }
-  
-  function changeViewResort(setView) {
-    setViewResort(setView);
+
+  function changeViewProductos(setView) {
+    setViewProductos(setView);
   }
 
-  function changeViewPortal(setView) {
-    setViewPortal(setView);
+  function changeViewProductSelect(setView){
+    setViewProductSelect(setView);
   }
 
-  function changeViewWebMaderas(setView){
-    setViewWebMaderas(setView);
+  function changeViewShoppingCart(setView) {
+    setViewShoppingCart(setView);
   }
 
-  function changeRegistrarse(setView){
-    setRegistrarse(setView);
+  function changeViewPedidosPerfil(setView) {
+    setViewPedidosPerfil(setView);
+  }
+
+  function changeViewHacerPedido(setView) {
+    setViewHacerPedido(setView);
+  }
+
+  function changeViewSession(setView) {
+    setViewSession(setView);
+  }
+
+  function changeViewPerfil(setView){
+    setViewPerfil(setView);
+  }
+
+  function changeProductIdSelect(setId){
+    setProductIdSelect(setId)
+  }
+
+  function changeProductCantidadSelect(setCantidad){
+    setProductCantidadSelect(setCantidad)
+  }
+
+  function changeReload() {
+    setReload(!reload);
   }
 
   return (
     <Context.Provider
       value={{
-        viewMaderas,
         viewInicio,
         viewContacto,
         viewOrigen,
-        viewResort,
-        viewPortal,
-        viewWebMaderas,
-        registrarse,
-        changeViewMaderas,
+        viewMaderas,
+        viewProductos,
+        viewProductSelect,
+        viewShoppingCart,
+        viewPedidosPerfil,
+        viewHacerPedido,
+        viewSession,
+        viewPerfil,
+        reload,
+        token,
+        productIdSelect,
+        productCantidadSelect,
+
         changeViewInicio,
         changeViewContacto,
         changeViewOrigen,
-        changeViewResort,
-        changeViewPortal,
-        changeViewWebMaderas,
-        changeRegistrarse,
+        changeViewMaderas,
+        changeViewProductos,
+        changeViewProductSelect,
+        changeViewShoppingCart,
+        changeViewPedidosPerfil,
+        changeViewHacerPedido,
+        changeViewSession,
+        changeViewPerfil,
+        changeReload,
+        changeProductIdSelect,
+        changeProductCantidadSelect,
       }}
     >
       {props.children}

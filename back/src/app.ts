@@ -15,9 +15,13 @@ const run = async () => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async () => {
-      return {
-        db
+    context: async ({ req }) => {
+      const token = req.headers.authorization || "";
+      const user = await db.collection("Usuarios").findOne({ token });
+      
+      return { 
+        db, 
+        user 
       }
     },
   });
