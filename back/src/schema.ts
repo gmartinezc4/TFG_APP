@@ -73,7 +73,8 @@ export const typeDefs = gql`
         addStockProducto(_id: String!, cantidad: String!): Product!
         addProductCesta(id_producto: String!, cantidad: String!): Carrito!
         deleteProductCesta(id: ID!): String!
-        RegistrarUser(nombre: String!, apellido: String!, correo: String!, password: String!): String!
+        modificarUser(nombre: String, apellido: String, newCorreo: String, password: String, newPassword: String): User!
+        RegistrarUser(nombre: String!, apellido: String!, correo: String! password: String!): String!
         logIn(correo: String!, password: String!): String!
         logOut:Boolean! 
     }

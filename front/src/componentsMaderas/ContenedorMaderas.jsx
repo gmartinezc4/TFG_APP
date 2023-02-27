@@ -21,6 +21,7 @@ function ContenedorMaderas() {
     cache: new InMemoryCache(),
   });
   //localStorage.removeItem("token");
+  
   const {
     viewMaderas,
     changeViewMaderas,

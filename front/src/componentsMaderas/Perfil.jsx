@@ -67,7 +67,7 @@ function Perfil() {
         <div className="flex justify-center">
           <div className="flex flex-col mt-10">
             <h1 className="font-bold text-4xl mb-3">Tus datos</h1>
-            <span>
+            <span className="mb-5">
               Aquí puedes revisar y actualizar tus datos de usuario y gestionar tu email y
               contraseña
             </span>
@@ -81,7 +81,7 @@ function Perfil() {
                 </p>
                 <p className="flex flex-col">
                   <span className="font-bold mb-1">Apellido</span>
-                  <span className="font-light">{data.getUser.nombre}</span>
+                  <span className="font-light">{data.getUser.apellido}</span>
                 </p>
                 <button
                   className="border border-black h-14 w-40 hover:bg-slate-500 hover:text-white"

@@ -5,6 +5,7 @@ import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa"
 import { BsCashStack } from "react-icons/bs";
 import HacerPedido from "./HacerPedido";
 import Cargando from "./Cargando";
+import ModalConfirmacion from "./ModalConfirmacion";
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
   query GetProductosCarritoUser {
@@ -40,20 +41,22 @@ function ShoppingCart() {
     changeViewMaderas,
     changeViewContacto,
     changeViewHacerPedido,
+    modalIsOpenConfirmacion,
+    closeModalConfirmacion,
   } = useContext(Context);
 
-  
-  const [idProd, setIdProd] = useState("");
-  
+  let idProd = "";
   let importe = 0;
   let importeFreeIva = 0;
   const fechaRecogida = new Date();
 
   const [deleteProductoCarrito] = useMutation(DELETE_PRODUCTO_CARRITO, {
-    context: {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
+    onCompleted: () => {
+      console.log("despues de mutation");
+      changeReload();
+    },
+    onError: (error) => {
+      console.log(error.toString());
     },
   });
 
@@ -70,14 +73,17 @@ function ShoppingCart() {
 
   function actualizarCarrito() {
     console.log("haciendo mutation");
-    console.log(idProd)
+    console.log("prodId " + idProd)
     deleteProductoCarrito({
+      context: {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      },
       variables: {
         deleteProductCestaId: idProd,
       },
-    }).then(() => {
-      changeReload(), console.log("despues de mutation");
-    });
+    })
   }
 
   return (
@@ -131,7 +137,7 @@ function ShoppingCart() {
                         <button
                           className="flex self-start mt-12 text-gray-400"
                           onClick={() => {
-                            setIdProd(p._id),changeReload() ,actualizarCarrito();
+                            idProd = p._id, actualizarCarrito();
                           }}
                         >
                           <div className="flex items-center">
@@ -216,6 +222,13 @@ function ShoppingCart() {
       )}
 
       {viewHacerPedido && <HacerPedido productos={data.getProductosCarritoUser} />}
+
+      {modalIsOpenConfirmacion && (
+        <ModalConfirmacion
+          closeModalConfirmacion={closeModalConfirmacion}
+          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
+        />
+      )}
     </div>
   );
 }

@@ -18,6 +18,7 @@ export function ContextProvider(props) {
 
   const [productIdSelect, setProductIdSelect] = useState("");
   const [productCantidadSelect, setProductCantidadSelect] = useState("");
+  const [modalIsOpenConfirmacion, setIsOpenConfirmacion] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -77,6 +78,14 @@ export function ContextProvider(props) {
     setReload(!reload);
   }
 
+  function openModalConfirmacion() {
+    setIsOpenConfirmacion(true);
+  }
+
+  function closeModalConfirmacion() {
+    setIsOpenConfirmacion(false);
+  }
+
   return (
     <Context.Provider
       value={{
@@ -95,6 +104,7 @@ export function ContextProvider(props) {
         token,
         productIdSelect,
         productCantidadSelect,
+        modalIsOpenConfirmacion,
 
         changeViewInicio,
         changeViewContacto,
@@ -110,6 +120,8 @@ export function ContextProvider(props) {
         changeReload,
         changeProductIdSelect,
         changeProductCantidadSelect,
+        openModalConfirmacion,
+        closeModalConfirmacion,
       }}
     >
       {props.children}

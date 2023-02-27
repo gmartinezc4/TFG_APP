@@ -55,7 +55,9 @@ function HacerPedido(props) {
     changeViewProductos,
     changeViewPedidosPerfil,
     changeViewHacerPedido,
+    openModalConfirmacion,
   } = useContext(Context);
+  
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [numTelefono, setNumTelefono] = useState("");
@@ -66,12 +68,25 @@ function HacerPedido(props) {
   const [pais, setPais] = useState("");
 
   const [confirmarPedido] = useMutation(VENDER_PRODUCTOS, {
-    context: {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
+    onCompleted: () => {
+      console.log("despues de mutation");
+      changeViewShoppingCart(true);
+      changeViewProductos(false),
+        changeViewInicio(false),
+        changeViewOrigen(false),
+        changeViewMaderas(false),
+        changeViewContacto(false);
+      changeViewPedidosPerfil(false);
+      changeViewHacerPedido(false);
+      openModalConfirmacion();
+      
+      changeReload();
+    },
+    onError: (error) => {
+      console.log(error.toString());
     },
   });
+
 
   let importe = 0;
   let importeFreeIva = 0;
@@ -80,6 +95,11 @@ function HacerPedido(props) {
   function tramitarDatos() {
     console.log("antes de mutation vender productos");
     confirmarPedido({
+      context: {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      },
       variables: {
         nombre: nombre,
         apellido: apellido,
@@ -90,18 +110,11 @@ function HacerPedido(props) {
         ciudad: ciudad,
         pais: pais,
       },
-    }).then(() => {
-      changeReload(), console.log("despues de mutation vender productos");
-      changeViewProductos(true),
-        changeViewInicio(false),
-        changeViewOrigen(false),
-        changeViewMaderas(false),
-        changeViewContacto(false);
-      changeViewShoppingCart(false);
-      changeViewPedidosPerfil(false);
-      changeViewHacerPedido(false);
-    });
+    })
   }
+
+  
+
 
   return (
     <div>

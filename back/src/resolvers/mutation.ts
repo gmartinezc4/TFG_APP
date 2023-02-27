@@ -62,14 +62,15 @@ export const Mutation = {
         let importe_freeIVAFinalPedido: number = 0;
         let productosPedido: Array<any> = [];
         let fecha = new Date();
-
+        
         try {
-            const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
-            const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
-
             if (user) {
-                const carritoUser = await db.collection("Carritos").find({ Id_user: user.Id_user.toString() }).toArray();
-
+                
+                const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
+                const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+                
+                const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
+                console.log("hola")
                 if (carritoUser.length > 0) {
                     carritoUser.map(async (p: any) => {
                         productosPedido.push(p);
@@ -82,12 +83,12 @@ export const Mutation = {
 
                         await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(p.Id_producto) }, { $set: { stock: newStock.toString() } })
                     })
-                    await db.collection("Carritos").deleteMany({ Id_user: user.Id_user });
+                    await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
                     await db.collection("Pedidos_Activos").insertOne({ Id_user: user.Id_user, Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
                     await db.collection("Historial_Pedidos").insertOne({ Id_user: user.Id_user, Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
 
                     return {
-                        id_user: user.Id_user,
+                        id_user: user._id.toString(),
                         estado: "Activo",
                         nombre: nombre,
                         apellido: apellido,
@@ -210,6 +211,67 @@ export const Mutation = {
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
         }
+    },
+
+    modificarUser: async (parent: any, args: { nombre: string, apellido: string, newCorreo: string, password: string, newPassword: string }, context: { db: Db, user: any }) => {
+        const { db, user } = context;
+        const { nombre, apellido, newCorreo, password, newPassword } = args;
+
+        try {
+            console.log(user)
+            if (user) {
+                if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre, Apellido: apellido } });
+                    return {
+                        _id: user._id.toString(),
+                        nombre: nombre,
+                        apellido: apellido,
+                        correo: user.Email,
+                        password: user.Password,
+                        token: user.token
+                    }
+                } else if (newCorreo != "" && password != "" && newCorreo != null && password != null) {
+                    if (user.Password == password) {
+                        const yaExisteCorreo = await db.collection("Usuarios").findOne({ Email: newCorreo });
+
+                        if (!yaExisteCorreo) {
+                            await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Email: newCorreo } });
+                            return {
+                                _id: user._id.toString(),
+                                nombre: user.Nombre,
+                                apellido: user.Apellido,
+                                correo: newCorreo,
+                                password: user.Password,
+                                token: user.token
+                            }
+                        } else {
+                            throw new ApolloError("Email ya registrado");
+                        }
+                    } else {
+                        throw new ApolloError("Contraseña incorrecta");
+                    }
+                } else if (password != "" && newPassword != "" && password != null && newPassword != null) {
+                    if (user.Password == password) {
+                        await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Password: newPassword } });
+                        return {
+                            _id: user._id.toString(),
+                            nombre: user.Nombre,
+                            apellido: user.Apellido,
+                            correo: user.Email,
+                            password: newPassword,
+                            token: user.token
+                        }
+                    } else {
+                        throw new ApolloError("Contraseña incorrecta");
+                    }
+                }
+            } else {
+                throw new ApolloError("Ha habido un error con el usuario");
+            }
+        } catch (e: any) {
+            throw new ApolloError(e, e.extensions.code);
+        }
+
     },
 
     RegistrarUser: async (parent: any, args: { nombre: string, apellido: string, correo: string, password: string }, context: { db: Db }) => {
