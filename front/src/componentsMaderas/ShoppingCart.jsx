@@ -218,12 +218,11 @@ function ShoppingCart() {
         )}
       </div>
 
-      
-
       {modalIsOpenConfirmacion && (
         <ModalConfirmacion
           closeModalConfirmacion={closeModalConfirmacion}
           modalIsOpenConfirmacion={modalIsOpenConfirmacion}
+          mensaje={"Pedido confirmado"}
         />
       )}
     </div>

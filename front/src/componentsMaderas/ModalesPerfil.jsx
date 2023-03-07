@@ -102,12 +102,9 @@ function ModalesPerfil(props) {
   });
 
   function comprobarUserNombreApellido() {
-    if (nombre == "") {
+    if (nombre == "" && apellido == "") {
       setNoHayNombre(true);
-      setNoHayApellido(false);
-    } else if (apellido == "") {
       setNoHayApellido(true);
-      setNoHayNombre(false);
     } else {
       setNoHayApellido(false);
       setNoHayNombre(false);

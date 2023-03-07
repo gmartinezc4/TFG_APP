@@ -62,13 +62,13 @@ export const Mutation = {
         let importe_freeIVAFinalPedido: number = 0;
         let productosPedido: Array<any> = [];
         let fecha = new Date();
-        
+
         try {
             if (user) {
-                
+
                 const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
                 const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
-                
+
                 const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
                 console.log("hola")
                 if (carritoUser.length > 0) {
@@ -218,9 +218,28 @@ export const Mutation = {
         const { nombre, apellido, newCorreo, password, newPassword } = args;
 
         try {
-            console.log(user)
             if (user) {
-                if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
+                if (nombre != "" && nombre != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre } });
+                    return {
+                        _id: user._id.toString(),
+                        nombre: nombre,
+                        apellido: apellido,
+                        correo: user.Email,
+                        password: user.Password,
+                        token: user.token
+                    }
+                } else if (apellido != "" && apellido != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Apellido: apellido } });
+                    return {
+                        _id: user._id.toString(),
+                        nombre: nombre,
+                        apellido: apellido,
+                        correo: user.Email,
+                        password: user.Password,
+                        token: user.token
+                    }
+                } else if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
                     await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre, Apellido: apellido } });
                     return {
                         _id: user._id.toString(),
