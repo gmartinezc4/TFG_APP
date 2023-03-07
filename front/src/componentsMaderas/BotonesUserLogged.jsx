@@ -35,6 +35,7 @@ function BotonesUserLogged() {
     changeViewMaderas,
     changeViewContacto,
     changeViewPedidosPerfil,
+    changeViewDetallePedido,
     changeViewHacerPedido,
     changeViewSession,
     changeViewProductSelect,
@@ -92,6 +93,7 @@ function BotonesUserLogged() {
                   changeViewMaderas(false),
                   changeViewContacto(false),
                 changeViewPedidosPerfil(false),
+                changeViewDetallePedido(false),
                 changeViewHacerPedido(false),
                 changeViewPerfil(false)
               }}
@@ -140,6 +142,7 @@ function BotonesUserLogged() {
                         changeViewMaderas(false),
                         changeViewContacto(false),
                       changeViewPedidosPerfil(false),
+                      changeViewDetallePedido(false),
                       changeViewHacerPedido(false)
                     }}
                   >
@@ -155,6 +158,7 @@ function BotonesUserLogged() {
                     id="menu-item-1"
                     onClick={() => {
                       changeViewPedidosPerfil(true),
+                      changeViewDetallePedido(false),
                       changeViewShoppingCart(false),
                         changeViewProductos(false),
                         changeViewProductSelect(false),
@@ -181,6 +185,7 @@ function BotonesUserLogged() {
                       logOut();
                       setOpenSubMenuPerfil(false),
                       changeViewPedidosPerfil(false),
+                      changeViewDetallePedido(false),
                       changeViewShoppingCart(false),
                         changeViewProductos(false),
                         changeViewProductSelect(false),

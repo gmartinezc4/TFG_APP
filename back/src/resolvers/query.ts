@@ -84,18 +84,17 @@ export const Query = {
 
     },
 
-    getPedidosUser: async (parent: any, args: { id_user: string }, context: { db: Db, user: any }) => {
+    getHistorialPedidosUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
         const { db, user } = context;
-        const id_user = args.id_user;
 
         try {
             if (user) {
-                const pedidos = await db.collection("Historial_Pedidos").find({ Id_user: id_user }).toArray();
+                const pedidos = await db.collection("Historial_Pedidos").find({ Id_user: user._id.toString() }).toArray();
 
                 if (pedidos) {
                     console.log(pedidos)
                     return pedidos.map(p => ({
-
+                        _id: p._id,
                         id_user: p.Id_user,
                         estado: p.Estado,
                         nombre: p.Nombre,
@@ -110,7 +109,16 @@ export const Query = {
                         fechaRecogida: p.FechaRecogida,
                         importePedido: p.ImportePedido,
                         importeFreeIvaPedido: p.ImporteFreeIvaPedido,
-                        productos: p.Productos
+                        productos: p.Productos.map((e: any) => ({
+                            _id: e._id.toString(),
+                            id_user: e.Id_user,
+                            id_producto: e.Id_producto,
+                            img: e.Img,
+                            name: e.Name,
+                            cantidad: e.Cantidad,
+                            precioTotal: e.PrecioTotal,
+                            precioTotal_freeIVA: e.PrecioTotal_freeIVA
+                        }))
 
                     }))
 
