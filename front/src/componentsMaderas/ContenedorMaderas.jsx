@@ -15,6 +15,7 @@ import Session from "./Session";
 import BotonesUserNotLogged from "./BotonesUserNotLogged";
 import Perfil from "./Perfil";
 import DetallePedido from "./DetallePedido";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -52,6 +53,7 @@ function ContenedorMaderas() {
     productCantidadSelect,
     pedidoDetallado,
     productosShoppingCart,
+    enviarCorreoConfirmacion,
   } = useContext(Context);
 
   return (
@@ -288,6 +290,7 @@ function ContenedorMaderas() {
       {token && viewPedidosPerfil && <PedidosPerfil />}
       {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado}/>}
       {token && viewPerfil && <Perfil />}
+      {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>}
     </ApolloProvider>
   );
 }

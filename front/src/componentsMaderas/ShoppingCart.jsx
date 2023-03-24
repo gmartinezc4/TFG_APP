@@ -3,8 +3,6 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
-import HacerPedido from "./HacerPedido";
-import Cargando from "./Cargando";
 import ModalConfirmacion from "./ModalConfirmacion";
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
@@ -41,6 +39,7 @@ function ShoppingCart() {
     modalIsOpenConfirmacion,
     closeModalConfirmacion,
     changeProductosShoppingCart,
+    changeViewProductSelect
   } = useContext(Context);
 
   let idProd = "";
@@ -106,6 +105,7 @@ function ShoppingCart() {
                         changeViewOrigen(false),
                         changeViewMaderas(false),
                         changeViewContacto(false);
+                        changeViewProductSelect(false);
                     }}
                   >
                     Volver a la tienda
