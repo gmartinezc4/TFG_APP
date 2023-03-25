@@ -1,6 +1,7 @@
 import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
+const bcrypt = require('bcrypt');
 
 export const Mutation = {
     darAltaMadera: async (parent: any, args: { img: String, name: String, description: String }, context: { db: Db }) => {
@@ -55,9 +56,9 @@ export const Mutation = {
         }
     },
 
-    venderProductos: async (parent: any, args: { nombre: string, apellido: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db, user: any }) => {
+    venderProductos: async (parent: any, args: { nombre: string, apellido: string, correo: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db, user: any }) => {
         const { db, user } = context;
-        const { nombre, apellido, telefono, direccion, masInformacion, codigoPostal, ciudad, pais } = args;
+        const { nombre, apellido, correo, telefono, direccion, masInformacion, codigoPostal, ciudad, pais } = args;
         let importeFinalPedido: number = 0;
         let importe_freeIVAFinalPedido: number = 0;
         let productosPedido: Array<any> = [];
@@ -70,7 +71,6 @@ export const Mutation = {
                 const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
 
                 const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
-                console.log("hola")
                 if (carritoUser.length > 0) {
                     carritoUser.map(async (p: any) => {
                         productosPedido.push(p);
@@ -84,14 +84,15 @@ export const Mutation = {
                         await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(p.Id_producto) }, { $set: { stock: newStock.toString() } })
                     })
                     await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
-                    await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
-                    await db.collection("Historial_Pedidos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
+                    await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
+                    await db.collection("Historial_Pedidos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
 
                     return {
                         id_user: user._id.toString(),
                         estado: "Activo",
                         nombre: nombre,
                         apellido: apellido,
+                        email: correo,
                         telefono: telefono,
                         direccion: direccion,
                         masInformacion: masInformacion,
@@ -217,6 +218,9 @@ export const Mutation = {
         const { db, user } = context;
         const { nombre, apellido, newCorreo, password, newPassword } = args;
 
+        const encripted_pass = await bcrypt.hash(newPassword, 12);
+        const encripted_new_pass = await bcrypt.hash(newPassword, 12);
+
         try {
             if (user) {
                 if (nombre != "" && nombre != null) {
@@ -270,14 +274,14 @@ export const Mutation = {
                         throw new ApolloError("Contraseña incorrecta");
                     }
                 } else if (password != "" && newPassword != "" && password != null && newPassword != null) {
-                    if (user.Password == password) {
-                        await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Password: newPassword } });
+                    if (bcrypt.compare(user.Password, password)) {
+                        await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Password: encripted_new_pass } });
                         return {
                             _id: user._id.toString(),
                             nombre: user.Nombre,
                             apellido: user.Apellido,
                             correo: user.Email,
-                            password: newPassword,
+                            password: encripted_new_pass,
                             token: user.token
                         }
                     } else {
@@ -305,8 +309,9 @@ export const Mutation = {
 
             if (!user) {
                 const token = uuidv4();
+                const encripted_pass = await bcrypt.hash(password, 12);
 
-                await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: password, token: token });
+                await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: encripted_pass, token: token });
                 return token;
             } else {
                 return new ApolloError("El correo ya esta registrado");
@@ -320,16 +325,18 @@ export const Mutation = {
         const db = context.db;
         const { correo, password } = args;
         try {
-            const user = await db.collection("Usuarios").findOne({ Email: correo, Password: password });
+            const user = await db.collection("Usuarios").findOne({ Email: correo });
 
             if (!user) {
                 return new ApolloError("Ningun usuario con ese correo está registrado");
 
             } else {
-                const token = uuidv4();
+                if (bcrypt.compare(password, user['Password'])) {
+                    const token = uuidv4();
 
-                await db.collection("Usuarios").updateOne({ Email: correo, Password: password }, { $set: { token: token } });
-                return token;
+                    await db.collection("Usuarios").updateOne({ Email: correo}, { $set: { token: token } });
+                    return token;
+                }
             }
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
