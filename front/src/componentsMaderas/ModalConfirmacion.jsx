@@ -26,7 +26,7 @@ function ModalConfirmacion(props) {
         style={customStyles}
         ariaHideApp={false}
       >
-        <h1 className="flex justify-center font-bold text-2xl">{props.mensaje}</h1>
+        <h1 className="flex justify-center  text-2xl">{props.mensaje}</h1>
         <div className="flex justify-center">
           <button
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-10"
