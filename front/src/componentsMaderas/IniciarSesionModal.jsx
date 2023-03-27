@@ -3,6 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import ModalConfirmacion from "./ModalConfirmacion";
 
 const customStyles = {
   content: {
@@ -48,7 +49,8 @@ function IniciarSesionModal(props) {
   const [noHayPassword, setNoHayPassword] = useState(false);
   const [passView, setPassView] = useState(false);
 
-  const { changeReload, changeViewSession, changeViewProductos } = useContext(Context);
+  const { changeReload, changeViewSession, changeViewProductos, openModalConfirmacion } =
+    useContext(Context);
 
   const [login] = useMutation(LOG_IN, {
     onCompleted: (data) => {
@@ -63,6 +65,7 @@ function IniciarSesionModal(props) {
 
       props.closeModalInicioSesion();
       changeReload();
+      openModalConfirmacion();
     },
     onError: (error) => {
       //si hay un error, borrar el token

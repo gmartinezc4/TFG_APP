@@ -15,6 +15,7 @@ import Session from "./Session";
 import BotonesUserNotLogged from "./BotonesUserNotLogged";
 import Perfil from "./Perfil";
 import DetallePedido from "./DetallePedido";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -52,8 +53,10 @@ function ContenedorMaderas() {
     productCantidadSelect,
     pedidoDetallado,
     productosShoppingCart,
+    enviarCorreoConfirmacion,
+    modalIsOpenConfirmacion
   } = useContext(Context);
-
+console.log(modalIsOpenConfirmacion)
   return (
     <ApolloProvider client={client}>
       <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')] bg-no-repeat bg-cover h-56">
@@ -288,6 +291,8 @@ function ContenedorMaderas() {
       {token && viewPedidosPerfil && <PedidosPerfil />}
       {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado}/>}
       {token && viewPerfil && <Perfil />}
+      {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>}
+      
     </ApolloProvider>
   );
 }
