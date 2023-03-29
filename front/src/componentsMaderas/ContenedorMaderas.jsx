@@ -10,7 +10,6 @@ import BotonesUserLogged from "./BotonesUserLogged";
 import ShoppingCart from "./ShoppingCart";
 import PedidosPerfil from "./PedidosPerfil";
 import HacerPedido from "./HacerPedido";
-import Cargando from "./Cargando";
 import Session from "./Session";
 import BotonesUserNotLogged from "./BotonesUserNotLogged";
 import Perfil from "./Perfil";
@@ -56,7 +55,7 @@ function ContenedorMaderas() {
     enviarCorreoConfirmacion,
     modalIsOpenConfirmacion
   } = useContext(Context);
-console.log(modalIsOpenConfirmacion)
+
   return (
     <ApolloProvider client={client}>
       <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')] bg-no-repeat bg-cover h-56">

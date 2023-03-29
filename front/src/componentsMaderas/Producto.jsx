@@ -30,6 +30,21 @@ const GET_PRODUCTO = gql`
   }
 `;
 
+const GET_PRODUCTO_CARRITO_USER = gql`
+  query GetProductoCarritoUser($idProduct: String!) {
+    getProductoCarritoUser(id_product: $idProduct) {
+      _id
+      cantidad
+      id_producto
+      id_user
+      img
+      name
+      precioTotal
+      precioTotal_freeIVA
+    }
+  } 
+`;
+
 function Producto(props) {
   const {
     changeReload,
@@ -39,9 +54,11 @@ function Producto(props) {
     reload,
     changeProductIdSelect,
     changeProductCantidadSelect,
-    changeViewSession
+    changeViewSession,
   } = useContext(Context);
   const [cantidad, setCantidad] = useState("");
+  //const [cantidadProdCarrito, setCantidadProdCarrito] = useState("");
+  let cantidadProdCarrito = 0;
 
   useEffect(() => {}), [reload];
 
@@ -53,7 +70,7 @@ function Producto(props) {
     },
   });
 
-  const { data, loading, error } = useQuery(GET_PRODUCTO, {
+  const { data: dataProd, loading: loadingProd, error: errorProd } = useQuery(GET_PRODUCTO, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -64,13 +81,26 @@ function Producto(props) {
     },
   });
 
-  if (loading)
-    return (
-      <div>
-        <Cargando />
-      </div>
-    );
-  if (error) return <div>Error...</div>;
+  const { data: dataProductos, loading: loadingProductos, error: errorProductos } = useQuery(GET_PRODUCTO_CARRITO_USER, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+    variables: {
+      idProduct: props.productId,
+    },
+  });
+
+  if (loadingProd) return (<div><Cargando /></div>);
+  if (errorProd) return <div>Error...</div>;
+
+
+  if(dataProductos){
+    cantidadProdCarrito = dataProductos.getProductoCarritoUser.cantidad;
+    console.log(dataProductos.getProductoCarritoUser.cantidad);
+  }
+
 
   function actualizarCarrito() {
     console.log("haciendo mutation");
@@ -86,9 +116,10 @@ function Producto(props) {
 
   return (
     <div>
+      {}
       <div className="flex justify-center">
         <div className="bg-no-repeat bg-contain -ml-96">
-          <img className="h-80 w-100 border rounded" src={data.getProducto.img}></img>
+          <img className="h-80 w-100 border rounded" src={dataProd.getProducto.img}></img>
           <button
             className="border rounded text-white bg-black mt-10 p-2"
             onClick={() => {
@@ -100,17 +131,17 @@ function Producto(props) {
         </div>
 
         <div className="ml-20 w-60 flex flex-col">
-          <div className="font-serif text-5xl mb-10 underline">{data.getProducto.name}</div>
+          <div className="font-serif text-5xl mb-10 underline">{dataProd.getProducto.name}</div>
 
           <div className="font-serif text-2xl flex flex-row items-baseline">
-            {data.getProducto.precio} €/kg
+            {dataProd.getProducto.precio} €/kg
             <div className="font-serif text-sm text-gray-400 ml-3">IVA incluido</div>
           </div>
 
-          {data.getProducto.stock <= 0 && <div className="mt-10">Sin Stock</div>}
+          {dataProd.getProducto.stock <= 0 && <div className="mt-10">Sin Stock</div>}
 
-          {data.getProducto.stock > 0 && (
-            <div className="mt-10">Stock: {data.getProducto.stock} kg</div>
+          {dataProd.getProducto.stock > 0 && (
+            <div className="mt-10">Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg</div>
           )}
 
           <form
@@ -119,15 +150,15 @@ function Producto(props) {
               if (cantidad != 0 && token) {
                 actualizarCarrito();
               } else {
-                changeViewSession(true)
+                changeViewSession(true);
                 changeViewProductSelect(false);
                 changeViewProductos(false);
-                changeProductIdSelect(props.productId)
-                changeProductCantidadSelect(cantidad)
+                changeProductIdSelect(props.productId);
+                changeProductCantidadSelect(cantidad);
               }
             }}
           >
-            {data.getProducto.stock <= 0 && (
+            {dataProd.getProducto.stock <= 0 && (
               <input
                 className="w-64 border border-black mt-4 bg-red-200"
                 placeholder="Sin Stock"
@@ -135,21 +166,21 @@ function Producto(props) {
               ></input>
             )}
 
-            {data.getProducto.stock > 0 && (
+            {dataProd.getProducto.stock > 0 && (
               <input
                 className="w-64 border border-black mt-4"
                 placeholder="Pedido mínimo 5kg"
                 type="number"
                 name="cantidad"
                 min="5"
-                max={data.getProducto.stock}
+                max={dataProd.getProducto.stock - cantidadProdCarrito}
                 value={cantidad}
                 onChange={(e) => setCantidad(e.target.value)}
                 required
               ></input>
             )}
 
-            {data.getProducto.stock <= 0 && (
+            {dataProd.getProducto.stock <= 0 && (
               <button
                 className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
                 type="submit"
@@ -159,7 +190,7 @@ function Producto(props) {
               </button>
             )}
 
-            {data.getProducto.stock > 0 && (
+            {dataProd.getProducto.stock > 0 && (
               <button
                 className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
                 type="submit"
@@ -170,9 +201,6 @@ function Producto(props) {
           </form>
         </div>
       </div>
-      
-      
-      
     </div>
   );
 }

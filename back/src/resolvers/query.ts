@@ -80,8 +80,36 @@ export const Query = {
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
         }
+    },
 
+    getProductoCarritoUser: async (parent: any, args: { id_product: string }, context: { db: Db, user: any }) => {
+        const id_product = args.id_product;
+        const { db, user } = context;
 
+        try {
+            if (user) {
+                const producto = await db.collection("Carritos").findOne({ Id_user: user._id.toString(), Id_producto: id_product });
+
+                if (producto) {
+                    return {
+                        _id: producto._id.toString(),
+                        id_user: producto.Id_user,
+                        id_producto: producto.Id_producto,
+                        img: producto.Img,
+                        name: producto.Name,
+                        cantidad: producto.Cantidad,
+                        precioTotal: producto.PrecioTotal,
+                        precioTotal_freeIVA: producto.PrecioTotal_freeIVA,
+                    }
+                } else {
+                    throw new ApolloError("El usuario no tiene carrito", "404");
+                }
+            } else {
+                throw new ApolloError("Ha ocurrido un error con el usuario", "500");
+            }
+        } catch (e: any) {
+            throw new ApolloError(e, e.extensions.code);
+        }
     },
 
     getHistorialPedidosUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
