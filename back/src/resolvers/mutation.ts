@@ -218,7 +218,7 @@ export const Mutation = {
         const { db, user } = context;
         const { nombre, apellido, newCorreo, password, newPassword } = args;
 
-        const encripted_pass = await bcrypt.hash(newPassword, 12);
+        const encripted_pass = await bcrypt.hash(password, 12);
         const encripted_new_pass = await bcrypt.hash(newPassword, 12);
 
         try {
@@ -254,7 +254,10 @@ export const Mutation = {
                         token: user.token
                     }
                 } else if (newCorreo != "" && password != "" && newCorreo != null && password != null) {
-                    if (user.Password == password) {
+                    console.log(user.Password)
+                    console.log(password)
+                    console.log(await bcrypt.compare(user.Password, password))
+                    if (await bcrypt.compare(password, user.Password)) {
                         const yaExisteCorreo = await db.collection("Usuarios").findOne({ Email: newCorreo });
 
                         if (!yaExisteCorreo) {
@@ -264,7 +267,7 @@ export const Mutation = {
                                 nombre: user.Nombre,
                                 apellido: user.Apellido,
                                 correo: newCorreo,
-                                password: user.Password,
+                                password: encripted_pass,
                                 token: user.token
                             }
                         } else {
@@ -274,7 +277,7 @@ export const Mutation = {
                         throw new ApolloError("Contraseña incorrecta");
                     }
                 } else if (password != "" && newPassword != "" && password != null && newPassword != null) {
-                    if (bcrypt.compare(user.Password, password)) {
+                    if (await bcrypt.compare(password, user.Password)) {
                         await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Password: encripted_new_pass } });
                         return {
                             _id: user._id.toString(),
@@ -312,6 +315,7 @@ export const Mutation = {
                 const encripted_pass = await bcrypt.hash(password, 12);
 
                 await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: encripted_pass, token: token });
+
                 return token;
             } else {
                 return new ApolloError("El correo ya esta registrado");
@@ -331,10 +335,10 @@ export const Mutation = {
                 return new ApolloError("Ningun usuario con ese correo está registrado");
 
             } else {
-                if (bcrypt.compare(password, user['Password'])) {
+                if (await bcrypt.compare(password, user['Password'])) {
                     const token = uuidv4();
 
-                    await db.collection("Usuarios").updateOne({ Email: correo}, { $set: { token: token } });
+                    await db.collection("Usuarios").updateOne({ Email: correo }, { $set: { token: token } });
                     return token;
                 }
             }
