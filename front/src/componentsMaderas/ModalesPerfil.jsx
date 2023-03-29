@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useMutation } from "@apollo/client";
-import { Context } from "../context/Context";
+import React, { useState, useContext } from "react";
 import Modal from "react-modal";
+import { Context } from "../context/Context";
+import { gql, useMutation } from "@apollo/client";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const customStyles = {
@@ -20,6 +20,31 @@ const customStyles = {
   },
 };
 
+const MODIFICAR_USER = gql`
+  mutation Mutation(
+    $nombre: String
+    $apellido: String
+    $newCorreo: String
+    $password: String
+    $newPassword: String
+  ) {
+    modificarUser(
+      nombre: $nombre
+      apellido: $apellido
+      newCorreo: $newCorreo
+      password: $password
+      newPassword: $newPassword
+    ) {
+      _id
+      nombre
+      apellido
+      correo
+      password
+      token
+    }
+  }
+`;
+
 function ModalesPerfil(props) {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -30,67 +55,215 @@ function ModalesPerfil(props) {
   const [correoRep, setCorreoRep] = useState("");
   const [noHayCorreo, setNoHayCorreo] = useState(false);
   const [noHayCorreoRep, setNoHayCorreoRep] = useState(false);
-  const [errorCorreo, setErrorCorreo] = useState(false);
-  const [errorCorreoIncompleto, setErrorCorreoIncompleto] = useState(false);
+  const [errorCorreoExistente, setErrorCorreoExistente] = useState(false);
+  const [invalidCorreo, setInvalidCorreo] = useState(false);
   const [noCoincidenCorreos, setNoCoincidenCorreos] = useState(false);
+  let invalidCorreo2 = false;
 
   const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordRep, setNewPasswordRep] = useState("");
   const [noHayPassword, setNoHayPassword] = useState(false);
+  const [noHayNewPassword, setNoHayNewPassword] = useState(false);
+  const [noHayNewPasswordRep, setNoHayNewPasswordRep] = useState(false);
+  const [errorNoCoincidenPasswords, setErrorNoCoincidenPasswords] = useState(false);
+  const [errorOldNewPasswordsEquals, setErrorOldNewPasswordsEquals] = useState(false);
+  const [errorPasswordIncorrecta, setErrorPasswordIcorrecta] = useState(false);
+  const [invalidNewPassword, setInvalidNewPassword] = useState(false);
+  let invalidNewPassword2 = false;
 
   const [passView, setPassView] = useState(false);
+  const [passViewNew, setPassViewNew] = useState(false);
+  const [passViewNewRep, setPassViewNewRep] = useState(false);
+
+  const { changeReload } = useContext(Context);
+
+  const [modificarUser] = useMutation(MODIFICAR_USER, {
+    onCompleted: () => {
+      setErrorPasswordIcorrecta(true);
+      setErrorCorreoExistente(true);
+
+      if (props.modalIsOpenNombreApellido) props.closeModalNombreApellido();
+      if (props.modalIsOpenCorreo) props.closeModalCorreo();
+      if (props.modalIsOpenPassword) props.closeModalPassword();
+
+      changeReload();
+    },
+    onError: (error) => {
+      console.log(error.toString());
+      if (error.toString() == "Error: Contraseña incorrecta") {
+        setErrorPasswordIcorrecta(true);
+        setErrorCorreoExistente(false);
+      } else if (error.toString() == "Error: Email ya registrado") {
+        setErrorCorreoExistente(true);
+        setErrorPasswordIcorrecta(false);
+      }
+    },
+  });
 
   function comprobarUserNombreApellido() {
-    if (nombre == "") {
+    if (nombre == "" && apellido == "") {
       setNoHayNombre(true);
-      setNoHayApellido(false);
-    } else if (apellido == "") {
       setNoHayApellido(true);
-      setNoHayNombre(false);
     } else {
       setNoHayApellido(false);
       setNoHayNombre(false);
-      props.closeModalNombreApellido();
+
+      modificarUser({
+        context: {
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        },
+        variables: {
+          nombre: nombre,
+          apellido: apellido,
+          newCorreo: correo,
+          password: password,
+          newPassword: newPassword,
+        },
+      });
     }
   }
-console.log(password)
+
   //falta el caso de cuando el correo existe y el de cuando la contraseña no es correcta
   function comprobarUserCorreo() {
     if (correo == "") {
       setNoHayCorreo(true);
       setNoHayCorreoRep(false);
-      setErrorCorreoIncompleto(false);
-      setErrorCorreo(false);
+      setErrorCorreoExistente(false);
       setNoCoincidenCorreos(false);
       setNoHayPassword(false);
+      invalidCorreo2 = false;
+      setErrorPasswordIcorrecta(false);
+    } else if (invalidCorreo2) {
+      setNoHayCorreo(false);
+      setNoHayCorreoRep(false);
+      setErrorCorreoExistente(false);
+      setNoCoincidenCorreos(false);
+      setNoHayPassword(false);
+      setErrorPasswordIcorrecta(false);
     } else if (correoRep == "") {
       setNoHayCorreoRep(true);
       setNoHayCorreo(false);
-      setErrorCorreoIncompleto(false);
-      setErrorCorreo(false);
+      setErrorCorreoExistente(false);
       setNoCoincidenCorreos(false);
       setNoHayPassword(false);
+      invalidCorreo2 = false;
+      setErrorPasswordIcorrecta(false);
     } else if (correo != correoRep) {
       setNoCoincidenCorreos(true);
       setNoHayCorreo(false);
       setNoHayCorreoRep(false);
-      setErrorCorreoIncompleto(false);
-      setErrorCorreo(false);
+      setErrorCorreoExistente(false);
       setNoHayPassword(false);
+      invalidCorreo2 = false;
+      setErrorPasswordIcorrecta(false);
     } else if (password == "") {
       setNoHayPassword(true);
       setNoCoincidenCorreos(false);
       setNoHayCorreo(false);
       setNoHayCorreoRep(false);
-      setErrorCorreoIncompleto(false);
-      setErrorCorreo(false);
+      setErrorCorreoExistente(false);
+      invalidCorreo2 = false;
+      setErrorPasswordIcorrecta(false);
     } else {
       setNoHayCorreo(false);
       setNoHayCorreoRep(false);
-      setErrorCorreoIncompleto(false);
-      setErrorCorreo(false);
+      setErrorCorreoExistente(false);
       setNoCoincidenCorreos(false);
       setNoHayPassword(false);
-      props.closeModalCorreo();
+      invalidCorreo2 = false;
+      setErrorPasswordIcorrecta(false);
+
+      modificarUser({
+        context: {
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        },
+        variables: {
+          nombre: nombre,
+          apellido: apellido,
+          newCorreo: correo,
+          password: password,
+          newPassword: newPassword,
+        },
+      });
+    }
+  }
+
+  function comprobarUserPassword() {
+    if (password == "") {
+      setNoHayPassword(true);
+      setNoHayNewPassword(false);
+      setNoHayNewPasswordRep(false);
+      setErrorNoCoincidenPasswords(false);
+      setErrorOldNewPasswordsEquals(false);
+      invalidNewPassword2 = false;
+      setErrorPasswordIcorrecta(false);
+    } else if (newPassword == "") {
+      setNoHayNewPassword(true);
+      setNoHayPassword(false);
+      setNoHayNewPasswordRep(false);
+      setErrorNoCoincidenPasswords(false);
+      setErrorOldNewPasswordsEquals(false);
+      invalidNewPassword2 = false;
+      setErrorPasswordIcorrecta(false);
+    } else if (invalidNewPassword2) {
+      setNoHayPassword(false);
+      setNoHayNewPassword(false);
+      setNoHayNewPasswordRep(false);
+      setErrorNoCoincidenPasswords(false);
+      setErrorOldNewPasswordsEquals(false);
+      setErrorPasswordIcorrecta(false);
+    } else if (newPasswordRep == "") {
+      setNoHayNewPasswordRep(true);
+      setNoHayPassword(false);
+      setNoHayNewPassword(false);
+      setErrorNoCoincidenPasswords(false);
+      setErrorOldNewPasswordsEquals(false);
+      invalidNewPassword2 = false;
+      setErrorPasswordIcorrecta(false);
+    } else if (newPassword != newPasswordRep) {
+      setErrorNoCoincidenPasswords(true);
+      setNoHayPassword(false);
+      setNoHayNewPassword(false);
+      setNoHayNewPasswordRep(false);
+      setErrorOldNewPasswordsEquals(false);
+      invalidNewPassword2 = false;
+      setErrorPasswordIcorrecta(false);
+    } else if (password == newPassword) {
+      setErrorOldNewPasswordsEquals(true);
+      setNoHayPassword(false);
+      setNoHayNewPassword(false);
+      setNoHayNewPasswordRep(false);
+      setErrorNoCoincidenPasswords(false);
+      invalidNewPassword2 = false;
+      setErrorPasswordIcorrecta(false);
+    } else {
+      setNoHayPassword(false);
+      setNoHayNewPassword(false);
+      setNoHayNewPasswordRep(false);
+      setErrorNoCoincidenPasswords(false);
+      setErrorOldNewPasswordsEquals(false);
+      invalidNewPassword2 = false;
+      setErrorPasswordIcorrecta(false);
+
+      modificarUser({
+        context: {
+          headers: {
+            authorization: localStorage.getItem("token"),
+          },
+        },
+        variables: {
+          nombre: nombre,
+          apellido: apellido,
+          newCorreo: correo,
+          password: password,
+          newPassword: newPassword,
+        },
+      });
     }
   }
 
@@ -171,6 +344,18 @@ console.log(password)
           </p>
         )}
 
+        {errorCorreoExistente && (
+          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+            El email ya esta registrado
+          </p>
+        )}
+
+        {errorPasswordIncorrecta && (
+          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+            Contraseña incorrecta
+          </p>
+        )}
+
         <form
           className="p-3 flex flex-col justify-center"
           onSubmit={(event) => {
@@ -178,44 +363,54 @@ console.log(password)
             comprobarUserCorreo();
           }}
         >
-          <label className="block text-gray-700 text-sm font-bold mb-2">Correo</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Nuevo Correo</label>
           <input
             className={
-              noHayCorreo
+              noHayCorreo || (noCoincidenCorreos && correoRep != "") || errorCorreoExistente
                 ? "shadow appearance-none border rounded p-2 border-red-500"
                 : "shadow appearance-none border rounded p-2"
             }
             placeholder="Correo electrónico..."
             value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
+            onChange={(e) => {
+              setCorreo(e.target.value),
+                setNoCoincidenCorreos(false),
+                setInvalidCorreo(false),
+                setErrorCorreoExistente(false);
+            }}
             type="text"
             name="correo"
             pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"
             onInvalid={() => {
               {
-                setErrorCorreoIncompleto(true), setNoHayCorreo(false);
+                (invalidCorreo2 = true), setInvalidCorreo(true), comprobarUserCorreo();
               }
             }}
           ></input>
           {noHayCorreo && (
             <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca el nuevo email</p>
           )}
-          {errorCorreoIncompleto && (
+
+          {invalidCorreo && (
             <p className="text-red-500 text-xs italic mt-3">
               Porfavor introduzca un correo electrónico valido
             </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">Repetir Correo</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
+            Repetir Nuevo Correo
+          </label>
           <input
             className={
-              noHayCorreoRep
+              noHayCorreoRep || noCoincidenCorreos
                 ? "shadow appearance-none border rounded p-2 border-red-500"
                 : "shadow appearance-none border rounded p-2"
             }
             placeholder="Correo electrónico..."
             value={correoRep}
-            onChange={(e) => setCorreoRep(e.target.value)}
+            onChange={(e) => {
+              setCorreoRep(e.target.value), setNoCoincidenCorreos(false), setNoHayCorreoRep(false);
+            }}
             type="text"
             name="correoRep"
           ></input>
@@ -225,7 +420,7 @@ console.log(password)
             </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">Password</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">Contraseña</label>
           <div className="flex flex-row items-center">
             <input
               className={
@@ -235,7 +430,11 @@ console.log(password)
               }
               placeholder="******************"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value),
+                  setNoHayPassword(false),
+                  setErrorPasswordIcorrecta(false);
+              }}
               type={passView ? "text" : "password"}
               name="password"
               autoComplete="off"
@@ -252,6 +451,170 @@ console.log(password)
           </div>
 
           {noHayPassword && (
+            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+          )}
+
+          <div className="flex justify-between items-center mt-5">
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Modal Password */}
+      <Modal
+        isOpen={props.modalIsOpenPassword}
+        onRequestClose={props.closeModalPassword}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        {errorNoCoincidenPasswords && (
+          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+            Las nuevas contraseñas tienen que coincidir
+          </p>
+        )}
+
+        {errorOldNewPasswordsEquals && (
+          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+            La contraseña nueva no puede ser igual a la anterior
+          </p>
+        )}
+
+        {errorPasswordIncorrecta && (
+          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+            Contraseña incorrecta
+          </p>
+        )}
+
+        <form
+          className="p-3 flex flex-col justify-center"
+          onSubmit={(event) => {
+            event.preventDefault();
+            comprobarUserPassword();
+          }}
+        >
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">Contraseña</label>
+          <div className="flex flex-row items-center">
+            <input
+              className={
+                noHayPassword || errorOldNewPasswordsEquals || errorPasswordIncorrecta
+                  ? "shadow appearance-none border rounded p-2 border-red-500"
+                  : "shadow appearance-none border rounded p-2"
+              }
+              placeholder="******************"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value),
+                  setErrorNoCoincidenPasswords(false),
+                  setNoHayPassword(false),
+                  setErrorPasswordIcorrecta(false);
+              }}
+              type={passView ? "text" : "password"}
+              name="password"
+              autoComplete="off"
+            ></input>
+            <div
+              className="shadow appearance-none border rounded p-3 bg-green-300 hover:bg-green-500"
+              onClick={() => {
+                setPassView(!passView);
+              }}
+            >
+              {passView && <AiFillEye />}
+              {!passView && <AiFillEyeInvisible />}
+            </div>
+          </div>
+
+          {noHayPassword && (
+            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+          )}
+
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
+            Nueva Contraseña
+          </label>
+          <div className="flex flex-row items-center">
+            <input
+              className={
+                noHayNewPassword || errorNoCoincidenPasswords || errorOldNewPasswordsEquals
+                  ? "shadow appearance-none border rounded p-2 border-red-500"
+                  : "shadow appearance-none border rounded p-2"
+              }
+              placeholder="******************"
+              value={newPassword}
+              onChange={(e) => {
+                setNewPassword(e.target.value),
+                  setNoHayNewPassword(false),
+                  setInvalidNewPassword(false);
+              }}
+              type={passViewNew ? "text" : "password"}
+              name="newPassword"
+              autoComplete="off"
+              pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$"
+              onInvalid={() => {
+                {
+                  (invalidNewPassword2 = true),
+                    setInvalidNewPassword(true),
+                    comprobarUserPassword();
+                }
+              }}
+            ></input>
+            <div
+              className="shadow appearance-none border rounded p-3 bg-green-300 hover:bg-green-500"
+              onClick={() => {
+                setPassViewNew(!passViewNew);
+              }}
+            >
+              {passViewNew && <AiFillEye />}
+              {!passViewNew && <AiFillEyeInvisible />}
+            </div>
+          </div>
+
+          {noHayNewPassword && (
+            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+          )}
+
+          {invalidNewPassword && (
+            <p className="text-red-500 text-xs italic mt-3">
+              Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un número
+            </p>
+          )}
+
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
+            Repetir Nueva Contraseña
+          </label>
+          <div className="flex flex-row items-center">
+            <input
+              className={
+                noHayNewPasswordRep || errorNoCoincidenPasswords
+                  ? "shadow appearance-none border rounded p-2 border-red-500"
+                  : "shadow appearance-none border rounded p-2"
+              }
+              placeholder="******************"
+              value={newPasswordRep}
+              onChange={(e) => {
+                setNewPasswordRep(e.target.value),
+                  setErrorNoCoincidenPasswords(false),
+                  setNoHayNewPasswordRep(false);
+              }}
+              type={passViewNewRep ? "text" : "password"}
+              name="newPasswordRep"
+              autoComplete="off"
+            ></input>
+            <div
+              className="shadow appearance-none border rounded p-3 bg-green-300 hover:bg-green-500"
+              onClick={() => {
+                setPassViewNewRep(!passViewNewRep);
+              }}
+            >
+              {passViewNewRep && <AiFillEye />}
+              {!passViewNewRep && <AiFillEyeInvisible />}
+            </div>
+          </div>
+
+          {noHayNewPasswordRep && (
             <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
           )}
 

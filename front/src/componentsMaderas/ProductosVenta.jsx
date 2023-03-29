@@ -4,8 +4,6 @@ import Producto from "./Producto";
 import { Context } from "../context/Context";
 import { useEffect } from "react";
 import Cargando from "./Cargando";
-import Session from "./Session";
-import BotonesUser from "./BotonesUserLogged";
 
 const GET_PRODUCTOS = gql`
   query Query {
@@ -18,6 +16,7 @@ const GET_PRODUCTOS = gql`
     }
   }
 `;
+
 function ProductosVenta() {
   const { viewProductos, token, reload, viewProductSelect, changeViewProductSelect } =
     useContext(Context);
@@ -44,7 +43,7 @@ function ProductosVenta() {
   if (viewProductos == true) {
     return (
       <div>
-        <div className="grid grid-cols-4 gap-1 mt-10">
+        <div className="grid grid-cols-3 gap-1 mt-10">
           {!viewProductSelect &&
             data?.getProductos.map((p) => (
               <div

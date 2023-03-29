@@ -1,6 +1,8 @@
 import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
+var nodemailer  = require('nodemailer');
+import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
 export const Mutation = {
     darAltaMadera: async (parent: any, args: { img: String, name: String, description: String }, context: { db: Db }) => {
@@ -55,21 +57,21 @@ export const Mutation = {
         }
     },
 
-    venderProductos: async (parent: any, args: { nombre: string, apellido: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db, user: any }) => {
+    venderProductos: async (parent: any, args: { nombre: string, apellido: string, correo: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db, user: any }) => {
         const { db, user } = context;
-        const { nombre, apellido, telefono, direccion, masInformacion, codigoPostal, ciudad, pais } = args;
+        const { nombre, apellido, correo, telefono, direccion, masInformacion, codigoPostal, ciudad, pais } = args;
         let importeFinalPedido: number = 0;
         let importe_freeIVAFinalPedido: number = 0;
         let productosPedido: Array<any> = [];
         let fecha = new Date();
 
         try {
-            const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
-            const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
-
             if (user) {
-                const carritoUser = await db.collection("Carritos").find({ Id_user: user.Id_user.toString() }).toArray();
 
+                const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
+                const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+
+                const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
                 if (carritoUser.length > 0) {
                     carritoUser.map(async (p: any) => {
                         productosPedido.push(p);
@@ -82,15 +84,16 @@ export const Mutation = {
 
                         await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(p.Id_producto) }, { $set: { stock: newStock.toString() } })
                     })
-                    await db.collection("Carritos").deleteMany({ Id_user: user.Id_user });
-                    await db.collection("Pedidos_Activos").insertOne({ Id_user: user.Id_user, Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
-                    await db.collection("Historial_Pedidos").insertOne({ Id_user: user.Id_user, Estado: "Activo", Nombre: nombre, Apellido: apellido, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
+                    await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
+                    await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
+                    await db.collection("Historial_Pedidos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
 
                     return {
-                        id_user: user.Id_user,
+                        id_user: user._id.toString(),
                         estado: "Activo",
                         nombre: nombre,
                         apellido: apellido,
+                        email: correo,
                         telefono: telefono,
                         direccion: direccion,
                         masInformacion: masInformacion,
@@ -212,6 +215,86 @@ export const Mutation = {
         }
     },
 
+    modificarUser: async (parent: any, args: { nombre: string, apellido: string, newCorreo: string, password: string, newPassword: string }, context: { db: Db, user: any }) => {
+        const { db, user } = context;
+        const { nombre, apellido, newCorreo, password, newPassword } = args;
+
+        try {
+            if (user) {
+                if (nombre != "" && nombre != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre } });
+                    return {
+                        _id: user._id.toString(),
+                        nombre: nombre,
+                        apellido: apellido,
+                        correo: user.Email,
+                        password: user.Password,
+                        token: user.token
+                    }
+                } else if (apellido != "" && apellido != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Apellido: apellido } });
+                    return {
+                        _id: user._id.toString(),
+                        nombre: nombre,
+                        apellido: apellido,
+                        correo: user.Email,
+                        password: user.Password,
+                        token: user.token
+                    }
+                } else if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre, Apellido: apellido } });
+                    return {
+                        _id: user._id.toString(),
+                        nombre: nombre,
+                        apellido: apellido,
+                        correo: user.Email,
+                        password: user.Password,
+                        token: user.token
+                    }
+                } else if (newCorreo != "" && password != "" && newCorreo != null && password != null) {
+                    if (user.Password == password) {
+                        const yaExisteCorreo = await db.collection("Usuarios").findOne({ Email: newCorreo });
+
+                        if (!yaExisteCorreo) {
+                            await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Email: newCorreo } });
+                            return {
+                                _id: user._id.toString(),
+                                nombre: user.Nombre,
+                                apellido: user.Apellido,
+                                correo: newCorreo,
+                                password: user.Password,
+                                token: user.token
+                            }
+                        } else {
+                            throw new ApolloError("Email ya registrado");
+                        }
+                    } else {
+                        throw new ApolloError("Contraseña incorrecta");
+                    }
+                } else if (password != "" && newPassword != "" && password != null && newPassword != null) {
+                    if (user.Password == password) {
+                        await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Password: newPassword } });
+                        return {
+                            _id: user._id.toString(),
+                            nombre: user.Nombre,
+                            apellido: user.Apellido,
+                            correo: user.Email,
+                            password: newPassword,
+                            token: user.token
+                        }
+                    } else {
+                        throw new ApolloError("Contraseña incorrecta");
+                    }
+                }
+            } else {
+                throw new ApolloError("Ha habido un error con el usuario");
+            }
+        } catch (e: any) {
+            throw new ApolloError(e, e.extensions.code);
+        }
+
+    },
+
     RegistrarUser: async (parent: any, args: { nombre: string, apellido: string, correo: string, password: string }, context: { db: Db }) => {
         const db = context.db;
         const { nombre, apellido, correo, password } = args;
@@ -224,6 +307,37 @@ export const Mutation = {
 
             if (!user) {
                 const token = uuidv4();
+
+
+                //Creamos el objeto de transporte
+                var transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    ignoreTLS: false,
+                    secure: false,
+                    auth: {
+                        user: 'maderas.cobo.cuenca@gmail.com',
+                        pass: 'jnjitnifebduhnec'
+                    }
+                });
+
+                var mensaje = "Hola desde nodejs...";
+
+                var mailOptions = {
+                    from: 'maderas.cobo.cuenca@gmail.com',
+                    to: correo,
+                    subject: 'Bienvenido a Maderas Cobo',
+                    html: htmlRegistro,
+                };
+
+                transporter.sendMail(mailOptions, function (error: any, info: any) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email enviado: ' + info.response);
+                    }
+                });
+
 
                 await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: password, token: token });
                 return token;

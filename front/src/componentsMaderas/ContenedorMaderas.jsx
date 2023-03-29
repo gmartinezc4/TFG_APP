@@ -10,10 +10,11 @@ import BotonesUserLogged from "./BotonesUserLogged";
 import ShoppingCart from "./ShoppingCart";
 import PedidosPerfil from "./PedidosPerfil";
 import HacerPedido from "./HacerPedido";
-import Cargando from "./Cargando";
 import Session from "./Session";
 import BotonesUserNotLogged from "./BotonesUserNotLogged";
 import Perfil from "./Perfil";
+import DetallePedido from "./DetallePedido";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -21,6 +22,7 @@ function ContenedorMaderas() {
     cache: new InMemoryCache(),
   });
   //localStorage.removeItem("token");
+
   const {
     viewMaderas,
     changeViewMaderas,
@@ -36,6 +38,8 @@ function ContenedorMaderas() {
     changeViewProductos,
     viewPedidosPerfil,
     changeViewPedidosPerfil,
+    viewDetallePedido,
+    changeViewDetallePedido,
     viewHacerPedido,
     changeViewHacerPedido,
     viewSession,
@@ -46,6 +50,10 @@ function ContenedorMaderas() {
     changeViewPerfil,
     productIdSelect,
     productCantidadSelect,
+    pedidoDetallado,
+    productosShoppingCart,
+    enviarCorreoConfirmacion,
+    modalIsOpenConfirmacion
   } = useContext(Context);
 
   return (
@@ -61,10 +69,11 @@ function ContenedorMaderas() {
                 changeViewProductos(false);
               changeViewShoppingCart(false);
               changeViewPedidosPerfil(false);
+              changeViewDetallePedido(false);
               changeViewHacerPedido(false);
               changeViewSession(false);
               changeViewProductSelect(false);
-              changeViewPerfil(false)
+              changeViewPerfil(false);
             }}
             className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"
           ></button>
@@ -79,10 +88,11 @@ function ContenedorMaderas() {
                   changeViewProductos(false);
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
+                changeViewDetallePedido(false);
                 changeViewHacerPedido(false);
                 changeViewSession(false);
                 changeViewProductSelect(false);
-                changeViewPerfil(false)
+                changeViewPerfil(false);
               }}
               className={
                 viewInicio ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -100,10 +110,11 @@ function ContenedorMaderas() {
                   changeViewProductos(false);
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
+                changeViewDetallePedido(false);
                 changeViewHacerPedido(false);
                 changeViewSession(false);
                 changeViewProductSelect(false);
-                changeViewPerfil(false)
+                changeViewPerfil(false);
               }}
               className={
                 viewOrigen ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -121,10 +132,11 @@ function ContenedorMaderas() {
                   changeViewProductos(false);
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
+                changeViewDetallePedido(false);
                 changeViewHacerPedido(false);
                 changeViewSession(false);
                 changeViewProductSelect(false);
-                changeViewPerfil(false)
+                changeViewPerfil(false);
               }}
               className={
                 viewMaderas ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -142,10 +154,11 @@ function ContenedorMaderas() {
                   changeViewProductos(false);
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
+                changeViewDetallePedido(false);
                 changeViewHacerPedido(false);
                 changeViewSession(false);
                 changeViewProductSelect(false);
-                changeViewPerfil(false)
+                changeViewPerfil(false);
               }}
               className={
                 viewContacto ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -163,10 +176,11 @@ function ContenedorMaderas() {
                   changeViewContacto(false);
                 changeViewShoppingCart(false);
                 changeViewPedidosPerfil(false);
+                changeViewDetallePedido(false);
                 changeViewHacerPedido(false);
                 changeViewSession(false);
                 changeViewProductSelect(false);
-                changeViewPerfil(false)
+                changeViewPerfil(false);
               }}
               className={
                 viewProductos ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -244,11 +258,19 @@ function ContenedorMaderas() {
           </div>
         )}
 
-        {viewPerfil && (
+        {viewDetallePedido && (
           <div>
             <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-              Perfil
+              Pedido
             </h1>
+            {token && <BotonesUserLogged />}
+            {!token && <BotonesUserNotLogged />}
+          </div>
+        )}
+
+        {viewPerfil && (
+          <div>
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Perfil</h1>
             {token && <BotonesUserLogged />}
             {!token && <BotonesUserNotLogged />}
           </div>
@@ -260,10 +282,16 @@ function ContenedorMaderas() {
       <Contacto />
       <Origen />
       <ProductosVenta />
-      {viewSession && <Session productIdSelect={productIdSelect} productCantidadSelect={productCantidadSelect}/>} 
-      {token && <ShoppingCart />}
-      {token && <PedidosPerfil />}
-      {token && <Perfil />}
+      {viewSession && (
+        <Session productIdSelect={productIdSelect} productCantidadSelect={productCantidadSelect} />
+      )}
+      {token && viewShoppingCart && <ShoppingCart />}
+      {token && viewHacerPedido && <HacerPedido productos={productosShoppingCart} />}
+      {token && viewPedidosPerfil && <PedidosPerfil />}
+      {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado}/>}
+      {token && viewPerfil && <Perfil />}
+      {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>}
+      
     </ApolloProvider>
   );
 }

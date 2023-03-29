@@ -11,6 +11,7 @@ export function ContextProvider(props) {
   const [viewProductSelect, setViewProductSelect] = useState(false);
   const [viewShoppingCart, setViewShoppingCart] = useState(false);
   const [viewPedidosPerfil, setViewPedidosPerfil] = useState(false);
+  const [viewDetallePedido, setViewDetallePedido] = useState(false);
   const [viewHacerPedido, setViewHacerPedido] = useState(false);
   const [viewSession, setViewSession] = useState(false);
   const [reload, setReload] = useState(false);
@@ -18,6 +19,10 @@ export function ContextProvider(props) {
 
   const [productIdSelect, setProductIdSelect] = useState("");
   const [productCantidadSelect, setProductCantidadSelect] = useState("");
+  const [modalIsOpenConfirmacion, setIsOpenConfirmacion] = useState(false);
+  const [pedidoDetallado, setPedidoDetallado] = useState();
+  const [productosShoppingCart, setProductosShoppingCart] = useState(false);
+  const [enviarCorreoConfirmacion, setEnviarCorreoConfirmacion] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -53,6 +58,10 @@ export function ContextProvider(props) {
     setViewPedidosPerfil(setView);
   }
 
+  function changeViewDetallePedido(setView) {
+    setViewDetallePedido(setView);
+  }
+
   function changeViewHacerPedido(setView) {
     setViewHacerPedido(setView);
   }
@@ -77,6 +86,26 @@ export function ContextProvider(props) {
     setReload(!reload);
   }
 
+  function openModalConfirmacion() {
+    setIsOpenConfirmacion(true);
+  }
+
+  function closeModalConfirmacion() {
+    setIsOpenConfirmacion(false);
+  }
+
+  function changePedidoDetallado(pedido) {
+    setPedidoDetallado(pedido);
+  }
+
+  function changeProductosShoppingCart(productoShoppingCart) {
+    setProductosShoppingCart(productoShoppingCart)
+  }
+  
+  function changeEnviarCorreoConfirmacion(setCorreo){
+    setEnviarCorreoConfirmacion(setCorreo);
+  }
+
   return (
     <Context.Provider
       value={{
@@ -88,6 +117,7 @@ export function ContextProvider(props) {
         viewProductSelect,
         viewShoppingCart,
         viewPedidosPerfil,
+        viewDetallePedido,
         viewHacerPedido,
         viewSession,
         viewPerfil,
@@ -95,6 +125,10 @@ export function ContextProvider(props) {
         token,
         productIdSelect,
         productCantidadSelect,
+        modalIsOpenConfirmacion,
+        pedidoDetallado,
+        productosShoppingCart,
+        enviarCorreoConfirmacion,
 
         changeViewInicio,
         changeViewContacto,
@@ -104,12 +138,18 @@ export function ContextProvider(props) {
         changeViewProductSelect,
         changeViewShoppingCart,
         changeViewPedidosPerfil,
+        changeViewDetallePedido,
         changeViewHacerPedido,
         changeViewSession,
         changeViewPerfil,
         changeReload,
         changeProductIdSelect,
         changeProductCantidadSelect,
+        openModalConfirmacion,
+        closeModalConfirmacion,
+        changePedidoDetallado,
+        changeProductosShoppingCart,
+        changeEnviarCorreoConfirmacion
       }}
     >
       {props.children}

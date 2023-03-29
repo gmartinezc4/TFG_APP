@@ -1,13 +1,15 @@
-import React, { useContext, useState } from "react";
-import { gql, useMutation } from "@apollo/client";
+import React, { useContext, useState, useRef } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 const VENDER_PRODUCTOS = gql`
-  mutation VenderProducto(
+  mutation Mutation(
     $nombre: String!
     $apellido: String!
+    $correo: String!
     $telefono: String!
     $direccion: String!
     $masInformacion: String!
@@ -18,6 +20,7 @@ const VENDER_PRODUCTOS = gql`
     venderProductos(
       nombre: $nombre
       apellido: $apellido
+      correo: $correo
       telefono: $telefono
       direccion: $direccion
       masInformacion: $masInformacion
@@ -29,6 +32,7 @@ const VENDER_PRODUCTOS = gql`
       ciudad
       codigoPostal
       direccion
+      email
       estado
       fechaPedido
       fechaRecogida
@@ -46,7 +50,6 @@ const VENDER_PRODUCTOS = gql`
 function HacerPedido(props) {
   const {
     changeReload,
-    token,
     changeViewMaderas,
     changeViewInicio,
     changeViewContacto,
@@ -55,9 +58,13 @@ function HacerPedido(props) {
     changeViewProductos,
     changeViewPedidosPerfil,
     changeViewHacerPedido,
+    openModalConfirmacion,
+    changeEnviarCorreoConfirmacion,
   } = useContext(Context);
+
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
+  const [correo, setCorreo] = useState("");
   const [numTelefono, setNumTelefono] = useState("");
   const [calle, setCalle] = useState("");
   const [masInformacion, setmasInformacion] = useState("");
@@ -66,10 +73,22 @@ function HacerPedido(props) {
   const [pais, setPais] = useState("");
 
   const [confirmarPedido] = useMutation(VENDER_PRODUCTOS, {
-    context: {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
+    onCompleted: () => {
+      console.log("despues de mutation");
+      changeViewShoppingCart(true);
+      changeViewProductos(false),
+        changeViewInicio(false),
+        changeViewOrigen(false),
+        changeViewMaderas(false),
+        changeViewContacto(false);
+      changeViewPedidosPerfil(false);
+      changeViewHacerPedido(false);
+      openModalConfirmacion();
+      changeEnviarCorreoConfirmacion(true);
+      changeReload();
+    },
+    onError: (error) => {
+      console.log(error.toString());
     },
   });
 
@@ -80,9 +99,15 @@ function HacerPedido(props) {
   function tramitarDatos() {
     console.log("antes de mutation vender productos");
     confirmarPedido({
+      context: {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      },
       variables: {
         nombre: nombre,
         apellido: apellido,
+        correo: correo,
         telefono: numTelefono,
         direccion: calle,
         masInformacion: masInformacion,
@@ -90,16 +115,6 @@ function HacerPedido(props) {
         ciudad: ciudad,
         pais: pais,
       },
-    }).then(() => {
-      changeReload(), console.log("despues de mutation vender productos");
-      changeViewProductos(true),
-        changeViewInicio(false),
-        changeViewOrigen(false),
-        changeViewMaderas(false),
-        changeViewContacto(false);
-      changeViewShoppingCart(false);
-      changeViewPedidosPerfil(false);
-      changeViewHacerPedido(false);
     });
   }
 
@@ -172,6 +187,7 @@ function HacerPedido(props) {
         >
           <div className="flex justify-center flex-col">
             <h1 className="text-2xl mb-5 font-bold">Datos personales</h1>
+
             <label>Nombre*</label>
             <input
               type="text"
@@ -189,6 +205,16 @@ function HacerPedido(props) {
               placeholder="Rodriguez..."
               value={apellido}
               onChange={(e) => setApellido(e.target.value)}
+              minLength={2}
+              required
+            ></input>
+            <label>Email*</label>
+            <input
+              type="text"
+              className="border border-black rounded-md mb-4"
+              placeholder="Rodriguez..."
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
               minLength={2}
               required
             ></input>

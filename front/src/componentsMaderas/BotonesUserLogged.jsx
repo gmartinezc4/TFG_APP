@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import Cargando from "./Cargando";
+import ModalConfirmacion from "./ModalConfirmacion";
 
 const LOG_OUT = gql`
   mutation Mutation {
@@ -35,11 +36,15 @@ function BotonesUserLogged() {
     changeViewMaderas,
     changeViewContacto,
     changeViewPedidosPerfil,
+    changeViewDetallePedido,
     changeViewHacerPedido,
     changeViewSession,
     changeViewProductSelect,
     changeViewPerfil,
     reload,
+    closeModalConfirmacion,
+    modalIsOpenConfirmacion,
+    openModalConfirmacion,
   } = useContext(Context);
   const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
 
@@ -91,9 +96,10 @@ function BotonesUserLogged() {
                   changeViewOrigen(false),
                   changeViewMaderas(false),
                   changeViewContacto(false),
-                changeViewPedidosPerfil(false),
-                changeViewHacerPedido(false),
-                changeViewPerfil(false)
+                  changeViewPedidosPerfil(false),
+                  changeViewDetallePedido(false),
+                  changeViewHacerPedido(false),
+                  changeViewPerfil(false);
               }}
             ></button>
             {data.getProductosCarritoUser.length != 0 && (
@@ -139,8 +145,9 @@ function BotonesUserLogged() {
                         changeViewOrigen(false),
                         changeViewMaderas(false),
                         changeViewContacto(false),
-                      changeViewPedidosPerfil(false),
-                      changeViewHacerPedido(false)
+                        changeViewPedidosPerfil(false),
+                        changeViewDetallePedido(false),
+                        changeViewHacerPedido(false);
                     }}
                   >
                     Perfil
@@ -155,16 +162,17 @@ function BotonesUserLogged() {
                     id="menu-item-1"
                     onClick={() => {
                       changeViewPedidosPerfil(true),
-                      changeViewShoppingCart(false),
+                        changeViewDetallePedido(false),
+                        changeViewShoppingCart(false),
                         changeViewProductos(false),
                         changeViewProductSelect(false),
-                      changeViewInicio(false),
+                        changeViewInicio(false),
                         changeViewOrigen(false),
                         changeViewMaderas(false),
                         changeViewContacto(false),
-                      changeViewHacerPedido(false),
-                      changeViewSession(false),
-                      changeViewPerfil(false)
+                        changeViewHacerPedido(false),
+                        changeViewSession(false),
+                        changeViewPerfil(false);
                     }}
                   >
                     Pedidos
@@ -179,18 +187,20 @@ function BotonesUserLogged() {
                     id="menu-item-2 on"
                     onClick={() => {
                       logOut();
-                      setOpenSubMenuPerfil(false),
-                      changeViewPedidosPerfil(false),
-                      changeViewShoppingCart(false),
+                      openModalConfirmacion(true),
+                        setOpenSubMenuPerfil(false),
+                        changeViewPedidosPerfil(false),
+                        changeViewDetallePedido(false),
+                        changeViewShoppingCart(false),
                         changeViewProductos(false),
                         changeViewProductSelect(false),
-                      changeViewInicio(true),
+                        changeViewInicio(true),
                         changeViewOrigen(false),
                         changeViewMaderas(false),
                         changeViewContacto(false),
-                      changeViewHacerPedido(false),
-                      changeViewSession(false),
-                      changeViewPerfil(false)
+                        changeViewHacerPedido(false),
+                        changeViewSession(false),
+                        changeViewPerfil(false);
                       console.log("me desloggeo, token: " + localStorage.getItem("token"));
                       localStorage.removeItem("token");
                       console.log("me he desloggeado, token: " + localStorage.getItem("token"));
@@ -203,6 +213,14 @@ function BotonesUserLogged() {
             )}
           </div>
         </div>
+      )}
+
+      {modalIsOpenConfirmacion && (
+        <ModalConfirmacion
+          closeModalConfirmacion={closeModalConfirmacion}
+          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
+          mensaje={"Sesión iniciada correctamente"}
+        />
       )}
     </div>
   );

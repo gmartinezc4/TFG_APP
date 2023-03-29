@@ -42,6 +42,7 @@ export const typeDefs = gql`
         estado: String!
         nombre: String!
         apellido: String!
+        email: String!
         telefono: String!
         direccion: String!
         masInformacion: String!
@@ -61,7 +62,9 @@ export const typeDefs = gql`
         getProductos: [Product!]!
         getProducto (id_product: String!): Product!
         getProductosCarritoUser: [Carrito!]
-        getPedidosUser(id_user: String!): [Pedido!]!
+        getProductoCarritoUser (id_product: String!): Carrito!
+        getHistorialPedidosUser: [Pedido!]
+        getPedidosActivosUser: [Pedido!]
         getUser: User!
     }
 
@@ -69,11 +72,12 @@ export const typeDefs = gql`
         darAltaMadera(img: String!, name: String!, description: String!): Maderas!
         borrarMadera(id: ID!): Maderas!
         addProducto(img: String!, name: String!, stock: String!, precio: String!): Product!
-        venderProductos(nombre: String!, apellido: String!, telefono: String!, direccion: String!, masInformacion: String!, codigoPostal: String!, ciudad: String!, pais: String!): Pedido!
+        venderProductos(nombre: String!, apellido: String!, correo: String!, telefono: String!, direccion: String!, masInformacion: String!, codigoPostal: String!, ciudad: String!, pais: String!): Pedido!
         addStockProducto(_id: String!, cantidad: String!): Product!
         addProductCesta(id_producto: String!, cantidad: String!): Carrito!
         deleteProductCesta(id: ID!): String!
-        RegistrarUser(nombre: String!, apellido: String!, correo: String!, password: String!): String!
+        modificarUser(nombre: String, apellido: String, newCorreo: String, password: String, newPassword: String): User!
+        RegistrarUser(nombre: String!, apellido: String!, correo: String! password: String!): String!
         logIn(correo: String!, password: String!): String!
         logOut:Boolean! 
     }
