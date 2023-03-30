@@ -98,7 +98,6 @@ function Producto(props) {
 
   if(dataProductos){
     cantidadProdCarrito = dataProductos.getProductoCarritoUser.cantidad;
-    console.log(dataProductos.getProductoCarritoUser.cantidad);
   }
 
 
