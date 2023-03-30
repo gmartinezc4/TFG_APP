@@ -23,6 +23,7 @@ export function ContextProvider(props) {
   const [pedidoDetallado, setPedidoDetallado] = useState();
   const [productosShoppingCart, setProductosShoppingCart] = useState(false);
   const [enviarCorreoConfirmacion, setEnviarCorreoConfirmacion] = useState(false);
+  const [modalIsOpenConfirmacionCorreo, setIsOpenConfirmacionCorreo] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -106,6 +107,14 @@ export function ContextProvider(props) {
     setEnviarCorreoConfirmacion(setCorreo);
   }
 
+  function openModalConfirmacionCorreo() {
+    setIsOpenConfirmacionCorreo(true);
+  }
+
+  function closeModalConfirmacionCorreo() {
+    setIsOpenConfirmacionCorreo(false);
+  }
+
   return (
     <Context.Provider
       value={{
@@ -129,6 +138,7 @@ export function ContextProvider(props) {
         pedidoDetallado,
         productosShoppingCart,
         enviarCorreoConfirmacion,
+        modalIsOpenConfirmacionCorreo,
 
         changeViewInicio,
         changeViewContacto,
@@ -149,7 +159,9 @@ export function ContextProvider(props) {
         closeModalConfirmacion,
         changePedidoDetallado,
         changeProductosShoppingCart,
-        changeEnviarCorreoConfirmacion
+        changeEnviarCorreoConfirmacion,
+        openModalConfirmacionCorreo,
+        closeModalConfirmacionCorreo,
       }}
     >
       {props.children}

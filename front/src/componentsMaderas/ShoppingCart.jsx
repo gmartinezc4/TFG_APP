@@ -4,6 +4,7 @@ import { Context } from "../context/Context";
 import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
 import ModalConfirmacion from "./ModalConfirmacion";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
   query GetProductosCarritoUser {
@@ -36,10 +37,11 @@ function ShoppingCart() {
     changeViewMaderas,
     changeViewContacto,
     changeViewHacerPedido,
-    modalIsOpenConfirmacion,
-    closeModalConfirmacion,
+    modalIsOpenConfirmacionCorreo,
+    closeModalConfirmacionCorreo,
     changeProductosShoppingCart,
-    changeViewProductSelect
+    changeViewProductSelect,
+    enviarCorreoConfirmacion
   } = useContext(Context);
 
   let idProd = "";
@@ -218,11 +220,11 @@ function ShoppingCart() {
         )}
       </div>
 
-      {modalIsOpenConfirmacion && (
-        <ModalConfirmacion
-          closeModalConfirmacion={closeModalConfirmacion}
-          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
-          mensaje={"Pedido confirmado"}
+      {enviarCorreoConfirmacion && (
+        <CorreoConfirmacionPedido
+          closeModalConfirmacionCorreo={closeModalConfirmacionCorreo}
+          modalIsOpenConfirmacionCorreo={modalIsOpenConfirmacionCorreo}
+          mensaje={"Pedido confirmadoooo"}
         />
       )}
     </div>

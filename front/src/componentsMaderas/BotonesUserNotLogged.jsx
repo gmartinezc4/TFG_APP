@@ -61,7 +61,6 @@ function BotonesUserNotLogged() {
         />
       )}
 
-      {console.log("en botones no looged: " + modalIsOpenConfirmacion)}
       {modalIsOpenConfirmacion && (
         <ModalConfirmacion
           closeModalConfirmacion={closeModalConfirmacion}

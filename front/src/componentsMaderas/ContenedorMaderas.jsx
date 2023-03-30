@@ -290,7 +290,7 @@ function ContenedorMaderas() {
       {token && viewPedidosPerfil && <PedidosPerfil />}
       {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado}/>}
       {token && viewPerfil && <Perfil />}
-      {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>}
+      {/* {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>} */}
       
     </ApolloProvider>
   );
