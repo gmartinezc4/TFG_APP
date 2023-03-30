@@ -1,7 +1,24 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
-import emailjs from "@emailjs/browser";
+import emailjs, { send } from "@emailjs/browser";
 import { Context } from "../context/Context";
+import Modal from "react-modal";
+
+const customStyles = {
+  content: {
+    position: "absolute",
+    width: 400,
+    backgrounColor: "white",
+    boxShadow: "10px 5px 5px black",
+    padding: "16px 32px 24px",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+  },
+};
 
 const GET_PEDIDOS_ACTIVOS_USER = gql`
   query Query {
@@ -36,7 +53,7 @@ const GET_PEDIDOS_ACTIVOS_USER = gql`
   }
 `;
 
-function CorreoConfirmacionPedido() {
+function CorreoConfirmacionPedido(props) {
   const form = useRef();
 
   const { changeEnviarCorreoConfirmacion } = useContext(Context);
@@ -52,9 +69,7 @@ function CorreoConfirmacionPedido() {
   if (loading) return <div></div>;
   if (error) return <div>Error...</div>;
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-
+  const sendEmail = () => {
     emailjs
       .sendForm("Maderas_Cobo_Gmail", "template_a9o7nvu", form.current, "ePa31yfxHKL_zHYnH")
       .then(
@@ -72,10 +87,16 @@ function CorreoConfirmacionPedido() {
   const index = data.getPedidosActivosUser.length - 1;
   let importeFreeIva_redonded = data.getPedidosActivosUser[index].importeFreeIvaPedido.toString();
 
-  
   return (
     <div>
-      <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
+      <form
+        ref={form}
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendEmail();
+        }}
+        className="flex flex-col mt-8 w-96"
+      >
         <input
           type="text"
           name="user_email"
@@ -150,11 +171,23 @@ function CorreoConfirmacionPedido() {
           hidden
         />
 
-        <input
-          type="submit"
-          value="Send"
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-16"
-        />
+        <Modal
+          isOpen={props.modalIsOpenConfirmacionCorreo}
+          onRequestClose={() => {props.closeModalConfirmacionCorreo, sendEmail()}}
+          style={customStyles}
+          ariaHideApp={false}
+        >
+          <h1 className="flex justify-center  text-2xl">{props.mensaje}</h1>
+
+          <div className="flex justify-center">
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-10"
+              onClick={() => sendEmail()}
+            >
+              Aceptar
+            </button>
+          </div>
+        </Modal>
       </form>
     </div>
   );

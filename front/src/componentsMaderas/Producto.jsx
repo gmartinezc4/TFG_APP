@@ -146,6 +146,7 @@ function Producto(props) {
                 value={cantidad}
                 onChange={(e) => setCantidad(e.target.value)}
                 required
+                autoFocus
               ></input>
             )}
 

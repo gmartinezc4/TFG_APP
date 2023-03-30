@@ -56,7 +56,7 @@ function ContenedorMaderas() {
     enviarCorreoConfirmacion,
     modalIsOpenConfirmacion
   } = useContext(Context);
-console.log(modalIsOpenConfirmacion)
+
   return (
     <ApolloProvider client={client}>
       <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')] bg-no-repeat bg-cover h-56">
@@ -291,7 +291,7 @@ console.log(modalIsOpenConfirmacion)
       {token && viewPedidosPerfil && <PedidosPerfil />}
       {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado}/>}
       {token && viewPerfil && <Perfil />}
-      {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>}
+      {/* {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>} */}
       
     </ApolloProvider>
   );

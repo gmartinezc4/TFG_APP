@@ -214,7 +214,7 @@ function BotonesUserLogged() {
           </div>
         </div>
       )}
-  {console.log("en botones: " + modalIsOpenConfirmacion)}
+
       {modalIsOpenConfirmacion && (
         <ModalConfirmacion
           closeModalConfirmacion={closeModalConfirmacion}
