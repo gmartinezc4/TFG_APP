@@ -71,7 +71,7 @@ function PedidosPerfil() {
     <div>
       <div className="flex justify-center mt-20">
         {PedidosActivos.length==0 && PedidosPendientes.length==0 && PedidosHistoricos.length==0 && (
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center mb-3">
             <h1 className="text-4xl font-semibold">Todavia no ha realizado ningun pedido </h1>
             <div className="flex justify-center mt-10">
               <button
@@ -87,7 +87,7 @@ function PedidosPerfil() {
         )}
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-96">
         <div className="flex justify-center">
           <div className="flex flex-col">
             {PedidosActivos.length != 0 && (
