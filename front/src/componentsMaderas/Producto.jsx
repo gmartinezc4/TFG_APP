@@ -115,8 +115,7 @@ function Producto(props) {
 
   return (
     <div>
-      {}
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-96">
         <div className="bg-no-repeat bg-contain -ml-96">
           <img className="h-80 w-100 border rounded" src={dataProd.getProducto.img}></img>
           <button

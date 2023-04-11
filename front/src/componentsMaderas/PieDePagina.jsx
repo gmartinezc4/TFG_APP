@@ -6,34 +6,18 @@ import { Context } from "../context/Context";
 
 function PieDePagina() {
   const {
-    viewMaderas,
     changeViewMaderas,
-    viewInicio,
     changeViewInicio,
-    viewContacto,
     changeViewContacto,
-    viewOrigen,
     changeViewOrigen,
-    viewShoppingCart,
     changeViewShoppingCart,
-    viewProductos,
     changeViewProductos,
-    viewPedidosPerfil,
     changeViewPedidosPerfil,
-    viewDetallePedido,
     changeViewDetallePedido,
-    viewHacerPedido,
     changeViewHacerPedido,
-    viewSession,
     changeViewSession,
-    token,
     changeViewProductSelect,
-    viewPerfil,
     changeViewPerfil,
-    productIdSelect,
-    productCantidadSelect,
-    pedidoDetallado,
-    productosShoppingCart,
   } = useContext(Context);
 
   return (
