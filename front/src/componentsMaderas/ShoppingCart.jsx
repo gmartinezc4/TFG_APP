@@ -220,13 +220,13 @@ function ShoppingCart() {
         )}
       </div>
 
-      {enviarCorreoConfirmacion && (
+      {/* {enviarCorreoConfirmacion && (
         <CorreoConfirmacionPedido
           closeModalConfirmacionCorreo={closeModalConfirmacionCorreo}
           modalIsOpenConfirmacionCorreo={modalIsOpenConfirmacionCorreo}
           mensaje={"Pedido confirmadoooo"}
         />
-      )}
+      )} */}
     </div>
   );
 }
