@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { BsCashStack } from "react-icons/bs";
 import { BsCreditCard } from "react-icons/bs";
 import { Context } from "../context/Context";
 
@@ -75,8 +76,9 @@ function PieDePagina() {
               <h1>Nuestros modos de pago</h1>
             </div>
             <div className="flex flex-row">
-              <FaCcMastercard className=" mr-9 w-14 h-14" />
-              <FaCcVisa className="w-14 h-14" />
+              <FaCcMastercard className=" mr-6 w-14 h-14" />
+              <FaCcVisa className="mr-6 w-14 h-14" />
+              <BsCashStack className="w-14 h-14"/>
             </div>
           </div>
         </div>
