@@ -16,9 +16,9 @@ function Inicio() {
             </div>
           ))}
         </div>
-        <div className="bg-slate-200 h-screen font-serif  text-2xl flex flex-col p-10">
+        <div className="bg-slate-200 font-serif  text-2xl flex flex-col p-10">
           {dataInicio2.map((d) => (
-            <div key={d.id} className="flex flex-col">
+            <div key={d.id} className="flex flex-col mb-60">
               <h1 className="flex justify-center mb-8 text-4xl font-bold font-mono">
                 {d.title}
               </h1>
