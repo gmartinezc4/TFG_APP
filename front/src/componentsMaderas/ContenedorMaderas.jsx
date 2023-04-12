@@ -10,11 +10,12 @@ import BotonesUserLogged from "./BotonesUserLogged";
 import ShoppingCart from "./ShoppingCart";
 import PedidosPerfil from "./PedidosPerfil";
 import HacerPedido from "./HacerPedido";
-import Cargando from "./Cargando";
 import Session from "./Session";
 import BotonesUserNotLogged from "./BotonesUserNotLogged";
 import Perfil from "./Perfil";
 import DetallePedido from "./DetallePedido";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
+import PieDePagina from "./PieDePagina";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -258,9 +259,7 @@ function ContenedorMaderas() {
 
         {viewDetallePedido && (
           <div>
-            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-              Pedido
-            </h1>
+            <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">Pedido</h1>
             {token && <BotonesUserLogged />}
             {!token && <BotonesUserNotLogged />}
           </div>
@@ -286,8 +285,11 @@ function ContenedorMaderas() {
       {token && viewShoppingCart && <ShoppingCart />}
       {token && viewHacerPedido && <HacerPedido productos={productosShoppingCart} />}
       {token && viewPedidosPerfil && <PedidosPerfil />}
-      {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado}/>}
+      {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado} />}
       {token && viewPerfil && <Perfil />}
+      {/* {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>} */}
+
+      <PieDePagina />
     </ApolloProvider>
   );
 }

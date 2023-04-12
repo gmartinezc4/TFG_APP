@@ -63,7 +63,7 @@ function Perfil() {
 
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-96">
         <div className="flex flex-col mt-10">
           <h1 className="font-bold text-4xl mb-3">Tus datos</h1>
           <span className="mb-5">

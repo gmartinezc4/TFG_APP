@@ -57,7 +57,8 @@ function RegistrarseModal(props) {
   const [passView, setPassView] = useState(false);
   const [repPassView, setRepPassView] = useState(false);
 
-  const { changeReload, changeViewSession, changeViewProductos } = useContext(Context);
+  const { changeReload, changeViewSession, changeViewProductos, openModalConfirmacion } =
+    useContext(Context);
 
   const [register] = useMutation(REGISTRAR_USER, {
     onCompleted: (data) => {
@@ -72,6 +73,7 @@ function RegistrarseModal(props) {
 
       props.closeModalRegistro();
       changeReload();
+      openModalConfirmacion();
     },
     onError: (error) => {
       //si hay un error, borrar el token
@@ -174,7 +176,7 @@ function RegistrarseModal(props) {
           </p>
         )}
 
-        <form 
+        <form
           className="p-3 flex flex-col justify-center"
           onSubmit={(event) => {
             event.preventDefault();
@@ -228,7 +230,9 @@ function RegistrarseModal(props) {
             type="text"
             name="correo"
             pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"
-            onInvalid={() => {setErrorCorreoIncompleto(true)} }
+            onInvalid={() => {
+              setErrorCorreoIncompleto(true);
+            }}
           ></input>
           {noHayCorreo && (
             <p className="text-red-500 text-xs italic mt-3">
@@ -256,7 +260,9 @@ function RegistrarseModal(props) {
               name="password"
               autoComplete="off"
               pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$"
-              onInvalid={() => {setErrorPassword(true), setNoHayPassword(false), setErrorPasswordNoCoinciden(false)}}
+              onInvalid={() => {
+                setErrorPassword(true), setNoHayPassword(false), setErrorPasswordNoCoinciden(false);
+              }}
             ></input>
             <div
               className="shadow appearance-none border rounded p-3 bg-green-300 hover:bg-green-500"
@@ -265,7 +271,7 @@ function RegistrarseModal(props) {
               }}
             >
               {passView && <AiFillEye />}
-              {!passView && <AiFillEyeInvisible />} 
+              {!passView && <AiFillEyeInvisible />}
             </div>
           </div>
 
@@ -298,7 +304,7 @@ function RegistrarseModal(props) {
               }}
             >
               {repPassView && <AiFillEye />}
-              {!repPassView && <AiFillEyeInvisible />} 
+              {!repPassView && <AiFillEyeInvisible />}
             </div>
           </div>
 

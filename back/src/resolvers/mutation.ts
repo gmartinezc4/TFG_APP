@@ -2,6 +2,8 @@ import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 const bcrypt = require('bcrypt');
+var nodemailer  = require('nodemailer');
+import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
 export const Mutation = {
     darAltaMadera: async (parent: any, args: { img: String, name: String, description: String }, context: { db: Db }) => {
@@ -315,6 +317,38 @@ export const Mutation = {
                 const encripted_pass = await bcrypt.hash(password, 12);
 
                 await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: encripted_pass, token: token });
+
+                //Creamos el objeto de transporte
+                var transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    ignoreTLS: false,
+                    secure: false,
+                    auth: {
+                        user: 'maderas.cobo.cuenca@gmail.com',
+                        pass: 'fllksawjvxgrncfp'
+                    }
+                });
+
+                var mensaje = "Hola desde nodejs...";
+
+                var mailOptions = {
+                    from: 'maderas.cobo.cuenca@gmail.com',
+                    to: correo,
+                    subject: 'Bienvenido a Maderas Cobo',
+                    html: htmlRegistro,
+                };
+
+                transporter.sendMail(mailOptions, function (error: any, info: any) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email enviado: ' + info.response);
+                    }
+                });
+
+
+                await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: password, token: token });
 
                 return token;
             } else {
