@@ -16,6 +16,8 @@ import Perfil from "./Perfil";
 import DetallePedido from "./DetallePedido";
 import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 import PieDePagina from "./PieDePagina";
+import ForgotPassword from "./ForgotPassword";
+import ForgotPassword2 from "./ForgotPassword2";
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -53,6 +55,10 @@ function ContenedorMaderas() {
     productCantidadSelect,
     pedidoDetallado,
     productosShoppingCart,
+    viewRecuperarPass1,
+    changeViewRecuperarPass1,
+    viewRecuperarPass2,
+    changeViewRecuperarPass2
   } = useContext(Context);
 
   return (
@@ -73,6 +79,8 @@ function ContenedorMaderas() {
               changeViewSession(false);
               changeViewProductSelect(false);
               changeViewPerfil(false);
+              changeViewRecuperarPass1(false);
+              changeViewRecuperarPass2(false);
             }}
             className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"
           ></button>
@@ -92,6 +100,8 @@ function ContenedorMaderas() {
                 changeViewSession(false);
                 changeViewProductSelect(false);
                 changeViewPerfil(false);
+                changeViewRecuperarPass1(false);
+                changeViewRecuperarPass2(false);
               }}
               className={
                 viewInicio ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -114,6 +124,8 @@ function ContenedorMaderas() {
                 changeViewSession(false);
                 changeViewProductSelect(false);
                 changeViewPerfil(false);
+                changeViewRecuperarPass1(false);
+                changeViewRecuperarPass2(false);
               }}
               className={
                 viewOrigen ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -136,6 +148,8 @@ function ContenedorMaderas() {
                 changeViewSession(false);
                 changeViewProductSelect(false);
                 changeViewPerfil(false);
+                changeViewRecuperarPass1(false);
+                changeViewRecuperarPass2(false);
               }}
               className={
                 viewMaderas ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -158,6 +172,8 @@ function ContenedorMaderas() {
                 changeViewSession(false);
                 changeViewProductSelect(false);
                 changeViewPerfil(false);
+                changeViewRecuperarPass1(false);
+                changeViewRecuperarPass2(false);
               }}
               className={
                 viewContacto ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -180,6 +196,8 @@ function ContenedorMaderas() {
                 changeViewSession(false);
                 changeViewProductSelect(false);
                 changeViewPerfil(false);
+                changeViewRecuperarPass1(false);
+                changeViewRecuperarPass2(false);
               }}
               className={
                 viewProductos ? "text-orange-600  rounded m-3 p-1" : "hover:text-orange-600 m-3 p-1"
@@ -288,6 +306,8 @@ function ContenedorMaderas() {
       {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado} />}
       {token && viewPerfil && <Perfil />}
       {/* {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>} */}
+      {viewRecuperarPass1 && <ForgotPassword />}
+      {viewRecuperarPass2 && <ForgotPassword2 />}
 
       <PieDePagina />
     </ApolloProvider>

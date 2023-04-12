@@ -2,7 +2,9 @@ import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 var nodemailer  = require('nodemailer');
+var jwt = require('jsonwebtoken');
 import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
+import { response } from "express";
 
 export const Mutation = {
     darAltaMadera: async (parent: any, args: { img: String, name: String, description: String }, context: { db: Db }) => {
@@ -321,8 +323,6 @@ export const Mutation = {
                     }
                 });
 
-                var mensaje = "Hola desde nodejs...";
-
                 var mailOptions = {
                     from: 'maderas.cobo.cuenca@gmail.com',
                     to: correo,
@@ -381,6 +381,106 @@ export const Mutation = {
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
         }
+    },
+
+    forgotPassword: async (parent: any, args: { email: string }, context: { db: Db }) => {
+        const db = context.db;
+        const email = args.email;
+        const codigo = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
+
+        try{
+            const user = await db.collection("Usuarios").findOne({Email: email});
+
+            if(user){      
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    ignoreTLS: false,
+                    secure: false,
+                    auth: {
+                        user: 'maderas.cobo.cuenca@gmail.com',
+                        pass: 'fllksawjvxgrncfp'
+                    }
+                })
+
+                var mailOptions = {
+                    from: 'maderas.cobo.cuenca@gmail.com',
+                    to: email,
+                    subject: 'Enlace para recuperar su contraseña de Maderas Cobo',
+                    text: `Su codigo de recuperación es: ${codigo}`
+                };
+
+                transporter.sendMail(mailOptions, function (error: any, info: any) {
+                    if (error) {
+                        console.log(error);
+                        return error;
+                    } else {
+                        console.log('Email enviado: ' + info.response);
+                    }
+                });
+
+            }else{
+                throw new ApolloError("User not exist", "USER_NOT_EXIST")
+            }
+            
+        }catch(e: any){
+            throw new ApolloError(e, e.extensions.code);
+        }
+
+        return codigo;
+    },
+
+    recuperarPass: async (parent: any, args: { email: string, password: string }, context: { db: Db }) => {
+        const db = context.db;
+        const { email, password } = args;
+
+        try{
+            const user = await db.collection("Usuarios").findOne({ Email: email });
+
+            if(user){      
+
+                try{
+                    await db.collection("Usuarios").updateOne({ Email: email }, { $set: { Password: password } });
+                }catch(e: any){
+                    throw new ApolloError(e, e.extensions.code);
+                }
+
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    ignoreTLS: false,
+                    secure: false,
+                    auth: {
+                        user: 'maderas.cobo.cuenca@gmail.com',
+                        pass: 'fllksawjvxgrncfp'
+                    }
+                })
+
+                var mailOptions = {
+                    from: 'maderas.cobo.cuenca@gmail.com',
+                    to: email,
+                    subject: 'Contraseña cambiada',
+                    text: `¡Su contraseña ha sido cambiada con éxito! `
+                };
+
+                transporter.sendMail(mailOptions, function (error: any, info: any) {
+                    if (error) {
+                        console.log(error);
+                        return error;
+                    } else {
+                        console.log('Email enviado: ' + info.response);
+                    }
+                });
+
+            }else{
+                throw new ApolloError("User not exist", "USER_NOT_EXIST")
+            }
+            
+        }catch(e: any){
+            throw new ApolloError(e, e.extensions.code);
+        }
+
+        return password;
     }
 }
 

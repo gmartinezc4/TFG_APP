@@ -19,6 +19,8 @@ function PieDePagina() {
     changeViewSession,
     changeViewProductSelect,
     changeViewPerfil,
+    changeViewRecuperarPass1,
+    changeViewRecuperarPass2
   } = useContext(Context);
 
   return (
@@ -44,6 +46,8 @@ function PieDePagina() {
               changeViewSession(false);
               changeViewProductSelect(false);
               changeViewPerfil(false);
+              changeViewRecuperarPass1(false);
+              changeViewRecuperarPass2(false);
             }}
           >
             Conocenos
@@ -63,6 +67,8 @@ function PieDePagina() {
               changeViewSession(false);
               changeViewProductSelect(false);
               changeViewPerfil(false);
+              changeViewRecuperarPass1(false);
+              changeViewRecuperarPass2(false);
             }}
           >
             Contacto
