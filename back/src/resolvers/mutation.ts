@@ -1,6 +1,7 @@
 import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
+const bcrypt = require('bcrypt');
 var nodemailer  = require('nodemailer');
 import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
@@ -219,6 +220,9 @@ export const Mutation = {
         const { db, user } = context;
         const { nombre, apellido, newCorreo, password, newPassword } = args;
 
+        const encripted_pass = await bcrypt.hash(password, 12);
+        const encripted_new_pass = await bcrypt.hash(newPassword, 12);
+
         try {
             if (user) {
                 if (nombre != "" && nombre != null) {
@@ -252,7 +256,10 @@ export const Mutation = {
                         token: user.token
                     }
                 } else if (newCorreo != "" && password != "" && newCorreo != null && password != null) {
-                    if (user.Password == password) {
+                    console.log(user.Password)
+                    console.log(password)
+                    console.log(await bcrypt.compare(user.Password, password))
+                    if (await bcrypt.compare(password, user.Password)) {
                         const yaExisteCorreo = await db.collection("Usuarios").findOne({ Email: newCorreo });
 
                         if (!yaExisteCorreo) {
@@ -262,7 +269,7 @@ export const Mutation = {
                                 nombre: user.Nombre,
                                 apellido: user.Apellido,
                                 correo: newCorreo,
-                                password: user.Password,
+                                password: encripted_pass,
                                 token: user.token
                             }
                         } else {
@@ -272,14 +279,14 @@ export const Mutation = {
                         throw new ApolloError("Contraseña incorrecta");
                     }
                 } else if (password != "" && newPassword != "" && password != null && newPassword != null) {
-                    if (user.Password == password) {
-                        await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Password: newPassword } });
+                    if (await bcrypt.compare(password, user.Password)) {
+                        await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Password: encripted_new_pass } });
                         return {
                             _id: user._id.toString(),
                             nombre: user.Nombre,
                             apellido: user.Apellido,
                             correo: user.Email,
-                            password: newPassword,
+                            password: encripted_new_pass,
                             token: user.token
                         }
                     } else {
@@ -307,7 +314,9 @@ export const Mutation = {
 
             if (!user) {
                 const token = uuidv4();
+                const encripted_pass = await bcrypt.hash(password, 12);
 
+                await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: encripted_pass, token: token });
 
                 //Creamos el objeto de transporte
                 var transporter = nodemailer.createTransport({
@@ -340,6 +349,7 @@ export const Mutation = {
 
 
                 await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: password, token: token });
+
                 return token;
             } else {
                 return new ApolloError("El correo ya esta registrado");
@@ -353,16 +363,18 @@ export const Mutation = {
         const db = context.db;
         const { correo, password } = args;
         try {
-            const user = await db.collection("Usuarios").findOne({ Email: correo, Password: password });
+            const user = await db.collection("Usuarios").findOne({ Email: correo });
 
             if (!user) {
                 return new ApolloError("Ningun usuario con ese correo está registrado");
 
             } else {
-                const token = uuidv4();
+                if (await bcrypt.compare(password, user['Password'])) {
+                    const token = uuidv4();
 
-                await db.collection("Usuarios").updateOne({ Email: correo, Password: password }, { $set: { token: token } });
-                return token;
+                    await db.collection("Usuarios").updateOne({ Email: correo }, { $set: { token: token } });
+                    return token;
+                }
             }
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
