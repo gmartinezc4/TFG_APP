@@ -2,9 +2,8 @@ import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 var nodemailer  = require('nodemailer');
-var jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
-import { response } from "express";
 
 export const Mutation = {
     darAltaMadera: async (parent: any, args: { img: String, name: String, description: String }, context: { db: Db }) => {
@@ -440,7 +439,9 @@ export const Mutation = {
             if(user){      
 
                 try{
-                    await db.collection("Usuarios").updateOne({ Email: email }, { $set: { Password: password } });
+                    const encripted_pass = await bcrypt.hash(password, 12);
+
+                    await db.collection("Usuarios").updateOne({ Email: email }, { $set: { Password: encripted_pass } });
                 }catch(e: any){
                     throw new ApolloError(e, e.extensions.code);
                 }

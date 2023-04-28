@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { useMutation, gql } from "@apollo/client";
-import Swal from "sweetalert2";
 import { Context } from "../context/Context";
 
 const RECUPERAR_PASS = gql`
