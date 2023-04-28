@@ -330,8 +330,6 @@ export const Mutation = {
                     }
                 });
 
-                var mensaje = "Hola desde nodejs...";
-
                 var mailOptions = {
                     from: 'maderas.cobo.cuenca@gmail.com',
                     to: correo,
@@ -346,9 +344,6 @@ export const Mutation = {
                         console.log('Email enviado: ' + info.response);
                     }
                 });
-
-
-                await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: password, token: token });
 
                 return token;
             } else {
