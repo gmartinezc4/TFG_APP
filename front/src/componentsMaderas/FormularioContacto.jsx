@@ -28,7 +28,7 @@ function FormularioContacto(props) {
   return (
     <div className="flex justify-center">
       <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Nombre</label>
+        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Name</label>
         <input
           type="text"
           name="user_name"

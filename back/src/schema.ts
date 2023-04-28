@@ -80,7 +80,5 @@ export const typeDefs = gql`
         RegistrarUser(nombre: String!, apellido: String!, correo: String! password: String!): String!
         logIn(correo: String!, password: String!): String!
         logOut:Boolean! 
-        forgotPassword(email: String!): String!
-        recuperarPass(email: String!, password: String!): String!
     }
 `
