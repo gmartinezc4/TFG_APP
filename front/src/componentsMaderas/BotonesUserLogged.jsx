@@ -3,6 +3,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import Cargando from "./Cargando";
 import ModalConfirmacion from "./ModalConfirmacion";
+import PaginasErrores from "./PaginasErrores";
 
 const LOG_OUT = gql`
   mutation Mutation {
@@ -45,6 +46,10 @@ function BotonesUserLogged() {
     closeModalConfirmacion,
     modalIsOpenConfirmacion,
     openModalConfirmacion,
+    changeErrorTrue,
+    changeErrorFalse,
+    changeCodigoError,
+    changeMensajeError
   } = useContext(Context);
   const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
 
@@ -78,7 +83,13 @@ function BotonesUserLogged() {
   });
 
   if (loading) return <div></div>;
-  if (error) return <div>Error...</div>;
+  if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
 
   return (
     <div>
@@ -100,6 +111,7 @@ function BotonesUserLogged() {
                   changeViewDetallePedido(false),
                   changeViewHacerPedido(false),
                   changeViewPerfil(false);
+                  changeErrorFalse(false);
               }}
             ></button>
             {data.getProductosCarritoUser.length != 0 && (
@@ -148,6 +160,7 @@ function BotonesUserLogged() {
                         changeViewPedidosPerfil(false),
                         changeViewDetallePedido(false),
                         changeViewHacerPedido(false);
+                        changeErrorFalse(false);
                     }}
                   >
                     Perfil
@@ -173,6 +186,7 @@ function BotonesUserLogged() {
                         changeViewHacerPedido(false),
                         changeViewSession(false),
                         changeViewPerfil(false);
+                        changeErrorFalse(false);
                     }}
                   >
                     Pedidos
@@ -201,6 +215,7 @@ function BotonesUserLogged() {
                         changeViewHacerPedido(false),
                         changeViewSession(false),
                         changeViewPerfil(false);
+                        changeErrorFalse(false);
                       console.log("me desloggeo, token: " + localStorage.getItem("token"));
                       localStorage.removeItem("token");
                       console.log("me he desloggeado, token: " + localStorage.getItem("token"));

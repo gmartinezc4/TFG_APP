@@ -18,6 +18,9 @@ export function ContextProvider(props) {
   const [viewPerfil, setViewPerfil] = useState(false);
   const [viewRecuperarPass1, setViewRecuperarPass1] = useState(false);
   const [viewRecuperarPass2, setViewRecuperarPass2] = useState(false);
+  const [viewError, setViewError] = useState(false);
+  const [codigoError, setCodigoError] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
 
   const [productIdSelect, setProductIdSelect] = useState("");
   const [productCantidadSelect, setProductCantidadSelect] = useState("");
@@ -86,6 +89,37 @@ export function ContextProvider(props) {
     setViewRecuperarPass2(setView);
   }
 
+  function changeErrorTrue(){
+    setViewInicio(false);
+    setViewMaderas(false);
+    setViewContacto(false);
+    setViewOrigen(false);
+    setViewProductos(false);
+    setViewProductSelect(false);
+    setViewShoppingCart(false);
+    setViewPedidosPerfil(false);
+    setViewDetallePedido(false);
+    setViewHacerPedido(false);
+    setViewSession(false);
+    setReload(false);
+    setViewPerfil(false);
+    setViewRecuperarPass1(false);
+    setViewRecuperarPass2(false);
+    setViewError(true);
+  }
+
+  function changeErrorFalse(){
+    setViewError(false);
+  }
+
+  function changeCodigoError(codigo){
+    setCodigoError(codigo);
+  }
+
+  function changeMensajeError(mensaje){
+    setMensajeError(mensaje);
+  }
+
   function changeProductIdSelect(setId){
     setProductIdSelect(setId)
   }
@@ -147,6 +181,9 @@ export function ContextProvider(props) {
         viewPerfil,
         viewRecuperarPass1,
         viewRecuperarPass2,
+        viewError,
+        codigoError,
+        mensajeError,
         reload,
         token,
         productIdSelect,
@@ -172,6 +209,10 @@ export function ContextProvider(props) {
         changeViewPerfil,
         changeViewRecuperarPass1,
         changeViewRecuperarPass2,
+        changeErrorTrue,
+        changeErrorFalse,
+        changeCodigoError,
+        changeMensajeError,
         changeReload,
         changeProductIdSelect,
         changeProductCantidadSelect,

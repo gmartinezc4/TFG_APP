@@ -68,7 +68,13 @@ function ShoppingCart() {
   });
 
   if (loading) return <div></div>;
-  if (error) return <div>Error...</div>;
+  if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
 
   function actualizarCarrito() {
     console.log("haciendo mutation");
