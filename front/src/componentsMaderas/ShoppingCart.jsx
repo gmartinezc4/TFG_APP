@@ -4,6 +4,7 @@ import { Context } from "../context/Context";
 import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
 import ModalConfirmacion from "./ModalConfirmacion";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
   query GetProductosCarritoUser {
@@ -36,10 +37,11 @@ function ShoppingCart() {
     changeViewMaderas,
     changeViewContacto,
     changeViewHacerPedido,
-    modalIsOpenConfirmacion,
-    closeModalConfirmacion,
+    modalIsOpenConfirmacionCorreo,
+    closeModalConfirmacionCorreo,
     changeProductosShoppingCart,
-    changeViewProductSelect
+    changeViewProductSelect,
+    enviarCorreoConfirmacion
   } = useContext(Context);
 
   let idProd = "";
@@ -88,7 +90,7 @@ function ShoppingCart() {
       <div>
         {/* si no hay productos */}
         {data?.getProductosCarritoUser.length == 0 && (
-          <div className="flex justify-center ">
+          <div className="flex justify-center mb-96">
             <div className="flex flex-col mt-3 mb-7 bg-slate-200 p-5 container">
               <div className="bg-white">
                 <span className="flex justify-center p-5">
@@ -118,7 +120,7 @@ function ShoppingCart() {
 
         {/* si hay productos */}
         {data?.getProductosCarritoUser.length != 0 && (
-          <div className="flex justify-center ">
+          <div className="flex justify-center mb-96">
             <div className="grid grid-cols-2 gap-20 mt-3 mb-10 bg-slate-100 p-5">
               {/* columna izquierda */}
               <div>
@@ -218,13 +220,13 @@ function ShoppingCart() {
         )}
       </div>
 
-      {modalIsOpenConfirmacion && (
-        <ModalConfirmacion
-          closeModalConfirmacion={closeModalConfirmacion}
-          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
-          mensaje={"Pedido confirmado"}
+      {/* {enviarCorreoConfirmacion && (
+        <CorreoConfirmacionPedido
+          closeModalConfirmacionCorreo={closeModalConfirmacionCorreo}
+          modalIsOpenConfirmacionCorreo={modalIsOpenConfirmacionCorreo}
+          mensaje={"Pedido confirmadoooo"}
         />
-      )}
+      )} */}
     </div>
   );
 }

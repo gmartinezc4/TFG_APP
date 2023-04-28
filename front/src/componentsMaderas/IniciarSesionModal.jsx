@@ -49,8 +49,23 @@ function IniciarSesionModal(props) {
   const [noHayPassword, setNoHayPassword] = useState(false);
   const [passView, setPassView] = useState(false);
 
-  const { changeReload, changeViewSession, changeViewProductos, openModalConfirmacion } =
-    useContext(Context);
+  const {
+    changeReload,
+    changeViewSession,
+    changeViewProductos,
+    openModalConfirmacion,
+    changeViewMaderas,
+    changeViewInicio,
+    changeViewContacto,
+    changeViewOrigen,
+    changeViewShoppingCart,
+    changeViewPedidosPerfil,
+    changeViewDetallePedido,
+    changeViewHacerPedido,
+    changeViewProductSelect,
+    changeViewPerfil,
+    changeViewRecuperarPass1,
+  } = useContext(Context);
 
   const [login] = useMutation(LOG_IN, {
     onCompleted: (data) => {
@@ -191,7 +206,24 @@ function IniciarSesionModal(props) {
             >
               Submit
             </button>
-            <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer">
+            <a
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
+              onClick={() => {
+                changeViewRecuperarPass1(true);
+                changeViewMaderas(false),
+                  changeViewInicio(false),
+                  changeViewOrigen(false),
+                  changeViewContacto(false),
+                  changeViewProductos(false);
+                changeViewShoppingCart(false);
+                changeViewPedidosPerfil(false);
+                changeViewDetallePedido(false);
+                changeViewHacerPedido(false);
+                changeViewSession(false);
+                changeViewProductSelect(false);
+                changeViewPerfil(false);
+              }}
+            >
               Ha olvidado su contraseña?
             </a>
           </div>
