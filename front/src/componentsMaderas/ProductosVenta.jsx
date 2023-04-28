@@ -38,7 +38,13 @@ function ProductosVenta() {
         <Cargando />
       </div>
     );
-  if (error) return <div>Error...</div>;
+    if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
 
   if (viewProductos == true) {
     return (

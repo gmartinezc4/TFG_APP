@@ -55,7 +55,13 @@ function PedidosPerfil() {
   });
 
   if (loading) return <div></div>;
-  if (error) return <div>Error...</div>;
+  if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
 
   data?.getHistorialPedidosUser.map((pedido) => {
     if (pedido.estado == "Activo") {

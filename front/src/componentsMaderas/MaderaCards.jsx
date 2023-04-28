@@ -17,7 +17,13 @@ function MaderaCards() {
   const { data, loading, error } = useQuery(GET_MADERAS);
 
   if (loading) return <div></div>;
-  if (error) return <div>Error...</div>;
+  if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
 
   return (
     <div className=" bg-slate-200 h-screen">
