@@ -16,6 +16,8 @@ export function ContextProvider(props) {
   const [viewSession, setViewSession] = useState(false);
   const [reload, setReload] = useState(false);
   const [viewPerfil, setViewPerfil] = useState(false);
+  const [viewRecuperarPass1, setViewRecuperarPass1] = useState(false);
+  const [viewRecuperarPass2, setViewRecuperarPass2] = useState(false);
 
   const [productIdSelect, setProductIdSelect] = useState("");
   const [productCantidadSelect, setProductCantidadSelect] = useState("");
@@ -24,6 +26,7 @@ export function ContextProvider(props) {
   const [productosShoppingCart, setProductosShoppingCart] = useState(false);
   const [enviarCorreoConfirmacion, setEnviarCorreoConfirmacion] = useState(false);
   const [modalIsOpenConfirmacionCorreo, setIsOpenConfirmacionCorreo] = useState(false);
+  const [emailUserRecuperaPass, setEmailUserRecuperaPass] = useState("");
 
   const token = localStorage.getItem("token");
 
@@ -75,6 +78,14 @@ export function ContextProvider(props) {
     setViewPerfil(setView);
   }
 
+  function changeViewRecuperarPass1(setView){
+    setViewRecuperarPass1(setView);
+  }
+
+  function changeViewRecuperarPass2(setView){
+    setViewRecuperarPass2(setView);
+  }
+
   function changeProductIdSelect(setId){
     setProductIdSelect(setId)
   }
@@ -115,6 +126,10 @@ export function ContextProvider(props) {
     setIsOpenConfirmacionCorreo(false);
   }
 
+  function changeEmailUserRecuperaPass(setEmail){
+    setEmailUserRecuperaPass(setEmail);
+  }
+
   return (
     <Context.Provider
       value={{
@@ -130,6 +145,8 @@ export function ContextProvider(props) {
         viewHacerPedido,
         viewSession,
         viewPerfil,
+        viewRecuperarPass1,
+        viewRecuperarPass2,
         reload,
         token,
         productIdSelect,
@@ -139,6 +156,7 @@ export function ContextProvider(props) {
         productosShoppingCart,
         enviarCorreoConfirmacion,
         modalIsOpenConfirmacionCorreo,
+        emailUserRecuperaPass,
 
         changeViewInicio,
         changeViewContacto,
@@ -152,6 +170,8 @@ export function ContextProvider(props) {
         changeViewHacerPedido,
         changeViewSession,
         changeViewPerfil,
+        changeViewRecuperarPass1,
+        changeViewRecuperarPass2,
         changeReload,
         changeProductIdSelect,
         changeProductCantidadSelect,
@@ -162,6 +182,7 @@ export function ContextProvider(props) {
         changeEnviarCorreoConfirmacion,
         openModalConfirmacionCorreo,
         closeModalConfirmacionCorreo,
+        changeEmailUserRecuperaPass,
       }}
     >
       {props.children}
