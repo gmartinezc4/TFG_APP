@@ -347,9 +347,6 @@ export const Mutation = {
                     }
                 });
 
-
-                await db.collection("Usuarios").insertOne({ Nombre: nombre, Apellido: apellido, Email: correo, Password: password, token: token });
-
                 return token;
             } else {
                 return new ApolloError("El correo ya esta registrado");
