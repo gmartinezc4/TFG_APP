@@ -3,7 +3,6 @@ import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 const bcrypt = require('bcrypt');
 var nodemailer  = require('nodemailer');
-const bcrypt = require('bcrypt');
 import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
 export const Mutation = {
