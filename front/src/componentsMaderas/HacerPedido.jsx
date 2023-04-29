@@ -57,11 +57,11 @@ function HacerPedido(props) {
     changeViewProductos,
     changeViewPedidosPerfil,
     changeViewHacerPedido,
-    openModalConfirmacion,
+    openModalConfirmacionCorreo,
     changeEnviarCorreoConfirmacion,
   } = useContext(Context);
 
-  const [nombre, setNombre] = useState("hola");
+  const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [correo, setCorreo] = useState("");
   const [numTelefono, setNumTelefono] = useState("");

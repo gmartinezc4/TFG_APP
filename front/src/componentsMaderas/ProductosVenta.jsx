@@ -47,7 +47,7 @@ function ProductosVenta() {
 
   if (viewProductos == true) {
     return (
-      <div>
+      <div className="mb-96">
         <div className="grid grid-cols-3 gap-1 mt-10">
           {!viewProductSelect &&
             data?.getProductos.map((p) => (

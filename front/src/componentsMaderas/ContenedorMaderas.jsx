@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import Maderas from "./Maderas";
 import Inicio from "./Inicio";
 import { Context } from "../context/Context";
@@ -64,8 +64,6 @@ function ContenedorMaderas() {
     changeErrorFalse,
     codigoError,
     mensajeError,
-    enviarCorreoConfirmacion,
-    modalIsOpenConfirmacion
   } = useContext(Context);
 
   return (

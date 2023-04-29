@@ -300,7 +300,11 @@ function RegistrarseModal(props) {
           </label>
           <div className="flex flex-row items-center">
             <input
-              className="shadow appearance-none border rounded p-2"
+               className={
+                errorPasswordNoCoinciden
+                  ? "shadow appearance-none border rounded p-2 border-red-500"
+                  : "shadow appearance-none border rounded p-2"
+              }
               placeholder="******************"
               value={repPassword}
               onChange={(e) => setRepPassword(e.target.value)}

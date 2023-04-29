@@ -22,7 +22,7 @@ function Maps() {
         <div className="flex flex-col font-mono ">
           <h1 className="flex justify-center m-3 text-xl">A S E R A D E R O</h1>
           <p className="flex justify-center m-3 text-2xl">+34 626105849</p>
-          <p className="flex justify-center m-3 text-2xl">maderas.coboc@gmail.com</p>
+          <p className="flex justify-center m-3 text-2xl">maderas.cobo.cuenca@gmail.com</p>
           <p className="flex justify-center m-3 text-xs mb-10">
             Casa de Moya, 16740 La Almarcha, Cuenca
           </p>
@@ -54,7 +54,7 @@ function Maps() {
         <div className="flex flex-col font-mono ">
           <h1 className="flex justify-center m-3 text-xl">O F I C I N A</h1>
           <p className="flex justify-center m-3 text-2xl">+34 969214585</p>
-          <p className="flex justify-center m-3 text-2xl">maderas.coboc@gmail.com</p>
+          <p className="flex justify-center m-3 text-2xl">maderas.cobo.cuenca@gmail.com</p>
           <p className="flex justify-center m-3 text-xs mb-10">C. de Colón, 47, 1, 16002 Cuenca</p>
         </div>
         <MapContainer

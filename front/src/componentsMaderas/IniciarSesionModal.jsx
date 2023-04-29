@@ -159,7 +159,9 @@ function IniciarSesionModal(props) {
             comprobarUser();
           }}
         >
-          <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Email
+          </label>
           <input
             className={
               noHayCorreo
@@ -178,7 +180,9 @@ function IniciarSesionModal(props) {
             </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">Password</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
+            Password
+          </label>
           <div className="flex flex-row items-center">
             <input
               className={
@@ -205,7 +209,9 @@ function IniciarSesionModal(props) {
           </div>
 
           {noHayPassword && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca una contraseña
+            </p>
           )}
 
           <div className="flex justify-between items-center mt-5">
@@ -215,7 +221,24 @@ function IniciarSesionModal(props) {
             >
               Submit
             </button>
-            <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer">
+            <a
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
+              onClick={() => {
+                changeViewRecuperarPass1(true);
+                changeViewMaderas(false),
+                  changeViewInicio(false),
+                  changeViewOrigen(false),
+                  changeViewContacto(false),
+                  changeViewProductos(false);
+                changeViewShoppingCart(false);
+                changeViewPedidosPerfil(false);
+                changeViewDetallePedido(false);
+                changeViewHacerPedido(false);
+                changeViewSession(false);
+                changeViewProductSelect(false);
+                changeViewPerfil(false);
+              }}
+            >
               Ha olvidado su contraseña?
             </a>
           </div>

@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import IniciarSesionModal from "./IniciarSesionModal";
 import RegistrarseModal from "./RegistrarseModal";
-import { Context } from "../context/Context";
-
 
 function BotonesUserNotLogged() {
   const [modalIsOpenRegistro, setIsOpenRegistro] = useState(false);
