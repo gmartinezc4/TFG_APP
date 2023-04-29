@@ -3,6 +3,7 @@ import { ApolloClient, InMemoryCache, gql, useMutation, useQuery } from "@apollo
 import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import Swal from "sweetalert2";
 
 const customStyles = {
   content: {
@@ -73,7 +74,7 @@ function RegistrarseModal(props) {
 
       props.closeModalRegistro();
       changeReload();
-      openModalConfirmacion();
+      mostrarConfirmación();
     },
     onError: (error) => {
       //si hay un error, borrar el token
@@ -160,6 +161,16 @@ function RegistrarseModal(props) {
         },
       });
     }
+  }
+
+  function mostrarConfirmación() {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: '¡Se ha registrado correctamente!',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   return (

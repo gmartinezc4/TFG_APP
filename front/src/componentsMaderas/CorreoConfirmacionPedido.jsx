@@ -3,6 +3,8 @@ import { gql, useQuery } from "@apollo/client";
 import emailjs, { send } from "@emailjs/browser";
 import { Context } from "../context/Context";
 import Modal from "react-modal";
+import Swal from "sweetalert2";
+
 
 const customStyles = {
   content: {
@@ -65,15 +67,10 @@ function CorreoConfirmacionPedido(props) {
       },
     },
   });
-
+  
   if (loading) return <div></div>;
   if (error)
-    return (
-      <div>
-        {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
-      </div>
-    );
+    return <div>{console.log(error)}</div>;
 
   const sendEmail = () => {
     emailjs
@@ -92,6 +89,22 @@ function CorreoConfirmacionPedido(props) {
 
   const index = data.getPedidosActivosUser.length - 1;
   let importeFreeIva_redonded = data.getPedidosActivosUser[index].importeFreeIvaPedido.toString();
+
+
+function mostrarModal(){
+  Swal.fire({
+    title: "¡Pedido confirmado!",
+    text: "Le hemos enviado la confirmación al correo electrónico",
+    icon: "success",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Aceptar",
+  }).then(() => {
+
+      sendEmail();
+    
+  });
+}
+
 
   return (
     <div>
@@ -135,7 +148,9 @@ function CorreoConfirmacionPedido(props) {
           <input
             type="text"
             name="d_adicional"
-            defaultValue={", " + data.getPedidosActivosUser[index].masInformacion}
+            defaultValue={
+              ", " + data.getPedidosActivosUser[index].masInformacion
+            }
             hidden
           />
         )}
@@ -176,25 +191,9 @@ function CorreoConfirmacionPedido(props) {
           defaultValue={data.getPedidosActivosUser[index].importePedido}
           hidden
         />
-
-        <Modal
-          isOpen={props.modalIsOpenConfirmacionCorreo}
-          onRequestClose={() => {props.closeModalConfirmacionCorreo, sendEmail()}}
-          style={customStyles}
-          ariaHideApp={false}
-        >
-          <h1 className="flex justify-center  text-2xl">{props.mensaje}</h1>
-
-          <div className="flex justify-center">
-            <button
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-10"
-              onClick={() => sendEmail()}
-            >
-              Aceptar
-            </button>
-          </div>
-        </Modal>
       </form>
+
+      {mostrarModal()}
     </div>
   );
 }

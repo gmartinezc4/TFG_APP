@@ -4,6 +4,7 @@ import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import ModalConfirmacion from "./ModalConfirmacion";
+import Swal from "sweetalert2";
 
 const customStyles = {
   content: {
@@ -53,7 +54,6 @@ function IniciarSesionModal(props) {
     changeReload,
     changeViewSession,
     changeViewProductos,
-    openModalConfirmacion,
     changeViewMaderas,
     changeViewInicio,
     changeViewContacto,
@@ -80,7 +80,7 @@ function IniciarSesionModal(props) {
 
       props.closeModalInicioSesion();
       changeReload();
-      openModalConfirmacion();
+      mostrarConfirmación();
     },
     onError: (error) => {
       //si hay un error, borrar el token
@@ -127,6 +127,16 @@ function IniciarSesionModal(props) {
         },
       });
     }
+  }
+
+  function mostrarConfirmación() {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: '¡Sesión iniciada!',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   return (
