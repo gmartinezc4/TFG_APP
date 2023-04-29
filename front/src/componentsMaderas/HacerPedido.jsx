@@ -62,7 +62,7 @@ function HacerPedido(props) {
     changeEnviarCorreoConfirmacion,
   } = useContext(Context);
 
-  const [nombre, setNombre] = useState("");
+  const [nombre, setNombre] = useState("hola");
   const [apellido, setApellido] = useState("");
   const [correo, setCorreo] = useState("");
   const [numTelefono, setNumTelefono] = useState("");
@@ -83,8 +83,10 @@ function HacerPedido(props) {
         changeViewContacto(false);
       changeViewPedidosPerfil(false);
       changeViewHacerPedido(false);
-      openModalConfirmacion();
+      
+      openModalConfirmacionCorreo();
       changeEnviarCorreoConfirmacion(true);
+      
       changeReload();
     },
     onError: (error) => {

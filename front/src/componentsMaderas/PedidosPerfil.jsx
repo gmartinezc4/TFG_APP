@@ -49,6 +49,25 @@ function PedidosPerfil() {
     },
   });
 
+  if (loading) return <div></div>;
+  if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
+
+  data?.getHistorialPedidosUser.map((pedido) => {
+    if (pedido.estado == "Activo") {
+      PedidosActivos.push(pedido);
+    } else if (pedido.estado == "Pendiente") {
+      PedidosPendientes.push(pedido);
+    } else {
+      PedidosHistoricos.push(pedido);
+    }
+  });
+
   return (
     <div className="flex flex-col">
       <div className="flex justify-center mt-14">

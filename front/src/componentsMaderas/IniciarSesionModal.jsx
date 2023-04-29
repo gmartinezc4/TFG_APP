@@ -4,6 +4,7 @@ import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import ModalConfirmacion from "./ModalConfirmacion";
+import Swal from "sweetalert2";
 
 const customStyles = {
   content: {
@@ -49,8 +50,22 @@ function IniciarSesionModal(props) {
   const [noHayPassword, setNoHayPassword] = useState(false);
   const [passView, setPassView] = useState(false);
 
-  const { changeReload, changeViewSession, changeViewProductos, openModalConfirmacion } =
-    useContext(Context);
+  const {
+    changeReload,
+    changeViewSession,
+    changeViewProductos,
+    changeViewMaderas,
+    changeViewInicio,
+    changeViewContacto,
+    changeViewOrigen,
+    changeViewShoppingCart,
+    changeViewPedidosPerfil,
+    changeViewDetallePedido,
+    changeViewHacerPedido,
+    changeViewProductSelect,
+    changeViewPerfil,
+    changeViewRecuperarPass1,
+  } = useContext(Context);
 
   const [login] = useMutation(LOG_IN, {
     onCompleted: (data) => {
@@ -65,7 +80,7 @@ function IniciarSesionModal(props) {
 
       props.closeModalInicioSesion();
       changeReload();
-      openModalConfirmacion();
+      mostrarConfirmación();
     },
     onError: (error) => {
       //si hay un error, borrar el token
@@ -112,6 +127,16 @@ function IniciarSesionModal(props) {
         },
       });
     }
+  }
+
+  function mostrarConfirmación() {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: '¡Sesión iniciada!',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   return (

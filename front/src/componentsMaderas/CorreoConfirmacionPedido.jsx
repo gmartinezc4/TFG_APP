@@ -2,6 +2,25 @@ import React, { useContext, useRef, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import emailjs from "@emailjs/browser";
 import { Context } from "../context/Context";
+import Modal from "react-modal";
+import Swal from "sweetalert2";
+
+
+const customStyles = {
+  content: {
+    position: "absolute",
+    width: 400,
+    backgrounColor: "white",
+    boxShadow: "10px 5px 5px black",
+    padding: "16px 32px 24px",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+  },
+};
 
 const GET_PEDIDOS_ACTIVOS_USER = gql`
   query Query {
@@ -48,9 +67,10 @@ function CorreoConfirmacionPedido() {
       },
     },
   });
-
+  
   if (loading) return <div></div>;
-  if (error) return <div>Error...</div>;
+  if (error)
+    return <div>{console.log(error)}</div>;
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -72,7 +92,21 @@ function CorreoConfirmacionPedido() {
   const index = data.getPedidosActivosUser.length - 1;
   let importeFreeIva_redonded = data.getPedidosActivosUser[index].importeFreeIvaPedido.toString();
 
-  
+
+function mostrarModal(){
+  Swal.fire({
+    title: "¡Pedido confirmado!",
+    text: "Le hemos enviado la confirmación al correo electrónico",
+    icon: "success",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Aceptar",
+  }).then(() => {
+
+      sendEmail();
+    
+  });
+}
+
   return (
     <div>
       <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
@@ -108,7 +142,9 @@ function CorreoConfirmacionPedido() {
           <input
             type="text"
             name="d_adicional"
-            defaultValue={", " + data.getPedidosActivosUser[index].masInformacion}
+            defaultValue={
+              ", " + data.getPedidosActivosUser[index].masInformacion
+            }
             hidden
           />
         )}
@@ -149,13 +185,9 @@ function CorreoConfirmacionPedido() {
           defaultValue={data.getPedidosActivosUser[index].importePedido}
           hidden
         />
-
-        <input
-          type="submit"
-          value="Send"
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-16"
-        />
       </form>
+
+      {mostrarModal()}
     </div>
   );
 }

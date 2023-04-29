@@ -1,8 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
-import Cargando from "./Cargando";
 import ModalConfirmacion from "./ModalConfirmacion";
+import PaginasErrores from "./PaginasErrores";
+import Swal from "sweetalert2";
 
 const LOG_OUT = gql`
   mutation Mutation {
@@ -42,13 +43,12 @@ function BotonesUserLogged() {
     changeViewProductSelect,
     changeViewPerfil,
     reload,
-    closeModalConfirmacion,
-    modalIsOpenConfirmacion,
-    openModalConfirmacion,
+    changeErrorTrue,
+    changeErrorFalse,
+    changeCodigoError,
+    changeMensajeError
   } = useContext(Context);
   const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
-
-  useEffect(() => {}), [reload];
 
   const [logOut] = useMutation(LOG_OUT, {
     context: {
@@ -78,7 +78,23 @@ function BotonesUserLogged() {
   });
 
   if (loading) return <div></div>;
-  if (error) return <div>Error...</div>;
+  if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
+
+    function mostrarConfirmación() {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: '¡Hasta pronto!',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
 
   return (
     <div>
@@ -100,6 +116,7 @@ function BotonesUserLogged() {
                   changeViewDetallePedido(false),
                   changeViewHacerPedido(false),
                   changeViewPerfil(false);
+                  changeErrorFalse(false);
               }}
             ></button>
             {data.getProductosCarritoUser.length != 0 && (
@@ -148,6 +165,7 @@ function BotonesUserLogged() {
                         changeViewPedidosPerfil(false),
                         changeViewDetallePedido(false),
                         changeViewHacerPedido(false);
+                        changeErrorFalse(false);
                     }}
                   >
                     Perfil
@@ -173,6 +191,7 @@ function BotonesUserLogged() {
                         changeViewHacerPedido(false),
                         changeViewSession(false),
                         changeViewPerfil(false);
+                        changeErrorFalse(false);
                     }}
                   >
                     Pedidos
@@ -187,7 +206,7 @@ function BotonesUserLogged() {
                     id="menu-item-2 on"
                     onClick={() => {
                       logOut();
-                      openModalConfirmacion(true),
+                      mostrarConfirmación(),
                         setOpenSubMenuPerfil(false),
                         changeViewPedidosPerfil(false),
                         changeViewDetallePedido(false),
@@ -201,6 +220,7 @@ function BotonesUserLogged() {
                         changeViewHacerPedido(false),
                         changeViewSession(false),
                         changeViewPerfil(false);
+                        changeErrorFalse(false);
                       console.log("me desloggeo, token: " + localStorage.getItem("token"));
                       localStorage.removeItem("token");
                       console.log("me he desloggeado, token: " + localStorage.getItem("token"));
@@ -213,14 +233,6 @@ function BotonesUserLogged() {
             )}
           </div>
         </div>
-      )}
-
-      {modalIsOpenConfirmacion && (
-        <ModalConfirmacion
-          closeModalConfirmacion={closeModalConfirmacion}
-          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
-          mensaje={"Sesión iniciada correctamente"}
-        />
       )}
     </div>
   );

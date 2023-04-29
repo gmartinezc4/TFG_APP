@@ -4,6 +4,7 @@ import RegistrarseModal from "./RegistrarseModal";
 import { Context } from "../context/Context";
 import ModalConfirmacion from "./ModalConfirmacion";
 
+
 function BotonesUserNotLogged() {
   const [modalIsOpenRegistro, setIsOpenRegistro] = useState(false);
   const [modalIsOpenInicioSesion, setIsOpenInicioSesion] = useState(false);
@@ -58,15 +59,6 @@ function BotonesUserNotLogged() {
         <IniciarSesionModal
           closeModalInicioSesion={closeModalInicioSesion}
           modalIsOpenInicioSesion={modalIsOpenInicioSesion}
-        />
-      )}
-
-      {console.log("en botones no looged: " + modalIsOpenConfirmacion)}
-      {modalIsOpenConfirmacion && (
-        <ModalConfirmacion
-          closeModalConfirmacion={closeModalConfirmacion}
-          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
-          mensaje={"Ha cerrado sesión"}
         />
       )}
     </div>

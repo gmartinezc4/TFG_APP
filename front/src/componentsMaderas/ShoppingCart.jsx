@@ -66,7 +66,13 @@ function ShoppingCart() {
   });
 
   if (loading) return <div></div>;
-  if (error) return <div>Error...</div>;
+  if (error)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
 
   function actualizarCarrito() {
     console.log("haciendo mutation");
@@ -218,11 +224,13 @@ function ShoppingCart() {
         )}
       </div>
 
-      {modalIsOpenConfirmacion && (
-        <ModalConfirmacion
-          closeModalConfirmacion={closeModalConfirmacion}
-          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
-          mensaje={"Pedido confirmado"}
+
+      {enviarCorreoConfirmacion && (
+        <CorreoConfirmacionPedido
+          closeModalConfirmacionCorreo={closeModalConfirmacionCorreo}
+          modalIsOpenConfirmacionCorreo={modalIsOpenConfirmacionCorreo}
+          mensaje={"Pedido confirmadoooo"}
+
         />
       )}
     </div>
