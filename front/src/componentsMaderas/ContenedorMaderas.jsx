@@ -14,11 +14,11 @@ import Session from "./Session";
 import BotonesUserNotLogged from "./BotonesUserNotLogged";
 import Perfil from "./Perfil";
 import DetallePedido from "./DetallePedido";
-import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 import PieDePagina from "./PieDePagina";
 import ForgotPassword from "./ForgotPassword";
 import ForgotPassword2 from "./ForgotPassword2";
 import PaginasErrores from "./PaginasErrores";
+
 
 function ContenedorMaderas() {
   const client = new ApolloClient({
@@ -64,10 +64,13 @@ function ContenedorMaderas() {
     changeErrorFalse,
     codigoError,
     mensajeError,
+    enviarCorreoConfirmacion,
+    modalIsOpenConfirmacion
   } = useContext(Context);
 
   return (
     <ApolloProvider client={client}>
+
       {viewError && <PaginasErrores codigo={codigoError} mensaje={mensajeError} />}
       {!viewError && (
         <div>

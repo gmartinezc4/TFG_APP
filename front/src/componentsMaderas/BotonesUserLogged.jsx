@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
-import Cargando from "./Cargando";
-import ModalConfirmacion from "./ModalConfirmacion";
-import PaginasErrores from "./PaginasErrores";
+import Swal from "sweetalert2";
 
 const LOG_OUT = gql`
   mutation Mutation {
@@ -42,18 +40,12 @@ function BotonesUserLogged() {
     changeViewSession,
     changeViewProductSelect,
     changeViewPerfil,
-    reload,
-    closeModalConfirmacion,
-    modalIsOpenConfirmacion,
-    openModalConfirmacion,
     changeErrorTrue,
     changeErrorFalse,
     changeCodigoError,
     changeMensajeError
   } = useContext(Context);
   const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
-
-  useEffect(() => {}), [reload];
 
   const [logOut] = useMutation(LOG_OUT, {
     context: {
@@ -90,6 +82,16 @@ function BotonesUserLogged() {
         {changeMensajeError("Not Found")}
       </div>
     );
+
+    function mostrarConfirmación() {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: '¡Hasta pronto!',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
 
   return (
     <div>
@@ -201,7 +203,7 @@ function BotonesUserLogged() {
                     id="menu-item-2 on"
                     onClick={() => {
                       logOut();
-                      openModalConfirmacion(true),
+                      mostrarConfirmación(),
                         setOpenSubMenuPerfil(false),
                         changeViewPedidosPerfil(false),
                         changeViewDetallePedido(false),
@@ -228,14 +230,6 @@ function BotonesUserLogged() {
             )}
           </div>
         </div>
-      )}
-
-      {modalIsOpenConfirmacion && (
-        <ModalConfirmacion
-          closeModalConfirmacion={closeModalConfirmacion}
-          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
-          mensaje={"Sesión iniciada correctamente"}
-        />
       )}
     </div>
   );

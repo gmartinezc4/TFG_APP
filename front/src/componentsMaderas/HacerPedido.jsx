@@ -3,7 +3,6 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
-import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 const VENDER_PRODUCTOS = gql`
   mutation Mutation(
@@ -58,11 +57,11 @@ function HacerPedido(props) {
     changeViewProductos,
     changeViewPedidosPerfil,
     changeViewHacerPedido,
-    openModalConfirmacionCorreo,
+    openModalConfirmacion,
     changeEnviarCorreoConfirmacion,
   } = useContext(Context);
 
-  const [nombre, setNombre] = useState("");
+  const [nombre, setNombre] = useState("hola");
   const [apellido, setApellido] = useState("");
   const [correo, setCorreo] = useState("");
   const [numTelefono, setNumTelefono] = useState("");
@@ -83,8 +82,10 @@ function HacerPedido(props) {
         changeViewContacto(false);
       changeViewPedidosPerfil(false);
       changeViewHacerPedido(false);
+      
       openModalConfirmacionCorreo();
       changeEnviarCorreoConfirmacion(true);
+      
       changeReload();
     },
     onError: (error) => {

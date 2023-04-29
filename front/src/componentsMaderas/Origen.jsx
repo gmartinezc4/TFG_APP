@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../context/Context";
 import dataOrigen from "../data/OrigenData";
-import Maderas from "./Maderas";
 
 function Origen() {
   const { viewOrigen } = useContext(Context);

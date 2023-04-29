@@ -3,6 +3,8 @@ import Modal from "react-modal";
 import { Context } from "../context/Context";
 import { gql, useMutation } from "@apollo/client";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import Swal from "sweetalert2";
+
 
 const customStyles = {
   content: {
@@ -88,6 +90,7 @@ function ModalesPerfil(props) {
       if (props.modalIsOpenPassword) props.closeModalPassword();
 
       changeReload();
+      mostrarConfirmación() 
     },
     onError: (error) => {
       console.log(error.toString());
@@ -265,6 +268,16 @@ function ModalesPerfil(props) {
         },
       });
     }
+  }
+
+  function mostrarConfirmación() {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Cambios guardados con éxito',
+      showConfirmButton: false,
+      timer: 1500
+    })
   }
 
   return (

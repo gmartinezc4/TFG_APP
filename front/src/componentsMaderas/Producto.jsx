@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import Cargando from "./Cargando";
-import Session from "./Session";
+import Swal from "sweetalert2";
+
 
 const ADD_PRODUCTO_CARRITO = gql`
   mutation Mutation($idProducto: String!, $cantidad: String!) {
@@ -70,7 +71,11 @@ function Producto(props) {
     },
   });
 
-  const { data: dataProd, loading: loadingProd, error: errorProd } = useQuery(GET_PRODUCTO, {
+  const {
+    data: dataProd,
+    loading: loadingProd,
+    error: errorProd,
+  } = useQuery(GET_PRODUCTO, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -81,7 +86,11 @@ function Producto(props) {
     },
   });
 
-  const { data: dataProductos, loading: loadingProductos, error: errorProductos } = useQuery(GET_PRODUCTO_CARRITO_USER, {
+  const {
+    data: dataProductos,
+    loading: loadingProductos,
+    error: errorProductos,
+  } = useQuery(GET_PRODUCTO_CARRITO_USER, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -92,14 +101,18 @@ function Producto(props) {
     },
   });
 
-  if (loadingProd) return (<div><Cargando /></div>);
+  if (loadingProd)
+    return (
+      <div>
+        <Cargando />
+      </div>
+    );
   if (errorProd) return <div>Error...</div>;
 
-
-  if(dataProductos){
+  if (dataProductos) {
     cantidadProdCarrito = dataProductos.getProductoCarritoUser.cantidad;
+    console.log(dataProductos.getProductoCarritoUser.cantidad);
   }
-
 
   function actualizarCarrito() {
     console.log("haciendo mutation");
@@ -113,11 +126,23 @@ function Producto(props) {
     });
   }
 
+  function mostrarConfirmación() {
+    Swal.fire({
+      icon: "success",
+      title: "Producto añadido a la cesta",
+      text: cantidad + "kg",
+    });
+  }
+
   return (
     <div>
-      <div className="flex justify-center mb-96">
+      {}
+      <div className="flex justify-center">
         <div className="bg-no-repeat bg-contain -ml-96">
-          <img className="h-80 w-100 border rounded" src={dataProd.getProducto.img}></img>
+          <img
+            className="h-80 w-100 border rounded"
+            src={dataProd.getProducto.img}
+          ></img>
           <button
             className="border rounded text-white bg-black mt-10 p-2"
             onClick={() => {
@@ -129,17 +154,25 @@ function Producto(props) {
         </div>
 
         <div className="ml-20 w-60 flex flex-col">
-          <div className="font-serif text-5xl mb-10 underline">{dataProd.getProducto.name}</div>
+          <div className="font-serif text-5xl mb-10 underline">
+            {dataProd.getProducto.name}
+          </div>
 
           <div className="font-serif text-2xl flex flex-row items-baseline">
             {dataProd.getProducto.precio} €/kg
-            <div className="font-serif text-sm text-gray-400 ml-3">IVA incluido</div>
+            <div className="font-serif text-sm text-gray-400 ml-3">
+              IVA incluido
+            </div>
           </div>
 
-          {dataProd.getProducto.stock <= 0 && <div className="mt-10">Sin Stock</div>}
+          {dataProd.getProducto.stock <= 0 && (
+            <div className="mt-10">Sin Stock</div>
+          )}
 
           {dataProd.getProducto.stock > 0 && (
-            <div className="mt-10">Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg</div>
+            <div className="mt-10">
+              Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
+            </div>
           )}
 
           <form
@@ -147,6 +180,7 @@ function Producto(props) {
               event.preventDefault();
               if (cantidad != 0 && token) {
                 actualizarCarrito();
+                mostrarConfirmación();
               } else {
                 changeViewSession(true);
                 changeViewProductSelect(false);
@@ -175,7 +209,6 @@ function Producto(props) {
                 value={cantidad}
                 onChange={(e) => setCantidad(e.target.value)}
                 required
-                autoFocus
               ></input>
             )}
 

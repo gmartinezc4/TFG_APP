@@ -3,7 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import ModalConfirmacion from "./ModalConfirmacion";
+import Swal from "sweetalert2";
 
 const customStyles = {
   content: {
@@ -53,7 +53,6 @@ function IniciarSesionModal(props) {
     changeReload,
     changeViewSession,
     changeViewProductos,
-    openModalConfirmacion,
     changeViewMaderas,
     changeViewInicio,
     changeViewContacto,
@@ -80,7 +79,7 @@ function IniciarSesionModal(props) {
 
       props.closeModalInicioSesion();
       changeReload();
-      openModalConfirmacion();
+      mostrarConfirmación();
     },
     onError: (error) => {
       //si hay un error, borrar el token
@@ -127,6 +126,16 @@ function IniciarSesionModal(props) {
         },
       });
     }
+  }
+
+  function mostrarConfirmación() {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: '¡Sesión iniciada!',
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   return (
@@ -206,24 +215,7 @@ function IniciarSesionModal(props) {
             >
               Submit
             </button>
-            <a
-              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
-              onClick={() => {
-                changeViewRecuperarPass1(true);
-                changeViewMaderas(false),
-                  changeViewInicio(false),
-                  changeViewOrigen(false),
-                  changeViewContacto(false),
-                  changeViewProductos(false);
-                changeViewShoppingCart(false);
-                changeViewPedidosPerfil(false);
-                changeViewDetallePedido(false);
-                changeViewHacerPedido(false);
-                changeViewSession(false);
-                changeViewProductSelect(false);
-                changeViewPerfil(false);
-              }}
-            >
+            <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer">
               Ha olvidado su contraseña?
             </a>
           </div>

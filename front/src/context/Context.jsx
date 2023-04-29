@@ -22,14 +22,12 @@ export function ContextProvider(props) {
   const [codigoError, setCodigoError] = useState(false);
   const [mensajeError, setMensajeError] = useState("");
 
+
   const [productIdSelect, setProductIdSelect] = useState("");
   const [productCantidadSelect, setProductCantidadSelect] = useState("");
-  const [modalIsOpenConfirmacion, setIsOpenConfirmacion] = useState(false);
   const [pedidoDetallado, setPedidoDetallado] = useState();
   const [productosShoppingCart, setProductosShoppingCart] = useState(false);
   const [enviarCorreoConfirmacion, setEnviarCorreoConfirmacion] = useState(false);
-  const [modalIsOpenConfirmacionCorreo, setIsOpenConfirmacionCorreo] = useState(false);
-  const [emailUserRecuperaPass, setEmailUserRecuperaPass] = useState("");
 
   const token = localStorage.getItem("token");
 
@@ -132,14 +130,6 @@ export function ContextProvider(props) {
     setReload(!reload);
   }
 
-  function openModalConfirmacion() {
-    setIsOpenConfirmacion(true);
-  }
-
-  function closeModalConfirmacion() {
-    setIsOpenConfirmacion(false);
-  }
-
   function changePedidoDetallado(pedido) {
     setPedidoDetallado(pedido);
   }
@@ -150,18 +140,6 @@ export function ContextProvider(props) {
   
   function changeEnviarCorreoConfirmacion(setCorreo){
     setEnviarCorreoConfirmacion(setCorreo);
-  }
-
-  function openModalConfirmacionCorreo() {
-    setIsOpenConfirmacionCorreo(true);
-  }
-
-  function closeModalConfirmacionCorreo() {
-    setIsOpenConfirmacionCorreo(false);
-  }
-
-  function changeEmailUserRecuperaPass(setEmail){
-    setEmailUserRecuperaPass(setEmail);
   }
 
   return (
@@ -188,12 +166,9 @@ export function ContextProvider(props) {
         token,
         productIdSelect,
         productCantidadSelect,
-        modalIsOpenConfirmacion,
         pedidoDetallado,
         productosShoppingCart,
         enviarCorreoConfirmacion,
-        modalIsOpenConfirmacionCorreo,
-        emailUserRecuperaPass,
 
         changeViewInicio,
         changeViewContacto,
@@ -216,14 +191,9 @@ export function ContextProvider(props) {
         changeReload,
         changeProductIdSelect,
         changeProductCantidadSelect,
-        openModalConfirmacion,
-        closeModalConfirmacion,
         changePedidoDetallado,
         changeProductosShoppingCart,
-        changeEnviarCorreoConfirmacion,
-        openModalConfirmacionCorreo,
-        closeModalConfirmacionCorreo,
-        changeEmailUserRecuperaPass,
+        changeEnviarCorreoConfirmacion
       }}
     >
       {props.children}
