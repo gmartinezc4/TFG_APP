@@ -6,58 +6,6 @@ var nodemailer  = require('nodemailer');
 import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
 export const Mutation = {
-    darAltaMadera: async (parent: any, args: { img: String, name: String, description: String }, context: { db: Db }) => {
-        const db = context.db;
-        const { img, name, description } = args;
-
-        try {
-            await db.collection("Tipos_Madera").insertOne({ img, name, description });
-            return { img, name, description }
-        } catch (e: any) {
-            throw new ApolloError(e, e.extensions.code);
-        }
-
-    },
-
-    borrarMadera: async (parent: any, args: { id: string }, context: { db: Db }) => {
-        const db = context.db;
-        const id = args.id;
-
-        try {
-
-
-            const madera = await db.collection("Tipos_Madera").findOne({ _id: new ObjectId(id) });
-            if (madera) {
-                await db.collection("Tipos_Madera").deleteOne({ _id: new ObjectId(id) });
-            }
-            return {
-                id: id,
-                ...madera
-            };
-        } catch (e: any) {
-            throw new ApolloError(e, e.extensions.code);
-        }
-    },
-
-    addProducto: async (parent: any, args: { img: string, name: string, stock: string, precio: string }, context: { db: Db }) => {
-        const db = context.db;
-        const { img, name, stock, precio } = args;
-
-        try {
-            const precioInt: number = parseInt(precio)
-
-            await db.collection("Productos_Venta").insertOne({ img, name, stock, precio: precioInt })
-            return {
-                img,
-                name,
-                stock,
-                precio: precioInt
-            }
-        } catch (e: any) {
-            throw new ApolloError(e, e.extensions.code);
-        }
-    },
-
     venderProductos: async (parent: any, args: { nombre: string, apellido: string, correo: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db, user: any }) => {
         const { db, user } = context;
         const { nombre, apellido, correo, telefono, direccion, masInformacion, codigoPostal, ciudad, pais } = args;
