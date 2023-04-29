@@ -58,7 +58,7 @@ function HacerPedido(props) {
     changeViewProductos,
     changeViewPedidosPerfil,
     changeViewHacerPedido,
-    openModalConfirmacionCorreo,
+    openModalConfirmacion,
     changeEnviarCorreoConfirmacion,
   } = useContext(Context);
 

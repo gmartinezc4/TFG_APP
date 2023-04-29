@@ -20,6 +20,7 @@ import ForgotPassword from "./ForgotPassword";
 import ForgotPassword2 from "./ForgotPassword2";
 import PaginasErrores from "./PaginasErrores";
 
+
 function ContenedorMaderas() {
   const client = new ApolloClient({
     uri: "http://localhost:4000/",
@@ -64,10 +65,13 @@ function ContenedorMaderas() {
     changeErrorFalse,
     codigoError,
     mensajeError,
+    enviarCorreoConfirmacion,
+    modalIsOpenConfirmacion
   } = useContext(Context);
 
   return (
     <ApolloProvider client={client}>
+
       {viewError && <PaginasErrores codigo={codigoError} mensaje={mensajeError} />}
       {!viewError && (
         <div>

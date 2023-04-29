@@ -216,24 +216,7 @@ function IniciarSesionModal(props) {
             >
               Submit
             </button>
-            <a
-              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
-              onClick={() => {
-                changeViewRecuperarPass1(true);
-                changeViewMaderas(false),
-                  changeViewInicio(false),
-                  changeViewOrigen(false),
-                  changeViewContacto(false),
-                  changeViewProductos(false);
-                changeViewShoppingCart(false);
-                changeViewPedidosPerfil(false);
-                changeViewDetallePedido(false);
-                changeViewHacerPedido(false);
-                changeViewSession(false);
-                changeViewProductSelect(false);
-                changeViewPerfil(false);
-              }}
-            >
+            <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer">
               Ha olvidado su contraseña?
             </a>
           </div>

@@ -111,6 +111,7 @@ function Producto(props) {
 
   if (dataProductos) {
     cantidadProdCarrito = dataProductos.getProductoCarritoUser.cantidad;
+    console.log(dataProductos.getProductoCarritoUser.cantidad);
   }
 
   function actualizarCarrito() {
@@ -135,7 +136,8 @@ function Producto(props) {
 
   return (
     <div>
-      <div className="flex justify-center mb-96">
+      {}
+      <div className="flex justify-center">
         <div className="bg-no-repeat bg-contain -ml-96">
           <img
             className="h-80 w-100 border rounded"
@@ -207,7 +209,6 @@ function Producto(props) {
                 value={cantidad}
                 onChange={(e) => setCantidad(e.target.value)}
                 required
-                autoFocus
               ></input>
             )}
 

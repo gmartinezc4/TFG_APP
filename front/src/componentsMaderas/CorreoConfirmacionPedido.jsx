@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
-import emailjs, { send } from "@emailjs/browser";
+import emailjs from "@emailjs/browser";
 import { Context } from "../context/Context";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
@@ -55,7 +55,7 @@ const GET_PEDIDOS_ACTIVOS_USER = gql`
   }
 `;
 
-function CorreoConfirmacionPedido(props) {
+function CorreoConfirmacionPedido() {
   const form = useRef();
 
   const { changeEnviarCorreoConfirmacion } = useContext(Context);
@@ -72,7 +72,9 @@ function CorreoConfirmacionPedido(props) {
   if (error)
     return <div>{console.log(error)}</div>;
 
-  const sendEmail = () => {
+  const sendEmail = (e) => {
+    e.preventDefault();
+
     emailjs
       .sendForm("Maderas_Cobo_Gmail", "template_a9o7nvu", form.current, "ePa31yfxHKL_zHYnH")
       .then(
@@ -105,17 +107,9 @@ function mostrarModal(){
   });
 }
 
-
   return (
     <div>
-      <form
-        ref={form}
-        onSubmit={(e) => {
-          e.preventDefault();
-          sendEmail();
-        }}
-        className="flex flex-col mt-8 w-96"
-      >
+      <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
         <input
           type="text"
           name="user_email"
