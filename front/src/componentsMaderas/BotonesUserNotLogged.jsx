@@ -56,7 +56,6 @@ function BotonesUserNotLogged() {
           modalIsOpenInicioSesion={modalIsOpenInicioSesion}
         />
       )}
-
     </div>
   );
 }
