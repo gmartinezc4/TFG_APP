@@ -40,6 +40,9 @@ function PedidosPerfil() {
     changeViewPedidosPerfil,
     changePedidoDetallado,
     changeViewProductos,
+    changeErrorTrue,
+    changeCodigoError,
+    changeMensajeError,
   } = useContext(Context);
 
   let PedidosActivos = [];

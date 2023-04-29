@@ -56,7 +56,12 @@ const GET_PEDIDOS_ACTIVOS_USER = gql`
 function CorreoConfirmacionPedido(props) {
   const form = useRef();
 
-  const { changeEnviarCorreoConfirmacion } = useContext(Context);
+  const {
+    changeEnviarCorreoConfirmacion,
+    changeErrorTrue,
+    changeCodigoError,
+    changeMensajeError,
+  } = useContext(Context);
 
   const { data, loading, error } = useQuery(GET_PEDIDOS_ACTIVOS_USER, {
     context: {

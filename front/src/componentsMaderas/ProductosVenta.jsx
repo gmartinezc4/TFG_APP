@@ -18,7 +18,7 @@ const GET_PRODUCTOS = gql`
 `;
 
 function ProductosVenta() {
-  const { viewProductos, token, reload, viewProductSelect, changeViewProductSelect } =
+  const { viewProductos, changeErrorTrue, changeCodigoError, changeMensajeError, reload, viewProductSelect, changeViewProductSelect } =
     useContext(Context);
   const [productId, setProductId] = useState(null);
 
