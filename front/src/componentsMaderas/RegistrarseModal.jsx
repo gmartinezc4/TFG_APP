@@ -194,7 +194,9 @@ function RegistrarseModal(props) {
             comprobarUser();
           }}
         >
-          <label className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Nombre
+          </label>
           <input
             className={
               noHayNombre
@@ -208,10 +210,14 @@ function RegistrarseModal(props) {
             name="nombre"
           ></input>
           {noHayNombre && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca su nombre</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca su nombre
+            </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">Apellido</label>
+          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">
+            Apellido
+          </label>
           <input
             className={
               noHayApellido
@@ -225,10 +231,14 @@ function RegistrarseModal(props) {
             name="apellido"
           ></input>
           {noHayApellido && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca su apellido</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca su apellido
+            </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">Email</label>
+          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">
+            Email
+          </label>
           <input
             className={
               noHayCorreo || errorCorreoIncompleto
@@ -256,7 +266,9 @@ function RegistrarseModal(props) {
             </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">Contraseña</label>
+          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">
+            Contraseña
+          </label>
           <div className="flex flex-row items-center">
             <input
               className={
@@ -272,7 +284,9 @@ function RegistrarseModal(props) {
               autoComplete="off"
               pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$"
               onInvalid={() => {
-                setErrorPassword(true), setNoHayPassword(false), setErrorPasswordNoCoinciden(false);
+                setErrorPassword(true),
+                  setNoHayPassword(false),
+                  setErrorPasswordNoCoinciden(false);
               }}
             ></input>
             <div
@@ -287,11 +301,14 @@ function RegistrarseModal(props) {
           </div>
 
           {noHayPassword && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor elija una contraseña</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor elija una contraseña
+            </p>
           )}
           {errorPassword && (
             <p className="text-red-500 text-xs italic mt-3">
-              Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un número
+              Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula
+              y un número
             </p>
           )}
 
@@ -300,7 +317,7 @@ function RegistrarseModal(props) {
           </label>
           <div className="flex flex-row items-center">
             <input
-               className={
+              className={
                 errorPasswordNoCoinciden
                   ? "shadow appearance-none border rounded p-2 border-red-500"
                   : "shadow appearance-none border rounded p-2"
@@ -324,7 +341,9 @@ function RegistrarseModal(props) {
           </div>
 
           {errorPasswordNoCoinciden && (
-            <p className="text-red-500 text-xs italic mt-3">Las contraseñas no coinciden</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Las contraseñas no coinciden
+            </p>
           )}
 
           <div className="flex justify-between items-center mt-5">
@@ -335,7 +354,12 @@ function RegistrarseModal(props) {
               Submit
             </button>
 
-            <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer">
+            <a
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
+              onClick={() => {
+                props.closeModalRegistro(), props.openModalInicioSesion(); 
+              }}
+            >
               Esta registrado? Inicie sessión
             </a>
           </div>
