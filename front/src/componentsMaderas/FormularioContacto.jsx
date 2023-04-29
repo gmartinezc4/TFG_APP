@@ -4,8 +4,6 @@ import { Context } from "../context/Context";
 
 function FormularioContacto(props) {
   const form = useRef();
-  const { changeReload, modalIsOpenConfirmacion, closeModalConfirmacion, openModalConfirmacion, changeViewContacto } =
-    useContext(Context);
 
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");

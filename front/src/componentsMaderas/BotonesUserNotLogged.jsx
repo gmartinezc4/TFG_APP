@@ -2,16 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import IniciarSesionModal from "./IniciarSesionModal";
 import RegistrarseModal from "./RegistrarseModal";
 import { Context } from "../context/Context";
-import ModalConfirmacion from "./ModalConfirmacion";
-import ForgotPassword from "./ForgotPassword";
 
 
 function BotonesUserNotLogged() {
   const [modalIsOpenRegistro, setIsOpenRegistro] = useState(false);
   const [modalIsOpenInicioSesion, setIsOpenInicioSesion] = useState(false);
-  const { reload, closeModalConfirmacion, modalIsOpenConfirmacion, viewRecuperarPass1 } = useContext(Context);
-
-  useEffect(() => {}), [reload];
 
   function openModalRegistro() {
     setIsOpenRegistro(true);

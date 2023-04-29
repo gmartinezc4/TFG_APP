@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
-import Cargando from "./Cargando";
 import { CgProfile } from "react-icons/cg";
 import { TfiEmail } from "react-icons/tfi";
 import { BsPencil } from "react-icons/bs";
@@ -21,7 +20,6 @@ const GET_USER = gql`
 `;
 
 function Perfil() {
-  const { changeReload, viewPerfil, changeViewPerfil, reload } = useContext(Context);
   const [modalIsOpenNombreApellido, setIsOpenNombreApellido] = useState(false);
   const [modalIsOpenCorreo, setIsOpenCorreo] = useState(false);
   const [modalIsOpenPassword, setIsOpenPassword] = useState(false);

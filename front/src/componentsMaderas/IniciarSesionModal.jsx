@@ -3,7 +3,6 @@ import { gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import ModalConfirmacion from "./ModalConfirmacion";
 import Swal from "sweetalert2";
 
 const customStyles = {
