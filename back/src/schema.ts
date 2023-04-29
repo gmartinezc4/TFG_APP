@@ -69,9 +69,6 @@ export const typeDefs = gql`
     }
 
     type Mutation{
-        darAltaMadera(img: String!, name: String!, description: String!): Maderas!
-        borrarMadera(id: ID!): Maderas!
-        addProducto(img: String!, name: String!, stock: String!, precio: String!): Product!
         venderProductos(nombre: String!, apellido: String!, correo: String!, telefono: String!, direccion: String!, masInformacion: String!, codigoPostal: String!, ciudad: String!, pais: String!): Pedido!
         addStockProducto(_id: String!, cantidad: String!): Product!
         addProductCesta(id_producto: String!, cantidad: String!): Carrito!
