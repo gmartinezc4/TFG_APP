@@ -67,6 +67,10 @@ function Perfil() {
       </div>
     );
 
+    localStorage.setItem("nombreUser", data.getUser.nombre);
+    localStorage.setItem("apellidoUser", data.getUser.apellido);
+    localStorage.setItem("emailUser", data.getUser.correo);
+
   return (
     <div>
       <div className="flex justify-center mb-96">
