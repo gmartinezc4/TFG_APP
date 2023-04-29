@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { useMutation, gql } from "@apollo/client";
 import Swal from "sweetalert2";
 import { Context } from "../context/Context";
@@ -24,12 +24,17 @@ function ForgotPassword2() {
   const [passView, setPassView] = useState(false);
   const [repPassView, setRepPassView] = useState(false);
 
+  const [errorCaptcha, setErrorCaptcha] = useState(false);
+  const captchaRef = useRef(null)
+  let tokenCaptcha;
+
   const { changeReload, emailUserRecuperaPass, changeViewInicio, changeViewRecuperarPass2 } =
     useContext(Context);
 
   const [recuperarPassword] = useMutation(RECUPERAR_PASS_2, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       mostrarConfirmación();
+      captchaRef.current.reset();
     },
     onError: (error) => {
       console.log(error);
@@ -55,12 +60,14 @@ function ForgotPassword2() {
       setErrorPasswordNoCoinciden(false);
       setErrorCodigo(false);
       setNoHayCodigo(false);
+      setErrorCaptcha(false);
     } else if (password != repPassword) {
       setErrorPasswordNoCoinciden(true);
       setNoHayPassword(false);
       setErrorPassword(false);
       setErrorCodigo(false);
       setNoHayCodigo(false);
+      setErrorCaptcha(false);
     } else if (codigo == "") {
       console.log("hols");
       setNoHayCodigo(true);
@@ -68,11 +75,20 @@ function ForgotPassword2() {
       setNoHayPassword(false);
       setErrorPassword(false);
       setErrorCodigo(false);
+      setErrorCaptcha(false);
     } else if (codigo != localStorage.getItem("codigoRecuperacion")) {
       setErrorCodigo(true);
       setErrorPasswordNoCoinciden(false);
       setNoHayPassword(false);
       setErrorPassword(false);
+      setNoHayCodigo(false);
+      setErrorCaptcha(false);
+    }else if (tokenCaptcha == ""){
+      setErrorCaptcha(true);
+      setNoHayPassword(false);
+      setErrorPassword(false);
+      setErrorPasswordNoCoinciden(false);
+      setErrorCodigo(false);
       setNoHayCodigo(false);
     } else {
       setNoHayPassword(false);
@@ -80,6 +96,7 @@ function ForgotPassword2() {
       setErrorPasswordNoCoinciden(false);
       setErrorCodigo(false);
       setNoHayCodigo(false);
+      setErrorCaptcha(false);
       recuperarPassword({
         variables: {
           email: emailUserRecuperaPass,
@@ -94,6 +111,7 @@ function ForgotPassword2() {
       <form
         onSubmit={(event) => {
           event.preventDefault();
+          tokenCaptcha = captchaRef.current.getValue();
           comprobarUser();
         }}
       >
@@ -135,12 +153,13 @@ function ForgotPassword2() {
 
         {noHayPassword && (
           <p className="text-red-500 text-xs italic flex justify-center">
-            Porfavor elija una contraseña
+            Porfavor, elija una contraseña
           </p>
         )}
         {errorPassword && (
           <p className="text-red-500 text-xs italic flex justify-center">
-            Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un número
+            Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y
+            un número
           </p>
         )}
 
@@ -200,17 +219,28 @@ function ForgotPassword2() {
 
         {noHayCodigo && (
           <p className="text-red-500 text-xs italic mt-3 flex justify-center">
-            Porfavor introduzca el código de recuperción
+            Porfavor, introduzca el código de recuperción
           </p>
         )}
 
         {errorCodigo && (
           <p className="text-red-500 text-xs italic mt-3 flex justify-center">
-            Porfavor introduzca el código de recuperción válido
+            Porfavor, introduzca el código de recuperción válido
           </p>
         )}
 
-        <ReCAPTCHA sitekey={"6LdjHoElAAAAAOgUQ_f2lvuGG52lSZCEDdcXUqgT"}  />
+        <div className="flex justify-center mt-6">
+          <ReCAPTCHA
+            sitekey={"6LdjHoElAAAAAOgUQ_f2lvuGG52lSZCEDdcXUqgT"}
+            ref={captchaRef}
+          />
+        </div>
+
+        {errorCaptcha && (
+          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+            Porfavor, marque la casilla
+          </p>
+        )}
 
         <div className="flex justify-center mt-5">
           <button
