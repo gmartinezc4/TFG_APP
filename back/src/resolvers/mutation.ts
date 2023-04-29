@@ -156,7 +156,7 @@ export const Mutation = {
                     newStock = parseInt(productoVendido.stock) - parseInt(cantidad);
                     importe = parseInt(cantidad) * parseInt(productoVendido.precio);
                     importe_freeIVA = importe / 1.21;
-                    console.log(productoVendido.name)
+
                     if (newStock >= 0) {
 
                         const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
@@ -256,9 +256,7 @@ export const Mutation = {
                         token: user.token
                     }
                 } else if (newCorreo != "" && password != "" && newCorreo != null && password != null) {
-                    console.log(user.Password)
-                    console.log(password)
-                    console.log(await bcrypt.compare(user.Password, password))
+
                     if (await bcrypt.compare(password, user.Password)) {
                         const yaExisteCorreo = await db.collection("Usuarios").findOne({ Email: newCorreo });
 

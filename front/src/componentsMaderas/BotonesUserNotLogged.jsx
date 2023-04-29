@@ -5,6 +5,7 @@ import { Context } from "../context/Context";
 import ModalConfirmacion from "./ModalConfirmacion";
 import ForgotPassword from "./ForgotPassword";
 
+
 function BotonesUserNotLogged() {
   const [modalIsOpenRegistro, setIsOpenRegistro] = useState(false);
   const [modalIsOpenInicioSesion, setIsOpenInicioSesion] = useState(false);
@@ -58,14 +59,6 @@ function BotonesUserNotLogged() {
         <IniciarSesionModal
           closeModalInicioSesion={closeModalInicioSesion}
           modalIsOpenInicioSesion={modalIsOpenInicioSesion}
-        />
-      )}
-
-      {modalIsOpenConfirmacion && (
-        <ModalConfirmacion
-          closeModalConfirmacion={closeModalConfirmacion}
-          modalIsOpenConfirmacion={modalIsOpenConfirmacion}
-          mensaje={"Ha cerrado sesión"}
         />
       )}
 
