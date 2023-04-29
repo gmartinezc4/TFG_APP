@@ -20,6 +20,8 @@ const GET_USER = gql`
 `;
 
 function Perfil() {
+  const { changeErrorTrue, changeCodigoError, changeMensajeError } = useContext(Context);
+
   const [modalIsOpenNombreApellido, setIsOpenNombreApellido] = useState(false);
   const [modalIsOpenCorreo, setIsOpenCorreo] = useState(false);
   const [modalIsOpenPassword, setIsOpenPassword] = useState(false);

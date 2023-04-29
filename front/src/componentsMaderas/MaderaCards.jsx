@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery, gql } from "@apollo/client";
 import dataMaderaCards from "../data/MaderaCardsData";;
+import { Context } from "../context/Context";
 
 const GET_MADERAS = gql`
   query Query {
@@ -14,6 +15,9 @@ const GET_MADERAS = gql`
 `;
 
 function MaderaCards() {
+  const { changeErrorTrue, changeCodigoError, changeMensajeError } =
+    useContext(Context);
+  
   const { data, loading, error } = useQuery(GET_MADERAS);
 
   if (loading) return <div></div>;

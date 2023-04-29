@@ -39,7 +39,11 @@ function ShoppingCart() {
     modalIsOpenConfirmacion,
     closeModalConfirmacion,
     changeProductosShoppingCart,
-    changeViewProductSelect
+    changeViewProductSelect,
+    enviarCorreoConfirmacion,
+    changeErrorTrue,
+    changeCodigoError,
+    changeMensajeError,
   } = useContext(Context);
 
   let idProd = "";

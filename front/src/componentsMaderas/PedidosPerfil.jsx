@@ -35,8 +35,14 @@ const GET_HISTORIAL_PEDIDOS_USER = gql`
 `;
 
 function PedidosPerfil() {
-  const { changeViewDetallePedido, changeViewPedidosPerfil, changePedidoDetallado } =
-    useContext(Context);
+  const {
+    changeViewDetallePedido,
+    changeViewPedidosPerfil,
+    changePedidoDetallado,
+    changeErrorTrue,
+    changeCodigoError,
+    changeMensajeError,
+  } = useContext(Context);
 
   let hayPedidosActivos = false;
   let hayPedidosHistoricos = false;
