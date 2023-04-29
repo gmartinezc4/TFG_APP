@@ -2,25 +2,7 @@ import React, { useContext, useRef, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import emailjs from "@emailjs/browser";
 import { Context } from "../context/Context";
-import Modal from "react-modal";
 import Swal from "sweetalert2";
-
-
-const customStyles = {
-  content: {
-    position: "absolute",
-    width: 400,
-    backgrounColor: "white",
-    boxShadow: "10px 5px 5px black",
-    padding: "16px 32px 24px",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-  },
-};
 
 const GET_PEDIDOS_ACTIVOS_USER = gql`
   query Query {

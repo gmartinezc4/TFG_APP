@@ -3,7 +3,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
-import ModalConfirmacion from "./ModalConfirmacion";
+import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
   query GetProductosCarritoUser {

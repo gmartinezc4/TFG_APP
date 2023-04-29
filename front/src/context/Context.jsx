@@ -25,7 +25,6 @@ export function ContextProvider(props) {
 
   const [productIdSelect, setProductIdSelect] = useState("");
   const [productCantidadSelect, setProductCantidadSelect] = useState("");
-  const [modalIsOpenConfirmacion, setIsOpenConfirmacion] = useState(false);
   const [pedidoDetallado, setPedidoDetallado] = useState();
   const [productosShoppingCart, setProductosShoppingCart] = useState(false);
   const [enviarCorreoConfirmacion, setEnviarCorreoConfirmacion] = useState(false);
@@ -131,14 +130,6 @@ export function ContextProvider(props) {
     setReload(!reload);
   }
 
-  function openModalConfirmacion() {
-    setIsOpenConfirmacion(true);
-  }
-
-  function closeModalConfirmacion() {
-    setIsOpenConfirmacion(false);
-  }
-
   function changePedidoDetallado(pedido) {
     setPedidoDetallado(pedido);
   }
@@ -175,7 +166,6 @@ export function ContextProvider(props) {
         token,
         productIdSelect,
         productCantidadSelect,
-        modalIsOpenConfirmacion,
         pedidoDetallado,
         productosShoppingCart,
         enviarCorreoConfirmacion,
@@ -201,8 +191,6 @@ export function ContextProvider(props) {
         changeReload,
         changeProductIdSelect,
         changeProductCantidadSelect,
-        openModalConfirmacion,
-        closeModalConfirmacion,
         changePedidoDetallado,
         changeProductosShoppingCart,
         changeEnviarCorreoConfirmacion

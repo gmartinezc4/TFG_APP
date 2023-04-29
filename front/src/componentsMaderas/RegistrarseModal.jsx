@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { ApolloClient, InMemoryCache, gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -58,7 +58,7 @@ function RegistrarseModal(props) {
   const [passView, setPassView] = useState(false);
   const [repPassView, setRepPassView] = useState(false);
 
-  const { changeReload, changeViewSession, changeViewProductos, openModalConfirmacion } =
+  const { changeReload, changeViewSession, changeViewProductos } =
     useContext(Context);
 
   const [register] = useMutation(REGISTRAR_USER, {

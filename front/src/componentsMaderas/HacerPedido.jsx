@@ -3,7 +3,6 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
-import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 
 const VENDER_PRODUCTOS = gql`
   mutation Mutation(

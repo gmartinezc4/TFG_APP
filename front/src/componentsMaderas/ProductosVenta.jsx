@@ -18,11 +18,9 @@ const GET_PRODUCTOS = gql`
 `;
 
 function ProductosVenta() {
-  const { viewProductos, token, reload, viewProductSelect, changeViewProductSelect } =
+  const { viewProductos, reload, viewProductSelect, changeViewProductSelect } =
     useContext(Context);
   const [productId, setProductId] = useState(null);
-
-  useEffect(() => {}), [reload];
 
   const { data, loading, error } = useQuery(GET_PRODUCTOS, {
     context: {

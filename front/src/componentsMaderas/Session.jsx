@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import { gql, useMutation } from "@apollo/client";
 import RegistrarseModal from "./RegistrarseModal";
 import IniciarSesionModal from "./IniciarSesionModal";
 import { Context } from "../context/Context";

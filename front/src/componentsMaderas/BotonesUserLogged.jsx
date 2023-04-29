@@ -1,8 +1,6 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
-import ModalConfirmacion from "./ModalConfirmacion";
-import PaginasErrores from "./PaginasErrores";
 import Swal from "sweetalert2";
 
 const LOG_OUT = gql`
@@ -42,7 +40,6 @@ function BotonesUserLogged() {
     changeViewSession,
     changeViewProductSelect,
     changeViewPerfil,
-    reload,
     changeErrorTrue,
     changeErrorFalse,
     changeCodigoError,
