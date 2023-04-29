@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
-import Cargando from "./Cargando";
 import { CgProfile } from "react-icons/cg";
 import { TfiEmail } from "react-icons/tfi";
 import { BsPencil } from "react-icons/bs";
@@ -21,7 +20,8 @@ const GET_USER = gql`
 `;
 
 function Perfil() {
-  const { changeReload, viewPerfil, changeViewPerfil, reload } = useContext(Context);
+  const { changeErrorTrue, changeCodigoError, changeMensajeError } = useContext(Context);
+
   const [modalIsOpenNombreApellido, setIsOpenNombreApellido] = useState(false);
   const [modalIsOpenCorreo, setIsOpenCorreo] = useState(false);
   const [modalIsOpenPassword, setIsOpenPassword] = useState(false);
@@ -69,7 +69,7 @@ function Perfil() {
 
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-96">
         <div className="flex flex-col mt-10">
           <h1 className="font-bold text-4xl mb-3">Tus datos</h1>
           <span className="mb-5">

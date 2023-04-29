@@ -2,11 +2,10 @@ import React, { useState, useContext } from "react";
 import { Context } from "../context/Context";
 import Maps from "./Maps";
 import FormularioContacto from "./FormularioContacto";
-import ModalConfirmacion from "./ModalConfirmacion";
 import Swal from "sweetalert2";
 
 function Contacto() {
-  const { viewContacto, modalIsOpenConfirmacion, closeModalConfirmacion, changeReload, changeViewContacto } = useContext(Context);
+  const { viewContacto, modalIsOpenConfirmacion } = useContext(Context);
 
   const [error, setError] = useState(false);
   const [openConfirmacion, setOpenConfirmacion] = useState(false);

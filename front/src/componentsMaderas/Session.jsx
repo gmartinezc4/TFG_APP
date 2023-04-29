@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import { gql, useMutation } from "@apollo/client";
 import RegistrarseModal from "./RegistrarseModal";
 import IniciarSesionModal from "./IniciarSesionModal";
 import { Context } from "../context/Context";
@@ -30,7 +29,7 @@ function Session(props) {
 
   return (
     <div>
-      <div className="flex flex-col">
+      <div className="flex flex-col mb-96">
         <div className="grid font-serif text-4xl justify-center bg-slate-100 h-40 content-center">
           Para añadir los productos a tu cesta registrate o inicia sesión
         </div>

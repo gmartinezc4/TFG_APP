@@ -18,11 +18,10 @@ const GET_PRODUCTOS = gql`
 `;
 
 function ProductosVenta() {
-  const { viewProductos, token, reload, viewProductSelect, changeViewProductSelect } =
+  const { viewProductos, changeErrorTrue, changeCodigoError, changeMensajeError, reload, viewProductSelect, changeViewProductSelect } =
     useContext(Context);
+    
   const [productId, setProductId] = useState(null);
-
-  useEffect(() => {}), [reload];
 
   const { data, loading, error } = useQuery(GET_PRODUCTOS, {
     context: {
@@ -48,7 +47,7 @@ function ProductosVenta() {
 
   if (viewProductos == true) {
     return (
-      <div>
+      <div className="mb-96">
         <div className="grid grid-cols-3 gap-1 mt-10">
           {!viewProductSelect &&
             data?.getProductos.map((p) => (

@@ -2,25 +2,7 @@ import React, { useContext, useRef, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import emailjs from "@emailjs/browser";
 import { Context } from "../context/Context";
-import Modal from "react-modal";
 import Swal from "sweetalert2";
-
-
-const customStyles = {
-  content: {
-    position: "absolute",
-    width: 400,
-    backgrounColor: "white",
-    boxShadow: "10px 5px 5px black",
-    padding: "16px 32px 24px",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-  },
-};
 
 const GET_PEDIDOS_ACTIVOS_USER = gql`
   query Query {
@@ -55,10 +37,12 @@ const GET_PEDIDOS_ACTIVOS_USER = gql`
   }
 `;
 
-function CorreoConfirmacionPedido() {
+function CorreoConfirmacionPedido(props) {
   const form = useRef();
 
-  const { changeEnviarCorreoConfirmacion } = useContext(Context);
+  const {
+    changeEnviarCorreoConfirmacion,
+  } = useContext(Context);
 
   const { data, loading, error } = useQuery(GET_PEDIDOS_ACTIVOS_USER, {
     context: {
@@ -72,8 +56,7 @@ function CorreoConfirmacionPedido() {
   if (error)
     return <div>{console.log(error)}</div>;
 
-  const sendEmail = (e) => {
-    e.preventDefault();
+  const sendEmail = () => {
 
     emailjs
       .sendForm("Maderas_Cobo_Gmail", "template_a9o7nvu", form.current, "ePa31yfxHKL_zHYnH")
@@ -109,7 +92,14 @@ function mostrarModal(){
 
   return (
     <div>
-      <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
+      <form
+        ref={form}
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendEmail();
+        }}
+        className="flex flex-col mt-8 w-96"
+      >
         <input
           type="text"
           name="user_email"
