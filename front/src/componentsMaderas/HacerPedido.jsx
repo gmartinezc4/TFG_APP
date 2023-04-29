@@ -61,9 +61,9 @@ function HacerPedido(props) {
     changeEnviarCorreoConfirmacion,
   } = useContext(Context);
 
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [correo, setCorreo] = useState("");
+  const [nombre, setNombre] = useState(localStorage.getItem("nombreUser"));
+  const [apellido, setApellido] = useState(localStorage.getItem("apellidoUser"));
+  const [correo, setCorreo] = useState(localStorage.getItem("emailUser"));
   const [numTelefono, setNumTelefono] = useState("");
   const [calle, setCalle] = useState("");
   const [masInformacion, setmasInformacion] = useState("");
@@ -132,7 +132,7 @@ function HacerPedido(props) {
                 </div>
 
                 <div className="flex flex-col mb-3 ml-5 ">
-                  <span>{p.name}</span>
+                  <span className="font-bold underline">{p.name}</span>
                   <span>Cantidad: {p.cantidad}kg</span>
                 </div>
 

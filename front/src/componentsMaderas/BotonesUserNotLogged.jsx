@@ -45,6 +45,7 @@ function BotonesUserNotLogged() {
         <RegistrarseModal
           closeModalRegistro={closeModalRegistro}
           modalIsOpenRegistro={modalIsOpenRegistro}
+          openModalInicioSesion={openModalInicioSesion}
         />
       )}
 
