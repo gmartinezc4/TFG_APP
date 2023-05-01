@@ -127,6 +127,7 @@ export const Query = {
                         estado: p.Estado,
                         nombre: p.Nombre,
                         apellido: p.Apellido,
+                        email: p.Email,
                         telefono: p.Telefono,
                         direccion: p.Direccion,
                         masInformacion: p.MasInformacion,
