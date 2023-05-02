@@ -81,5 +81,6 @@ export const typeDefs = gql`
         logOut:Boolean! 
         forgotPassword(email: String!): String!
         recuperarPass(email: String!, password: String!): String!
+        cancelarPedido(id_pedido: ID!): Pedido!
     }
 `
