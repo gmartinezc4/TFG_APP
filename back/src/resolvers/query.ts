@@ -230,43 +230,5 @@ export const Query = {
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
         }
-    }
+    },
 }
-
-// p.Productos.map((e: any) => ({
-//     id_user: p.id_user,
-//     estado: p.Estado,
-//     nombre: p.Nombre,
-//     apellido: p.Apellido,
-//     telefono: p.Telefono,
-//     direccion: p.Direccion,
-//     masInformacion: p.MasInformacion,
-//     codigoPostal: p.CodigoPostal,
-//     ciudad: p.Ciudad,
-//     pais: p.Pais,
-//     fechaPedido: p.FechaHoy,
-//     fechaRecogida: p.FechaRecogida,
-//     importePedido: p.ImporteFinalPedido,
-//     importeFreeIvaPedido: p.Importe_freeIVAFinalPedido,
-//     productos: {
-//         _id: e._id.toString(),
-//         id_user: e.Id_user,
-//         id_producto: e.Id_producto,
-//         img: e.Img,
-//         name: e.Name,
-//         cantidad: e.Cantidad,
-//         precioTotal: e.PrecioTotal,
-//         precioTotal_freeIVA: e.PrecioTotal_freeIVA
-//     }
-
-
-// {
-//     _id: p.productos._id.toString(),
-//     id_user: p.productos.Id_user,
-//     id_producto: p.productos.Id_producto,
-//     img: p.productos.Img,
-//     name: p.productos.Name,
-//     cantidad: p.productos.Cantidad,
-//     precioTotal: p.productos.PrecioTotal,
-//     precioTotal_freeIVA: p.productos.PrecioTotal_freeIVA
-// }

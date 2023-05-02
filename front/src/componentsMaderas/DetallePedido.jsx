@@ -10,17 +10,16 @@ function DetallePedido(props) {
       <div className="flex flex-col">
         <h1 className="text-2xl font-bold">Numero de pedido: {props.pedido._id}</h1>
         <div className="flex flex-col font-bold mt-5">
-          Fecha del pedido <span className="font-extralight">{props.pedido.fechaPedido}</span>
+          Fecha del pedido{" "}
+          <span className="font-extralight">{props.pedido.fechaPedido}</span>
         </div>
 
         <div className="border border-gray-200 mt-5"></div>
 
-        {props.pedido.estado == "Activo" && (
-          <div className="flex flex-col font-bold mt-5">
-            Pendiente de recoger
-            <span className="font-extralight">{props.pedido.fechaRecogida}</span>
-          </div>
-        )}
+        <div className="flex flex-col font-bold mt-5">
+          Fecha de recogida
+          <span className="font-extralight">{props.pedido.fechaRecogida}</span>
+        </div>
 
         {props.pedido.estado == "Finalizado" && (
           <div className="flex flex-col font-bold mt-5">Recogido</div>
@@ -47,13 +46,16 @@ function DetallePedido(props) {
           <h1 className="font-bold text-2xl">Importe total</h1>
           <div className="mt-1">
             <p className="grid grid-cols-2 gap-10 mb-3">
-              <span>Subtotal:</span> <span>{props.pedido.importeFreeIvaPedido.substr(0, 6)}€</span>
+              <span>Subtotal:</span>{" "}
+              <span>{props.pedido.importeFreeIvaPedido.substr(0, 6)}€</span>
             </p>
             <p className="grid grid-cols-2 gap-10 font-bold">
               <span>Total:</span> <span>{props.pedido.importePedido}€</span>
             </p>
             <p>
-              <span className="mr-10  text-gray-400 text-xs">(el Total Incluye el IVA)</span>
+              <span className="mr-10  text-gray-400 text-xs">
+                (el Total Incluye el IVA)
+              </span>
             </p>
           </div>
         </div>
@@ -78,7 +80,9 @@ function DetallePedido(props) {
         <div className="flex justify-start mb-32">
           <button
             className="border border-black p-2 bg-black text-white hover:bg-slate-700"
-            onClick={() => {changeViewDetallePedido(false), changeViewPedidosPerfil(true)}}
+            onClick={() => {
+              changeViewDetallePedido(false), changeViewPedidosPerfil(true);
+            }}
           >
             Volver
           </button>
