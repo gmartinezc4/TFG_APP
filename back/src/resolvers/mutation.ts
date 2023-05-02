@@ -35,7 +35,6 @@ export const Mutation = {
                     })
                     await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
                     await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
-                    await db.collection("Historial_Pedidos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
 
                     return {
                         id_user: user._id.toString(),
