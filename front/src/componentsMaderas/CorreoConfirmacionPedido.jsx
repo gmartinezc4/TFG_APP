@@ -84,7 +84,9 @@ function mostrarModal(){
     confirmButtonColor: "#3085d6",
     confirmButtonText: "Aceptar",
   }).then(() => {
+
       sendEmail();
+    
   });
 }
 
