@@ -172,8 +172,8 @@ export const Mutation = {
 
         try {
             if (user) {
-                if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
-                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre, Apellido: apellido } });
+                if (nombre != "" && nombre != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre } });
                     return {
                         _id: user._id.toString(),
                         nombre: nombre,
@@ -192,16 +192,17 @@ export const Mutation = {
                         password: user.Password,
                         token: user.token
                     }
-                } else if (nombre != "" && nombre != null) {
-                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre } });
-                    return {
-                        _id: user._id.toString(),
-                        nombre: nombre,
-                        apellido: apellido,
-                        correo: user.Email,
-                        password: user.Password,
-                        token: user.token
-                    }
+                } else 
+                    if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
+                        await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre, Apellido: apellido } });
+                        return {
+                            _id: user._id.toString(),
+                            nombre: nombre,
+                            apellido: apellido,
+                            correo: user.Email,
+                            password: user.Password,
+                            token: user.token
+                        }
                 } else if (newCorreo != "" && password != "" && newCorreo != null && password != null) {
 
                     if (await bcrypt.compare(password, user.Password)) {
