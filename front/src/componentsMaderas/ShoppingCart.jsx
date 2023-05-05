@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa";
@@ -16,6 +16,18 @@ const GET_PRODUCTOS_CARRITO_USER = gql`
       precioTotal
       precioTotal_freeIVA
       img
+    }
+  }
+`;
+
+const GET_USER = gql`
+  query Query {
+    getUser {
+      _id
+      nombre
+      apellido
+      correo
+      password
     }
   }
 `;
@@ -61,7 +73,7 @@ function ShoppingCart() {
     },
   });
 
-  const { data, loading, error } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
+  const { data: dataGetProductos, loading: loadingGetProductos, error: errorGetPoductos } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -69,14 +81,29 @@ function ShoppingCart() {
     },
   });
 
-  if (loading) return <div></div>;
-  if (error)
+  const { data: dataGetUser, loading: loadingGetUser, error: errorGetUser } = useQuery(GET_USER, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+  });
+
+  if (loadingGetProductos) return <div></div>;
+  if (errorGetPoductos)
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
         {changeMensajeError("Not Found")}
       </div>
     );
+
+    if (loadingGetUser) return <div></div>;
+    if (errorGetUser) return console.log(error);
+  
+    localStorage.setItem("nombreUser", dataGetUser.getUser.nombre);
+    localStorage.setItem("apellidoUser", dataGetUser.getUser.apellido);
+    localStorage.setItem("emailUser", dataGetUser.getUser.correo);
 
   function actualizarCarrito() {
     console.log("haciendo mutation");
@@ -97,7 +124,7 @@ function ShoppingCart() {
     <div>
       <div>
         {/* si no hay productos */}
-        {data?.getProductosCarritoUser.length == 0 && (
+        {dataGetProductos?.getProductosCarritoUser.length == 0 && (
           <div className="flex justify-center mb-96">
             <div className="flex flex-col mt-3 mb-7 bg-slate-200 p-5 container">
               <div className="bg-white">
@@ -127,12 +154,12 @@ function ShoppingCart() {
         )}
 
         {/* si hay productos */}
-        {data?.getProductosCarritoUser.length != 0 && (
+        {dataGetProductos?.getProductosCarritoUser.length != 0 && (
           <div className="flex justify-center mb-96">
             <div className="grid grid-cols-2 gap-20 mt-3 mb-10 bg-slate-100 p-5">
               {/* columna izquierda */}
               <div>
-                {data?.getProductosCarritoUser.map((p) => (
+                {dataGetProductos?.getProductosCarritoUser.map((p) => (
                   <div key={p._id} className="grid grid-cols-3 p-4 mx-auto bg-white ">
                     <div className="bg-no-repeat bg-contain ">
                       <img className="h-30 w-40 border rounded mb-5 " src={p.img}></img>
@@ -216,7 +243,7 @@ function ShoppingCart() {
                         changeViewOrigen(false),
                         changeViewMaderas(false),
                         changeViewContacto(false);
-                        changeProductosShoppingCart(data.getProductosCarritoUser)
+                        changeProductosShoppingCart(dataGetProductos.getProductosCarritoUser)
                     }}
                   >
                     Comenzar pedido

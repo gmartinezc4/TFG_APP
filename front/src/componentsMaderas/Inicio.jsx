@@ -3,38 +3,9 @@ import { gql, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { dataInicio, dataInicio2 } from "../data/InicioData";
 
-const GET_USER = gql`
-  query Query {
-    getUser {
-      _id
-      nombre
-      apellido
-      correo
-      password
-    }
-  }
-`;
 
 function Inicio() {
-  const { viewInicio, token } = useContext(Context);
-
-  if(token && viewInicio){
-    const { data, loading, error } = useQuery(GET_USER, {
-      context: {
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      },
-    });
-  
-    if (loading) return <div></div>;
-    if (error) return console.log(error);
-
-    localStorage.setItem("nombreUser", data.getUser.nombre);
-    localStorage.setItem("apellidoUser", data.getUser.apellido);
-    localStorage.setItem("emailUser", data.getUser.correo);
-  }
-  
+  const { viewInicio } = useContext(Context);
 
   if (viewInicio == true) {
     return (
