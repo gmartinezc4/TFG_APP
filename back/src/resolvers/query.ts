@@ -120,7 +120,6 @@ export const Query = {
                 const pedidos = await db.collection("Pedidos_Recogidos").find({ Id_user: user._id.toString() }).toArray();
 
                 if (pedidos) {
-                    console.log(pedidos)
                     return pedidos.map(p => ({
                         _id: p._id,
                         id_user: p.Id_user,
@@ -166,7 +165,7 @@ export const Query = {
 
     getPedidosActivosUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
         const { db, user } = context;
-        console.log(user)
+
         try {
             if (user) {
                 const pedidos = await db.collection("Pedidos_Activos").find({ Id_user: user._id.toString() }).toArray();
@@ -215,7 +214,7 @@ export const Query = {
 
     getPedidosPendientesUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
         const { db, user } = context;
-        console.log(user)
+
         try {
             if (user) {
                 const pedidos = await db.collection("Pedidos_Pendientes").find({ Id_user: user._id.toString() }).toArray();
@@ -264,7 +263,7 @@ export const Query = {
 
     getPedidosCanceladosUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
         const { db, user } = context;
-        console.log(user)
+
         try {
             if (user) {
                 const pedidos = await db.collection("Pedidos_Cancelados").find({ Id_user: user._id.toString() }).toArray();
