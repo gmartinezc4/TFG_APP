@@ -142,7 +142,7 @@ function ShoppingCart() {
                         changeViewOrigen(false),
                         changeViewMaderas(false),
                         changeViewContacto(false);
-                        changeViewProductSelect(false);
+                      changeViewProductSelect(false);
                     }}
                   >
                     Volver a la tienda
@@ -189,22 +189,20 @@ function ShoppingCart() {
 
                     <div className="hidden">
                       {(importe = importe + parseInt(p.precioTotal))}
-                      {(importeFreeIva = importeFreeIva + parseInt(p.precioTotal_freeIVA))}
+                      {
+                        (importeFreeIva =
+                          importeFreeIva + parseInt(p.precioTotal_freeIVA))
+                      }
                     </div>
                   </div>
                 ))}
 
                 <div className="flex flex-col bg-white mt-5 p-5 ">
-                  <span className="font-bold text-xl mb-7">Fecha de recogida prevista</span>
+                  <span className="font-bold text-xl mb-7">
+                    Fecha de recogida prevista
+                  </span>
                   <span>
-                    {fechaRecogida.getDate() +
-                      2 +
-                      "/" +
-                      (fechaRecogida.getMonth() + 1) +
-                      " - " +
-                      (fechaRecogida.getDate() + 4) +
-                      "/" +
-                      (fechaRecogida.getMonth() + 1)}
+                    {fechaRecogida.toLocaleDateString()}
                     <br></br> <br></br>
                     Dispone de 7 días habiles para recoger el pedido
                   </span>
@@ -243,7 +241,9 @@ function ShoppingCart() {
                         changeViewOrigen(false),
                         changeViewMaderas(false),
                         changeViewContacto(false);
-                        changeProductosShoppingCart(dataGetProductos.getProductosCarritoUser)
+                      changeProductosShoppingCart(
+                        dataGetProductos.getProductosCarritoUser
+                      );
                     }}
                   >
                     Comenzar pedido
@@ -255,13 +255,11 @@ function ShoppingCart() {
         )}
       </div>
 
-
       {enviarCorreoConfirmacion && (
         <CorreoConfirmacionPedido
           closeModalConfirmacionCorreo={closeModalConfirmacionCorreo}
           modalIsOpenConfirmacionCorreo={modalIsOpenConfirmacionCorreo}
           mensaje={"Pedido confirmadoooo"}
-
         />
       )}
     </div>
