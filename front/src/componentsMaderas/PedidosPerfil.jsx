@@ -170,9 +170,8 @@ function PedidosPerfil() {
     changeViewPedidosPerfil,
     changePedidoDetallado,
     changeViewProductos,
-    changeReload
+    changeReload,
   } = useContext(Context);
-  
 
   const [cancelarPedido] = useMutation(CANCELAR_PEDIDO, {
     onCompleted: () => {
@@ -286,11 +285,11 @@ function PedidosPerfil() {
 
   return (
     <div>
-      <div className="flex justify-center mt-20">
-        {dataActivos.getPedidosActivosUser.length == 0 &&
-          dataPendientes.getPedidosPendientesUser.length == 0 &&
-          dataCancelados.getPedidosCanceladosUser.length == 0 &&
-          dataRecogidos.getPedidosRecogidos.length == 0 && (
+      {dataActivos.getPedidosActivosUser.length == 0 &&
+        dataPendientes.getPedidosPendientesUser.length == 0 &&
+        dataCancelados.getPedidosCanceladosUser.length == 0 &&
+        dataRecogidos.getPedidosRecogidos.length == 0 && (
+          <div className="flex justify-center mt-20 mb-96">
             <div className="flex flex-col justify-center mb-3">
               <h1 className="text-4xl font-semibold">
                 Todavia no ha realizado ningun pedido
@@ -306,12 +305,11 @@ function PedidosPerfil() {
                 </button>
               </div>
             </div>
-          )}
-      </div>
-
-      <div className="flex justify-center flex-col px-96">
-        <div className="flex flex-col bg-slate-200 p-20 mb-5">
-          {dataActivos.getPedidosActivosUser.length != 0 && (
+          </div>
+        )}
+      <div className="flex justify-center flex-col px-96 mt-20">
+        {dataActivos.getPedidosActivosUser.length != 0 && (
+          <div className="flex flex-col bg-slate-200 p-20 mb-5">
             <div>
               <h1 className="font-bold text-3xl mb-10 -mt-14 underline">
                 Pedidos activos
@@ -375,11 +373,10 @@ function PedidosPerfil() {
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        <div className="flex flex-col bg-slate-200 p-20 mb-5">
-          {dataPendientes.getPedidosPendientesUser.length != 0 && (
+          </div>
+        )}
+        {dataPendientes.getPedidosPendientesUser.length != 0 && (
+          <div className="flex flex-col bg-slate-200 p-20 mb-5">
             <div>
               <h1 className="font-bold text-3xl mb-10 -mt-14 underline">
                 Pedidos pendientes de recogida
@@ -413,7 +410,9 @@ function PedidosPerfil() {
                       </div>
                       <div className="flex flex-col font-bold -ml-16">
                         Estado del pedido
-                        <span className="font-extralight">{pedido.estado} de recoger</span>
+                        <span className="font-extralight">
+                          {pedido.estado} de recoger
+                        </span>
                       </div>
                     </div>
 
@@ -435,11 +434,10 @@ function PedidosPerfil() {
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        <div className="flex flex-col bg-slate-200 p-20 mb-5">
-          {dataCancelados.getPedidosCanceladosUser.length != 0 && (
+          </div>
+        )}
+        {dataCancelados.getPedidosCanceladosUser.length != 0 && (
+          <div className="flex flex-col bg-slate-200 p-20 mb-5">
             <div>
               <h1 className="font-bold text-3xl mb-10 -mt-14 underline">
                 Pedidos cancelados
@@ -495,11 +493,10 @@ function PedidosPerfil() {
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        <div className="flex flex-col bg-slate-200 p-20 mb-5">
-          {dataRecogidos.getPedidosRecogidos.length != 0 && (
+          </div>
+        )}
+        {dataRecogidos.getPedidosRecogidos.length != 0 && (
+          <div className="flex flex-col bg-slate-200 p-20 mb-5">
             <div>
               <h1 className="font-bold text-3xl mb-10 -mt-14 underline">
                 Pedidos anteriores
@@ -555,8 +552,8 @@ function PedidosPerfil() {
                 </div>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

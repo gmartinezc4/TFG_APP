@@ -6,6 +6,8 @@ import { TfiEmail } from "react-icons/tfi";
 import { BsPencil } from "react-icons/bs";
 import { RiLockPasswordLine } from "react-icons/ri";
 import ModalesPerfil from "./ModalesPerfil";
+import Swal from "sweetalert2";
+
 
 const GET_USER = gql`
   query Query {
@@ -19,8 +21,21 @@ const GET_USER = gql`
   }
 `;
 
+const BORRAR_USER = gql`
+  mutation Mutation {
+    borraUser {
+      _id
+      apellido
+      nombre
+      password
+      token
+      correo
+    }
+  }
+`;
+
 function Perfil() {
-  const { changeErrorTrue, changeCodigoError, changeMensajeError } = useContext(Context);
+  const { changeErrorTrue, changeCodigoError, changeMensajeError, changeReload } = useContext(Context);
 
   const [modalIsOpenNombreApellido, setIsOpenNombreApellido] = useState(false);
   const [modalIsOpenCorreo, setIsOpenCorreo] = useState(false);
@@ -45,6 +60,35 @@ function Perfil() {
   function openModalPassword() {
     setIsOpenPassword(true);
   }
+
+  const [borrarUser] = useMutation(BORRAR_USER, {
+    onCompleted: () => {
+      console.log("Se ha borrado su usuario admininstrador");
+      localStorage.removeItem("token");
+      localStorage.removeItem("nivel_auth");
+      changeReload();
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Se ha borrado su usuario admininstrador",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    },
+    onError: (error) => {
+      //si hay un error, borrar el token
+      console.log(error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Ha ocurrido un error",
+        text: "Por favor, intentelo de nuevo",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+  });
 
   function closeModalPassword() {
     setIsOpenPassword(false);
@@ -71,13 +115,35 @@ function Perfil() {
     localStorage.setItem("apellidoUser", data.getUser.apellido);
     localStorage.setItem("emailUser", data.getUser.correo);
 
+    function modalDarBajaUser(AdminId) {
+      Swal.fire({
+        icon: "warning",
+        title: "¿Quieres borrar tu perfil?",
+        text: "Los cambios serán irreversibles",
+        showCancelButton: true,
+        confirmButtonText: "Si, borrar",
+        confirmButtonColor: "#DF0000",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          borrarUser({
+            context: {
+              headers: {
+                authorization: localStorage.getItem("token"),
+              },
+            },
+          });
+        }
+      });
+    }
+
   return (
     <div>
-      <div className="flex justify-center mb-96">
+      <div className="flex justify-center">
         <div className="flex flex-col mt-10">
           <h1 className="font-bold text-4xl mb-3">Tus datos</h1>
           <span className="mb-5">
-            Aquí puedes revisar y actualizar tus datos de usuario y gestionar tu email y contraseña
+            Aquí puedes revisar y actualizar tus datos de usuario y gestionar tu email y
+            contraseña
           </span>
 
           <div className="grid grid-rows-1 grid-flow-col">
@@ -158,6 +224,17 @@ function Perfil() {
         </div>
       </div>
 
+      <div className="flex justify-center mt-32 mb-52">
+        <button
+          className="rounded border-2 border-red-800 bg-red-600 p-5 font-bold hover:bg-red-800 hover:border-red-400"
+          onClick={() => {
+            modalDarBajaUser(data.getUser._id);
+          }}
+        >
+          Darse de baja
+        </button>
+      </div>
+
       {modalIsOpenNombreApellido && (
         <ModalesPerfil
           closeModalNombreApellido={closeModalNombreApellido}
@@ -166,7 +243,10 @@ function Perfil() {
       )}
 
       {modalIsOpenCorreo && (
-        <ModalesPerfil closeModalCorreo={closeModalCorreo} modalIsOpenCorreo={modalIsOpenCorreo} />
+        <ModalesPerfil
+          closeModalCorreo={closeModalCorreo}
+          modalIsOpenCorreo={modalIsOpenCorreo}
+        />
       )}
 
       {modalIsOpenPassword && (
