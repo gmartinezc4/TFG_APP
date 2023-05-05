@@ -172,6 +172,7 @@ function PedidosPerfil() {
     changeViewProductos,
     changeReload
   } = useContext(Context);
+  
 
   const [cancelarPedido] = useMutation(CANCELAR_PEDIDO, {
     onCompleted: () => {
