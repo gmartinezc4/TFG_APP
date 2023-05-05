@@ -18,7 +18,7 @@ export const Mutation = {
             if (user) {
 
                 const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
-                const fechaRecogida = ((fecha.getDate() + 2) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " - " + (fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+                const fechaRecogida = ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
 
                 const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
                 if (carritoUser.length > 0) {
