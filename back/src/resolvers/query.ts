@@ -112,12 +112,12 @@ export const Query = {
         }
     },
 
-    getPedidosRecogidos: async (parent: any, args: any, context: { db: Db, user: any }) => {
+    getHistorialPedidosUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
         const { db, user } = context;
 
         try {
             if (user) {
-                const pedidos = await db.collection("Pedidos_Recogidos").find({ Id_user: user._id.toString() }).toArray();
+                const pedidos = await db.collection("Historial_Pedidos").find({ Id_user: user._id.toString() }).toArray();
 
                 if (pedidos) {
                     console.log(pedidos)
@@ -127,7 +127,6 @@ export const Query = {
                         estado: p.Estado,
                         nombre: p.Nombre,
                         apellido: p.Apellido,
-                        email: p.Email,
                         telefono: p.Telefono,
                         direccion: p.Direccion,
                         masInformacion: p.MasInformacion,
@@ -152,7 +151,7 @@ export const Query = {
                     }))
 
                 } else {
-                    throw new ApolloError("El usuario no tiene pedidos recogidos", "404");
+                    throw new ApolloError("El usuario no tiene pedidos", "404");
                 }
             } else {
                 throw new ApolloError("Ha ocurrido un error con el usuario", "500");
@@ -203,7 +202,7 @@ export const Query = {
                     }))
 
                 } else {
-                    throw new ApolloError("El usuario no tiene pedidos activos", "404");
+                    throw new ApolloError("El usuario no tiene pedidos", "404");
                 }
             } else {
                 throw new ApolloError("Ha ocurrido un error con el usuario", "500");
@@ -211,104 +210,8 @@ export const Query = {
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
         }
-    },
 
-    getPedidosPendientesUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
-        const { db, user } = context;
-        console.log(user)
-        try {
-            if (user) {
-                const pedidos = await db.collection("Pedidos_Pendientes").find({ Id_user: user._id.toString() }).toArray();
 
-                if (pedidos) {
-                    return pedidos.map(p => ({
-                        _id: p._id,
-                        id_user: p.Id_user,
-                        estado: p.Estado,
-                        nombre: p.Nombre,
-                        apellido: p.Apellido,
-                        email: p.Email,
-                        telefono: p.Telefono,
-                        direccion: p.Direccion,
-                        masInformacion: p.MasInformacion,
-                        codigoPostal: p.CodigoPostal,
-                        ciudad: p.Ciudad,
-                        pais: p.Pais,
-                        fechaPedido: p.FechaPedido,
-                        fechaRecogida: p.FechaRecogida,
-                        importePedido: p.ImportePedido,
-                        importeFreeIvaPedido: p.ImporteFreeIvaPedido,
-                        productos: p.Productos.map((e: any) => ({
-                            _id: e._id.toString(),
-                            id_user: e.Id_user,
-                            id_producto: e.Id_producto,
-                            img: e.Img,
-                            name: e.Name,
-                            cantidad: e.Cantidad,
-                            precioTotal: e.PrecioTotal,
-                            precioTotal_freeIVA: e.PrecioTotal_freeIVA
-                        }))
-
-                    }))
-
-                } else {
-                    throw new ApolloError("El usuario no tiene pedidos pendientes de recoger", "404");
-                }
-            } else {
-                throw new ApolloError("Ha ocurrido un error con el usuario", "500");
-            }
-        } catch (e: any) {
-            throw new ApolloError(e, e.extensions.code);
-        }
-    },
-
-    getPedidosCanceladosUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
-        const { db, user } = context;
-        console.log(user)
-        try {
-            if (user) {
-                const pedidos = await db.collection("Pedidos_Cancelados").find({ Id_user: user._id.toString() }).toArray();
-
-                if (pedidos) {
-                    return pedidos.map(p => ({
-                        _id: p._id,
-                        id_user: p.Id_user,
-                        estado: p.Estado,
-                        nombre: p.Nombre,
-                        apellido: p.Apellido,
-                        email: p.Email,
-                        telefono: p.Telefono,
-                        direccion: p.Direccion,
-                        masInformacion: p.MasInformacion,
-                        codigoPostal: p.CodigoPostal,
-                        ciudad: p.Ciudad,
-                        pais: p.Pais,
-                        fechaPedido: p.FechaPedido,
-                        fechaRecogida: p.FechaRecogida,
-                        importePedido: p.ImportePedido,
-                        importeFreeIvaPedido: p.ImporteFreeIvaPedido,
-                        productos: p.Productos.map((e: any) => ({
-                            _id: e._id.toString(),
-                            id_user: e.Id_user,
-                            id_producto: e.Id_producto,
-                            img: e.Img,
-                            name: e.Name,
-                            cantidad: e.Cantidad,
-                            precioTotal: e.PrecioTotal,
-                            precioTotal_freeIVA: e.PrecioTotal_freeIVA
-                        }))
-
-                    }))
-
-                } else {
-                    throw new ApolloError("El usuario no tiene pedidos cancelados", "404");
-                }
-            } else {
-                throw new ApolloError("Ha ocurrido un error con el usuario", "500");
-            }
-        } catch (e: any) {
-            throw new ApolloError(e, e.extensions.code);
-        }
     },
 
     getUser: async (parent: any, args: any, context: { user: any }) => {
@@ -327,43 +230,5 @@ export const Query = {
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
         }
-    }
+    },
 }
-
-// p.Productos.map((e: any) => ({
-//     id_user: p.id_user,
-//     estado: p.Estado,
-//     nombre: p.Nombre,
-//     apellido: p.Apellido,
-//     telefono: p.Telefono,
-//     direccion: p.Direccion,
-//     masInformacion: p.MasInformacion,
-//     codigoPostal: p.CodigoPostal,
-//     ciudad: p.Ciudad,
-//     pais: p.Pais,
-//     fechaPedido: p.FechaHoy,
-//     fechaRecogida: p.FechaRecogida,
-//     importePedido: p.ImporteFinalPedido,
-//     importeFreeIvaPedido: p.Importe_freeIVAFinalPedido,
-//     productos: {
-//         _id: e._id.toString(),
-//         id_user: e.Id_user,
-//         id_producto: e.Id_producto,
-//         img: e.Img,
-//         name: e.Name,
-//         cantidad: e.Cantidad,
-//         precioTotal: e.PrecioTotal,
-//         precioTotal_freeIVA: e.PrecioTotal_freeIVA
-//     }
-
-
-// {
-//     _id: p.productos._id.toString(),
-//     id_user: p.productos.Id_user,
-//     id_producto: p.productos.Id_producto,
-//     img: p.productos.Img,
-//     name: p.productos.Name,
-//     cantidad: p.productos.Cantidad,
-//     precioTotal: p.productos.PrecioTotal,
-//     precioTotal_freeIVA: p.productos.PrecioTotal_freeIVA
-// }

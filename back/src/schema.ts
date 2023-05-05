@@ -63,10 +63,8 @@ export const typeDefs = gql`
         getProducto (id_product: String!): Product!
         getProductosCarritoUser: [Carrito!]
         getProductoCarritoUser (id_product: String!): Carrito!
-        getPedidosRecogidos: [Pedido!]
+        getHistorialPedidosUser: [Pedido!]
         getPedidosActivosUser: [Pedido!]
-        getPedidosPendientesUser: [Pedido!]
-        getPedidosCanceladosUser: [Pedido!]
         getUser: User!
     }
 
@@ -81,5 +79,6 @@ export const typeDefs = gql`
         logOut:Boolean! 
         forgotPassword(email: String!): String!
         recuperarPass(email: String!, password: String!): String!
+        cancelarPedido(id_pedido: ID!): Pedido!
     }
 `

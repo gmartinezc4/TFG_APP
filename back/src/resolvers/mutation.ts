@@ -35,6 +35,7 @@ export const Mutation = {
                     })
                     await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
                     await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
+                    await db.collection("Historial_Pedidos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
 
                     return {
                         id_user: user._id.toString(),
@@ -435,6 +436,68 @@ export const Mutation = {
         }
 
         return password;
-    }
+    },
+
+    cancelarPedido: async (parent: any, args: { id_pedido: string }, context: { db: Db, user: any }) => {
+        const { db, user } = context;
+        let id_pedido = args.id_pedido;
+
+        try {
+            if (user) {
+                if (id_pedido.length != 24) {
+                    throw new ApolloError("ID invalido");
+                } else {
+                    let pedidoUserCambiado: any;
+
+                    const pedidoUser = await db.collection("Pedidos_Activos").findOne({ _id: new ObjectId(id_pedido) });
+
+                    if (pedidoUser) {
+                        pedidoUserCambiado = pedidoUser;
+                        await db.collection("Pedidos_Cancelados").insertOne({ Id_user: pedidoUser.Id_user.toString(), Estado: "Cancelado", Nombre: pedidoUser.Nombre, Apellido: pedidoUser.Apellido, Email: pedidoUser.Email, Telefono: pedidoUser.Telefono, Direccion: pedidoUser.Direccion, MasInformacion: pedidoUser.MasInformacion, CodigoPostal: pedidoUser.CodigoPostal, Ciudad: pedidoUser.Ciudad, Pais: pedidoUser.Pais, FechaPedido: pedidoUser.FechaPedido, FechaRecogida: pedidoUser.FechaRecogida, ImportePedido: pedidoUser.ImportePedido, ImporteFreeIvaPedido: pedidoUser.ImporteFreeIvaPedido, Productos: pedidoUser.Productos });
+                        await db.collection("Pedidos_Activos").findOneAndDelete({ _id: new ObjectId(id_pedido) });
+                    } else {
+                        throw new ApolloError("Ha ocurrido un error al recuperar el pedido");
+                    }
+
+                    if (pedidoUserCambiado) {
+                        return {
+                            _id: pedidoUserCambiado._id,
+                            id_user: pedidoUserCambiado.Id_user,
+                            estado: pedidoUserCambiado.Estado,
+                            nombre: pedidoUserCambiado.Nombre,
+                            apellido: pedidoUserCambiado.Apellido,
+                            email: pedidoUserCambiado.Email,
+                            telefono: pedidoUserCambiado.Telefono,
+                            direccion: pedidoUserCambiado.Direccion,
+                            masInformacion: pedidoUserCambiado.MasInformacion,
+                            codigoPostal: pedidoUserCambiado.CodigoPostal,
+                            ciudad: pedidoUserCambiado.Ciudad,
+                            pais: pedidoUserCambiado.Pais,
+                            fechaPedido: pedidoUserCambiado.FechaPedido,
+                            fechaRecogida: pedidoUserCambiado.FechaRecogida,
+                            importePedido: pedidoUserCambiado.ImportePedido,
+                            importeFreeIvaPedido: pedidoUserCambiado.ImporteFreeIvaPedido,
+                            productos: pedidoUserCambiado.Productos.map((e: any) => ({
+                                _id: e._id.toString(),
+                                id_user: e.Id_user,
+                                id_producto: e.Id_producto,
+                                img: e.Img,
+                                name: e.Name,
+                                cantidad: e.Cantidad,
+                                precioTotal: e.PrecioTotal,
+                                precioTotal_freeIVA: e.PrecioTotal_freeIVA
+                            }))
+                        }
+                    } else {
+                        throw new ApolloError("Ha ocurrido un error al recuperar el pedido");
+                    }
+                }
+            } else {
+                throw new ApolloError("Ha ocurrido un error con el usuario", "500");
+            }
+        } catch (e: any) {
+            throw new ApolloError(e, e.extensions.code);
+        }
+    },
 }
 
