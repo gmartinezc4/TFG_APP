@@ -3,9 +3,105 @@ import { useQuery, gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import Swal from "sweetalert2";
 
-const GET_HISTORIAL_PEDIDOS_USER = gql`
+const GET_PEDIDOS_RECOGIDOS_USER = gql`
   query Query {
-    getHistorialPedidosUser {
+    getPedidosRecogidos {
+      _id
+      apellido
+      ciudad
+      codigoPostal
+      direccion
+      estado
+      fechaPedido
+      fechaRecogida
+      id_user
+      importeFreeIvaPedido
+      importePedido
+      masInformacion
+      nombre
+      pais
+      telefono
+      productos {
+        _id
+        cantidad
+        id_producto
+        id_user
+        img
+        name
+        precioTotal
+        precioTotal_freeIVA
+      }
+    }
+  }
+`;
+
+const GET_PEDIDOS_ACTIVOS_USER = gql`
+  query Query {
+    getPedidosActivosUser {
+      _id
+      apellido
+      ciudad
+      codigoPostal
+      direccion
+      estado
+      fechaPedido
+      fechaRecogida
+      id_user
+      importeFreeIvaPedido
+      importePedido
+      masInformacion
+      nombre
+      pais
+      telefono
+      productos {
+        _id
+        cantidad
+        id_producto
+        id_user
+        img
+        name
+        precioTotal
+        precioTotal_freeIVA
+      }
+    }
+  }
+`;
+
+const GET_PEDIDOS_PENDIENTES_USER = gql`
+  query Query {
+    getPedidosPendientesUser {
+      _id
+      apellido
+      ciudad
+      codigoPostal
+      direccion
+      estado
+      fechaPedido
+      fechaRecogida
+      id_user
+      importeFreeIvaPedido
+      importePedido
+      masInformacion
+      nombre
+      pais
+      telefono
+      productos {
+        _id
+        cantidad
+        id_producto
+        id_user
+        img
+        name
+        precioTotal
+        precioTotal_freeIVA
+      }
+    }
+  }
+`;
+
+const GET_PEDIDOS_CANCELADOS_USER = gql`
+  query Query {
+    getPedidosCanceladosUser {
       _id
       apellido
       ciudad
@@ -76,7 +172,7 @@ function PedidosPerfil() {
     changeViewProductos,
     changeReload
   } = useContext(Context);
-
+  
 
   const [cancelarPedido] = useMutation(CANCELAR_PEDIDO, {
     onCompleted: () => {
@@ -116,7 +212,11 @@ function PedidosPerfil() {
     },
   });
 
-  const { data, loading, error } = useQuery(GET_HISTORIAL_PEDIDOS_USER, {
+  const {
+    data: dataActivos,
+    loading: loadingActivos,
+    error: errorActivos,
+  } = useQuery(GET_PEDIDOS_ACTIVOS_USER, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -124,23 +224,28 @@ function PedidosPerfil() {
     },
   });
 
-  if (loading) return <div></div>;
-  if (error)
-    return (
-      <div>
-        {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
-      </div>
-    );
+  const {
+    data: dataPendientes,
+    loading: loadingPendientes,
+    error: errorPendientes,
+  } = useQuery(GET_PEDIDOS_PENDIENTES_USER, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+  });
 
-  data?.getHistorialPedidosUser.map((pedido) => {
-    if (pedido.estado == "Activo") {
-      PedidosActivos.push(pedido);
-    } else if (pedido.estado == "Pendiente") {
-      PedidosPendientes.push(pedido);
-    } else {
-      PedidosHistoricos.push(pedido);
-    }
+  const {
+    data: dataCancelados,
+    loading: loadingCancelados,
+    error: errorCancelados,
+  } = useQuery(GET_PEDIDOS_CANCELADOS_USER, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
   });
 
   if (loadingRecogidos) return <div></div>;
@@ -178,13 +283,14 @@ function PedidosPerfil() {
       }
     });
   }
-  
+
   return (
     <div>
       <div className="flex justify-center mt-20">
-        {PedidosActivos.length == 0 &&
-          PedidosPendientes.length == 0 &&
-          PedidosHistoricos.length == 0 && (
+        {dataActivos.getPedidosActivosUser.length == 0 &&
+          dataPendientes.getPedidosPendientesUser.length == 0 &&
+          dataCancelados.getPedidosCanceladosUser.length == 0 &&
+          dataRecogidos.getPedidosRecogidos.length == 0 && (
             <div className="flex flex-col justify-center mb-3">
               <h1 className="text-4xl font-semibold">
                 Todavia no ha realizado ningun pedido
@@ -307,7 +413,7 @@ function PedidosPerfil() {
                       </div>
                       <div className="flex flex-col font-bold -ml-16">
                         Estado del pedido
-                        <span className="font-extralight">{pedido.estado}</span>
+                        <span className="font-extralight">{pedido.estado} de recoger</span>
                       </div>
                     </div>
 
@@ -331,7 +437,6 @@ function PedidosPerfil() {
             </div>
           )}
         </div>
-
 
         <div className="flex flex-col bg-slate-200 p-20 mb-5">
           {dataCancelados.getPedidosCanceladosUser.length != 0 && (
@@ -429,7 +534,6 @@ function PedidosPerfil() {
                       <div className="flex flex-col font-bold -ml-16">
                         Estado del pedido
                         <span className="font-extralight">{pedido.estado}</span>
-
                       </div>
                     </div>
 
@@ -458,5 +562,4 @@ function PedidosPerfil() {
   );
 }
 
-
-export default PedidosPerfil
+export default PedidosPerfil;

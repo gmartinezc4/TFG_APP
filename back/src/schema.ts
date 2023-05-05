@@ -63,8 +63,10 @@ export const typeDefs = gql`
         getProducto (id_product: String!): Product!
         getProductosCarritoUser: [Carrito!]
         getProductoCarritoUser (id_product: String!): Carrito!
-        getHistorialPedidosUser: [Pedido!]
+        getPedidosRecogidos: [Pedido!]
         getPedidosActivosUser: [Pedido!]
+        getPedidosPendientesUser: [Pedido!]
+        getPedidosCanceladosUser: [Pedido!]
         getUser: User!
     }
 
