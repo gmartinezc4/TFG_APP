@@ -35,7 +35,6 @@ export const Mutation = {
                     })
                     await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
                     await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
-                    await db.collection("Historial_Pedidos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
 
                     return {
                         id_user: user._id.toString(),
@@ -173,8 +172,8 @@ export const Mutation = {
 
         try {
             if (user) {
-                if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
-                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre, Apellido: apellido } });
+                if (nombre != "" && nombre != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre } });
                     return {
                         _id: user._id.toString(),
                         nombre: nombre,
@@ -193,8 +192,8 @@ export const Mutation = {
                         password: user.Password,
                         token: user.token
                     }
-                } else if (nombre != "" && nombre != null) {
-                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre } });
+                } else if (nombre != "" && apellido != "" && nombre != null && apellido != null) {
+                    await db.collection("Usuarios").findOneAndUpdate({ _id: user._id }, { $set: { Nombre: nombre, Apellido: apellido } });
                     return {
                         _id: user._id.toString(),
                         nombre: nombre,
@@ -500,4 +499,5 @@ export const Mutation = {
         }
     },
 }
+
 
