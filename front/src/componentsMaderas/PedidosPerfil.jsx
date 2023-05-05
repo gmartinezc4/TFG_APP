@@ -413,7 +413,7 @@ function PedidosPerfil() {
                       </div>
                       <div className="flex flex-col font-bold -ml-16">
                         Estado del pedido
-                        <span className="font-extralight">{pedido.estado}</span>
+                        <span className="font-extralight">{pedido.estado} de recoger</span>
                       </div>
                     </div>
 
