@@ -71,6 +71,10 @@ function HacerPedido(props) {
   const [ciudad, setCiudad] = useState("");
   const [pais, setPais] = useState("");
 
+  let importe = 0;
+  let importeFreeIva = 0;
+  const fechaRecogida = new Date();
+
   const [confirmarPedido] = useMutation(VENDER_PRODUCTOS, {
     onCompleted: () => {
       console.log("despues de mutation");
@@ -92,11 +96,7 @@ function HacerPedido(props) {
       console.log(error.toString());
     },
   });
-
-  let importe = 0;
-  let importeFreeIva = 0;
-  const fechaRecogida = new Date();
-
+  
   function tramitarDatos() {
     console.log("antes de mutation vender productos");
     confirmarPedido({
