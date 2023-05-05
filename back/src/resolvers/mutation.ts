@@ -5,6 +5,69 @@ const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
 import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
+function calcularFechaEntrega() {
+	const fecha = new Date();
+
+    if((fecha.getMonth() + 1) == 1 || (fecha.getMonth() + 1) == 3 || (fecha.getMonth() + 1) == 5 || 
+    (fecha.getMonth() + 1) == 7 || (fecha.getMonth() + 1) == 8 || (fecha.getMonth() + 1) == 10 
+    || (fecha.getMonth() + 1) == 12){
+        if(30 + 4 > 31){
+            let contador = 0;
+            let diaEntrega = 30;
+            
+            while(contador < 5){
+                if(diaEntrega != 31){
+                    diaEntrega = diaEntrega + 1;
+                }else{
+                    diaEntrega = 0;
+                }
+                contador++;
+            }
+            return (diaEntrega + "/" + (fecha.getMonth() + 2) + "/" + fecha.getFullYear()).toString();
+
+        }else{
+            return ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+        }
+    }else if ((fecha.getMonth() + 1) == 4 || (fecha.getMonth() + 1) == 6 || (fecha.getMonth() + 1) == 9
+    || (fecha.getMonth() + 1) == 11){
+        if(fecha.getDate() + 4 > 30){
+            let contador = 0;
+            let diaEntrega = fecha.getDate();
+            
+            while(contador < 5){
+                if(diaEntrega != 30){
+                    diaEntrega = diaEntrega + 1;
+                }else{
+                    diaEntrega = 0;
+                }
+                contador++;
+            }
+            return (diaEntrega + "/" + (fecha.getMonth() + 2) + "/" + fecha.getFullYear()).toString();
+
+        }else{
+            return ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+        }
+    } else { 
+        if(fecha.getDate() + 4 > 28){
+            let contador = 0;
+            let diaEntrega = fecha.getDate();
+            
+            while(contador < 5){
+                if(diaEntrega != 28){
+                    diaEntrega = diaEntrega + 1;
+                }else{
+                    diaEntrega = 0;
+                }
+                contador++;
+            }
+            return (diaEntrega + "/" + (fecha.getMonth() + 2) + "/" + fecha.getFullYear()).toString();
+
+        }else{
+            return ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+        }
+    }
+}
+
 export const Mutation = {
     venderProductos: async (parent: any, args: { nombre: string, apellido: string, correo: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db, user: any }) => {
         const { db, user } = context;
@@ -18,7 +81,9 @@ export const Mutation = {
             if (user) {
 
                 const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
-                const fechaRecogida = ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
+                const fechaRecogida = calcularFechaEntrega();
+                
+                console.log(fecha.getFullYear(), (fecha.getMonth() + 1))
 
                 const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
                 if (carritoUser.length > 0) {
