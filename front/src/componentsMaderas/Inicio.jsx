@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
+import { gql, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { dataInicio, dataInicio2 } from "../data/InicioData";
+
 
 function Inicio() {
   const { viewInicio } = useContext(Context);
