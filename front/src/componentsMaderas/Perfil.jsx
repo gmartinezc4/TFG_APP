@@ -111,10 +111,6 @@ function Perfil() {
       </div>
     );
 
-    localStorage.setItem("nombreUser", data.getUser.nombre);
-    localStorage.setItem("apellidoUser", data.getUser.apellido);
-    localStorage.setItem("emailUser", data.getUser.correo);
-
     function modalDarBajaUser(AdminId) {
       Swal.fire({
         icon: "warning",
