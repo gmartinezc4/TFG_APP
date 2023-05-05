@@ -3,7 +3,7 @@ import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
-import { htmlRegistro } from '/home/guillermo/App_TFG/back/data/htmlCorreos'
+import correoRegistroAdmin from '/home/guillermo/App_TFG_Admin/back/data/htmlCorreos'
 
 function calcularFechaEntrega() {
 	const fecha = new Date();
@@ -344,7 +344,7 @@ export const Mutation = {
                     from: 'maderas.cobo.cuenca@gmail.com',
                     to: correo,
                     subject: 'Bienvenido a Maderas Cobo',
-                    html: htmlRegistro,
+                    html: correoRegistroAdmin(correo, password),
                 };
 
                 transporter.sendMail(mailOptions, function (error: any, info: any) {
