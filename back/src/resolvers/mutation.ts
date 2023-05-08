@@ -11,7 +11,7 @@ function calcularFechaEntrega() {
     if((fecha.getMonth() + 1) == 1 || (fecha.getMonth() + 1) == 3 || (fecha.getMonth() + 1) == 5 || 
     (fecha.getMonth() + 1) == 7 || (fecha.getMonth() + 1) == 8 || (fecha.getMonth() + 1) == 10 
     || (fecha.getMonth() + 1) == 12){
-        if(30 + 4 > 31){
+        if(fecha.getDate() + 4 > 31){
             let contador = 0;
             let diaEntrega = 30;
             
