@@ -143,27 +143,32 @@ function HacerPedido(props) {
                 <div className="border border-gray-100"></div>
 
                 <div className="hidden">
-                  {(importe = importe + parseInt(p.precioTotal))}
-                  {(importeFreeIva = importeFreeIva + parseInt(p.precioTotal_freeIVA))}
+                  {(importe = importe + parseFloat(p.precioTotal))}
+                  {(importeFreeIva = importeFreeIva + parseFloat(p.precioTotal_freeIVA))}
                 </div>
               </div>
             ))}
+            <div className="bg-white mt-5 p-5">
+              <h1 className="font-bold text-2xl mb-7">Total</h1>
+              <p className="flex justify-between mb-5">
+                <span>Subtotal</span>
+                <span>{importeFreeIva.toString().substr(0, 5)}€</span>
+              </p>
+              <div className="border border-gray-100 mb-5"></div>
+              <p className="flex justify-between mb-3 font-semibold">
+                <span>Total (IVA incluido)</span>
+                <span>{importe.toString().substr(0, 5)}€</span>
+              </p>
+            </div>
           </div>
 
           <div>
             <div className="flex flex-col bg-white h-48 p-5 ">
               <span className="font-bold text-xl mb-7">Fecha de recogida prevista</span>
               <span>
-                {fechaRecogida.getDate() +
-                  2 +
-                  "/" +
-                  (fechaRecogida.getMonth() + 1) +
-                  " - " +
-                  (fechaRecogida.getDate() + 4) +
-                  "/" +
-                  (fechaRecogida.getMonth() + 1)}
+                Aproximadamente cuatro días laborables.
                 <br></br> <br></br>
-                Dispone de 7 días habiles para recoger el pedido
+                Después dispone de 7 días habiles para recoger el pedido
               </span>
             </div>
 
