@@ -61,7 +61,6 @@ function ShoppingCart() {
   let idProd = "";
   let importe = 0;
   let importeFreeIva = 0;
-  const fechaRecogida = new Date();
 
   const [deleteProductoCarrito] = useMutation(DELETE_PRODUCTO_CARRITO, {
     onCompleted: () => {
@@ -188,10 +187,10 @@ function ShoppingCart() {
                     <div className="border border-gray-100"></div>
 
                     <div className="hidden">
-                      {(importe = importe + parseInt(p.precioTotal))}
+                      {(importe = importe + parseFloat(p.precioTotal))}
                       {
                         (importeFreeIva =
-                          importeFreeIva + parseInt(p.precioTotal_freeIVA))
+                          importeFreeIva + parseFloat(p.precioTotal_freeIVA))
                       }
                     </div>
                   </div>
@@ -202,9 +201,9 @@ function ShoppingCart() {
                     Fecha de recogida prevista
                   </span>
                   <span>
-                    {fechaRecogida.toLocaleDateString()}
+                    Aproximadamente cuatro días laborables.
                     <br></br> <br></br>
-                    Dispone de 7 días habiles para recoger el pedido
+                    Después dispone de 7 días habiles para recoger el pedido
                   </span>
                 </div>
 
@@ -223,12 +222,12 @@ function ShoppingCart() {
                 <h1 className="font-bold text-2xl mb-7">Total</h1>
                 <p className="flex justify-between mb-5">
                   <span>Subtotal</span>
-                  <span>{importeFreeIva}€</span>
+                  <span>{importeFreeIva.toString().substr(0, 5)}€</span>
                 </p>
                 <div className="border border-gray-100 mb-5"></div>
                 <p className="flex justify-between mb-3 font-semibold">
                   <span>Total (IVA incluido)</span>
-                  <span>{importe}€</span>
+                  <span>{importe.toString().substr(0, 5)}€</span>
                 </p>
                 <div className="flex justify-center">
                   <button

@@ -55,8 +55,8 @@ function ProductosVenta() {
                 key={p._id}
                 className={
                   p.stock <= 0
-                    ? "flex justify-center flex-col p-4 mx-auto hover:opacity-70 bg-red-300"
-                    : "flex justify-center flex-col p-4 mx-auto hover:opacity-70"
+                    ? "flex justify-center flex-col p-4 mx-auto hover:opacity-70 bg-red-300 cursor-pointer"
+                    : "flex justify-center flex-col p-4 mx-auto hover:opacity-70 cursor-pointer"
                 }
                 onClick={() => {
                   changeViewProductSelect(true), setProductId(p._id);
