@@ -16,7 +16,10 @@ function Contacto() {
       icon: "info",
       title: "!Gracias por contactarnos!",
       text: "Nos pondremos en contacto contigo lo antes posible",
+      showConfirmButton: false,
+      timer: 2000,
     });
+    setOpenConfirmacion(false);
   }
 
   function mostrarError() {
@@ -24,7 +27,10 @@ function Contacto() {
       icon: "error",
       title: "Ha ocurrido un error",
       text: "Intentelo de nuevo",
+      showConfirmButton: false,
+      timer: 1000,
     });
+    setOpenError(false);
   }
 
   if (viewContacto == true) {
