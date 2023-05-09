@@ -629,9 +629,9 @@ export const Mutation = {
         return password;
     },
 
-    cancelarPedido: async (parent: any, args: { id_pedido: string }, context: { db: Db, user: any }) => {
+    cancelarPedido: async (parent: any, args: { id_pedido: string, bbdd: string }, context: { db: Db, user: any }) => {
         const { db, user } = context;
-        let id_pedido = args.id_pedido;
+        let { id_pedido, bbdd } = args;
 
         try {
             if (user) {
@@ -639,13 +639,15 @@ export const Mutation = {
                     throw new ApolloError("ID invalido");
                 } else {
                     let pedidoUserCambiado: any;
+                    const fecha = new Date();
+                    const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear())
 
-                    const pedidoUser = await db.collection("Pedidos_Activos").findOne({ _id: new ObjectId(id_pedido) });
+                    const pedidoUser = await db.collection(bbdd).findOne({ _id: new ObjectId(id_pedido) });
 
                     if (pedidoUser) {
                         pedidoUserCambiado = pedidoUser;
-                        await db.collection("Pedidos_Cancelados").insertOne({ Id_user: pedidoUser.Id_user.toString(), Estado: "Cancelado", Nombre: pedidoUser.Nombre, Apellido: pedidoUser.Apellido, Email: pedidoUser.Email, Telefono: pedidoUser.Telefono, Direccion: pedidoUser.Direccion, MasInformacion: pedidoUser.MasInformacion, CodigoPostal: pedidoUser.CodigoPostal, Ciudad: pedidoUser.Ciudad, Pais: pedidoUser.Pais, FechaPedido: pedidoUser.FechaPedido, FechaRecogida: pedidoUser.FechaRecogida, ImportePedido: pedidoUser.ImportePedido, ImporteFreeIvaPedido: pedidoUser.ImporteFreeIvaPedido, Productos: pedidoUser.Productos });
-                        await db.collection("Pedidos_Activos").findOneAndDelete({ _id: new ObjectId(id_pedido) });
+                        await db.collection("Pedidos_Cancelados").insertOne({ Id_user: pedidoUser.Id_user.toString(), Estado: "Cancelado", Nombre: pedidoUser.Nombre, Apellido: pedidoUser.Apellido, Email: pedidoUser.Email, Telefono: pedidoUser.Telefono, Direccion: pedidoUser.Direccion, MasInformacion: pedidoUser.MasInformacion, CodigoPostal: pedidoUser.CodigoPostal, Ciudad: pedidoUser.Ciudad, Pais: pedidoUser.Pais, FechaPedido: pedidoUser.FechaPedido, FechaRecogida: fechaHoy, ImportePedido: pedidoUser.ImportePedido, ImporteFreeIvaPedido: pedidoUser.ImporteFreeIvaPedido, Productos: pedidoUser.Productos });
+                        await db.collection(bbdd).findOneAndDelete({ _id: new ObjectId(id_pedido) });
                     } else {
                         throw new ApolloError("Ha ocurrido un error al recuperar el pedido");
                     }

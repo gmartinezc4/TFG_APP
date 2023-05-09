@@ -82,6 +82,6 @@ export const typeDefs = gql`
         borraUser: User!
         forgotPassword(email: String!): String!
         recuperarPass(email: String!, password: String!): String!
-        cancelarPedido(id_pedido: ID!): Pedido!
+        cancelarPedido(id_pedido: ID!, bbdd: String!): Pedido!
     }
 `
