@@ -4,7 +4,6 @@ import { Context } from "../context/Context";
 import Cargando from "./Cargando";
 import Swal from "sweetalert2";
 
-
 const ADD_PRODUCTO_CARRITO = gql`
   mutation Mutation($idProducto: String!, $cantidad: String!) {
     addProductCesta(id_producto: $idProducto, cantidad: $cantidad) {
@@ -43,7 +42,7 @@ const GET_PRODUCTO_CARRITO_USER = gql`
       precioTotal
       precioTotal_freeIVA
     }
-  } 
+  }
 `;
 
 function Producto(props) {
@@ -57,8 +56,8 @@ function Producto(props) {
     changeProductCantidadSelect,
     changeViewSession,
   } = useContext(Context);
+
   const [cantidad, setCantidad] = useState("");
-  //const [cantidadProdCarrito, setCantidadProdCarrito] = useState("");
   let cantidadProdCarrito = 0;
 
   useEffect(() => {}), [reload];
@@ -87,9 +86,9 @@ function Producto(props) {
   });
 
   const {
-    data: dataProductos,
-    loading: loadingProductos,
-    error: errorProductos,
+    data: dataProductosCarrito,
+    loading: loadingProductosCarrito,
+    error: errorProductosCarrito,
   } = useQuery(GET_PRODUCTO_CARRITO_USER, {
     context: {
       headers: {
@@ -107,10 +106,10 @@ function Producto(props) {
         <Cargando />
       </div>
     );
-  if (errorProd) return <div>Error...</div>;
+  if (errorProd) return console.log(errorProd)
 
-  if (dataProductos) {
-    cantidadProdCarrito = dataProductos.getProductoCarritoUser.cantidad;
+  if (dataProductosCarrito) {
+    cantidadProdCarrito = dataProductosCarrito.getProductoCarritoUser.cantidad;
   }
 
   function actualizarCarrito() {
@@ -130,6 +129,8 @@ function Producto(props) {
       icon: "success",
       title: "Producto añadido a la cesta",
       text: cantidad + "kg",
+      showConfirmButton: false,
+      timer: 1500,
     });
   }
 
@@ -137,10 +138,7 @@ function Producto(props) {
     <div>
       <div className="flex justify-center mb-96">
         <div className="bg-no-repeat bg-contain -ml-96">
-          <img
-            className="h-80 w-100 border rounded"
-            src={dataProd.getProducto.img}
-          ></img>
+          <img className="h-80 w-100 border rounded" src={dataProd.getProducto.img}></img>
           <button
             className="border rounded text-white bg-black mt-10 p-2"
             onClick={() => {
@@ -158,78 +156,151 @@ function Producto(props) {
 
           <div className="font-serif text-2xl flex flex-row items-baseline">
             {dataProd.getProducto.precio} €/kg
-            <div className="font-serif text-sm text-gray-400 ml-3">
-              IVA incluido
-            </div>
+            <div className="font-serif text-sm text-gray-400 ml-3">IVA incluido</div>
           </div>
 
-          {dataProd.getProducto.stock <= 0 && (
-            <div className="mt-10">Sin Stock</div>
-          )}
+          {cantidadProdCarrito == 0 && (
+            <div>
+              
+              {dataProd.getProducto.stock <= 4 && <div className="mt-10">Sin Stock</div>}
 
-          {dataProd.getProducto.stock > 0 && (
-            <div className="mt-10">
-              Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
+              {dataProd.getProducto.stock > 4 && (
+                <div className="mt-10">
+                  Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
+                </div>
+              )}
+
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  if (cantidad != 0 && token) {
+                    actualizarCarrito();
+                    mostrarConfirmación();
+                  } else {
+                    changeViewSession(true);
+                    changeViewProductSelect(false);
+                    changeViewProductos(false);
+                    changeProductIdSelect(props.productId);
+                    changeProductCantidadSelect(cantidad);
+                  }
+                }}
+              >
+                {dataProd.getProducto.stock <= 4 && (
+                  <input
+                    className="w-64 border border-black mt-4 bg-red-200"
+                    placeholder="Sin Stock"
+                    disabled
+                  ></input>
+                )}
+
+                {dataProd.getProducto.stock > 4 && (
+                  <input
+                    className="w-64 border border-black mt-4"
+                    placeholder="Pedido mínimo 5kg"
+                    type="number"
+                    name="cantidad"
+                    min="5"
+                    max={dataProd.getProducto.stock - cantidadProdCarrito}
+                    value={cantidad}
+                    onChange={(e) => setCantidad(e.target.value)}
+                    required
+                    autoFocus
+                  ></input>
+                )}
+
+                {dataProd.getProducto.stock <= 4 && (
+                  <button
+                    className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
+                    type="submit"
+                    disabled
+                  >
+                    Sin stock
+                  </button>
+                )}
+
+                {dataProd.getProducto.stock > 4 && (
+                  <button
+                    className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
+                    type="submit"
+                  >
+                    Añadir a la cesta
+                  </button>
+                )}
+              </form>
             </div>
           )}
 
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (cantidad != 0 && token) {
-                actualizarCarrito();
-                mostrarConfirmación();
-              } else {
-                changeViewSession(true);
-                changeViewProductSelect(false);
-                changeViewProductos(false);
-                changeProductIdSelect(props.productId);
-                changeProductCantidadSelect(cantidad);
-              }
-            }}
-          >
-            {dataProd.getProducto.stock <= 0 && (
-              <input
-                className="w-64 border border-black mt-4 bg-red-200"
-                placeholder="Sin Stock"
-                disabled
-              ></input>
-            )}
+          {cantidadProdCarrito != 0 && (
+              <div>
+                {dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito < 4 && (
+                  <div className="mt-10">Sin Stock</div>
+                )}
 
-            {dataProd.getProducto.stock > 0 && (
-              <input
-                className="w-64 border border-black mt-4"
-                placeholder="Pedido mínimo 5kg"
-                type="number"
-                name="cantidad"
-                min="5"
-                max={dataProd.getProducto.stock - cantidadProdCarrito}
-                value={cantidad}
-                onChange={(e) => setCantidad(e.target.value)}
-                required
-                autoFocus
-              ></input>
-            )}
+                {dataProd.getProducto.stock > 4 && dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                  <div className="mt-10">
+                    Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
+                  </div>
+                )}
 
-            {dataProd.getProducto.stock <= 0 && (
-              <button
-                className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
-                type="submit"
-                disabled
-              >
-                Sin stock
-              </button>
-            )}
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    if (cantidad != 0 && token) {
+                      actualizarCarrito();
+                      mostrarConfirmación();
+                    } else {
+                      changeViewSession(true);
+                      changeViewProductSelect(false);
+                      changeViewProductos(false);
+                      changeProductIdSelect(props.productId);
+                      changeProductCantidadSelect(cantidad);
+                    }
+                  }}
+                >
+                  {dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito <= 4 && (
+                    <input
+                      className="w-64 border border-black mt-4 bg-red-200"
+                      placeholder="Sin Stock"
+                      disabled
+                    ></input>
+                  )}
 
-            {dataProd.getProducto.stock > 0 && (
-              <button
-                className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
-                type="submit"
-              >
-                Añadir a la cesta
-              </button>
+                  {dataProd.getProducto.stock > 4 && dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                    <input
+                      className="w-64 border border-black mt-4"
+                      placeholder="Pedido mínimo 5kg"
+                      type="number"
+                      name="cantidad"
+                      min="5"
+                      max={dataProd.getProducto.stock - cantidadProdCarrito}
+                      value={cantidad}
+                      onChange={(e) => setCantidad(e.target.value)}
+                      required
+                      autoFocus
+                    ></input>
+                  )}
+
+                  {dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito <= 4 && (
+                    <button
+                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
+                      type="submit"
+                      disabled
+                    >
+                      Sin stock
+                    </button>
+                  )}
+
+                  {dataProd.getProducto.stock > 4 && dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                    <button
+                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
+                      type="submit"
+                    >
+                      Añadir a la cesta
+                    </button>
+                  )}
+                </form>
+              </div>
             )}
-          </form>
         </div>
       </div>
     </div>

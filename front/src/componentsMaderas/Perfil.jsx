@@ -129,15 +129,14 @@ function Perfil() {
 
   const [borrarUser] = useMutation(BORRAR_USER, {
     onCompleted: () => {
-      console.log("Se ha borrado su usuario admininstrador");
+      console.log("Se ha borrado su usuario");
       localStorage.removeItem("token");
-      localStorage.removeItem("nivel_auth");
       changeReload();
 
       Swal.fire({
         position: "center",
         icon: "success",
-        title: "Se ha borrado su usuario admininstrador",
+        title: "Se ha borrado su usuario",
         showConfirmButton: false,
         timer: 2000,
       });
@@ -231,6 +230,7 @@ function Perfil() {
       showCancelButton: true,
       confirmButtonText: "Si, borrar",
       confirmButtonColor: "#DF0000",
+      cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
         

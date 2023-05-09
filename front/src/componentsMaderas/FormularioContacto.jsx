@@ -51,7 +51,7 @@ function FormularioContacto(props) {
         />
         <label className="flex justify-center text-white  font-bold mb-2 font-mono">Mensaje</label>
         <textarea name="message" className="shadow appearance-none border rounded p-2 mb-10" value={texto} onChange={(e) => setTexto(e.target.value)}/>
-        <input type="submit" value="Send" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12" />
+        <input type="submit" value="Enviar" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12" />
       </form>
     </div>
   );

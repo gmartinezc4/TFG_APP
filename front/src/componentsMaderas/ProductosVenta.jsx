@@ -54,7 +54,7 @@ function ProductosVenta() {
               <div
                 key={p._id}
                 className={
-                  p.stock <= 0
+                  p.stock <= 4
                     ? "flex justify-center flex-col p-4 mx-auto hover:opacity-70 bg-red-300 cursor-pointer"
                     : "flex justify-center flex-col p-4 mx-auto hover:opacity-70 cursor-pointer"
                 }
@@ -68,7 +68,7 @@ function ProductosVenta() {
                     src={p.img}
                   ></img>
                 </div>
-                {p.stock <= 0 && <div className="mb-3 text-red-700">Producto agotado</div>}
+                {p.stock <= 4 && <div className="mb-3 text-red-700">Producto agotado</div>}
                 <div className="font-bold mb-1"> {p.name}</div>
                 <span className="w-40">{p.precio} € / kg</span>
               </div>
