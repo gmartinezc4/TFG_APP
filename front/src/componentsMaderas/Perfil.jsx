@@ -100,7 +100,7 @@ const BORRAR_USER = gql`
 `;
 
 function Perfil() {
-  const { changeErrorTrue, changeCodigoError, changeMensajeError, changeReload } =
+  const { changeErrorTrue, changeCodigoError, changeMensajeError, changeReload, changeViewInicio, changeViewPerfil } =
     useContext(Context);
 
   const [modalIsOpenNombreApellido, setIsOpenNombreApellido] = useState(false);
@@ -131,6 +131,9 @@ function Perfil() {
     onCompleted: () => {
       console.log("Se ha borrado su usuario");
       localStorage.removeItem("token");
+     
+      changeViewPerfil(false);
+      changeViewInicio(true);
       changeReload();
 
       Swal.fire({
