@@ -6,63 +6,63 @@ var nodemailer = require('nodemailer');
 import correoRegistroAdmin from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
 function calcularFechaEntrega() {
-	const fecha = new Date();
+    const fecha = new Date();
 
-    if((fecha.getMonth() + 1) == 1 || (fecha.getMonth() + 1) == 3 || (fecha.getMonth() + 1) == 5 || 
-    (fecha.getMonth() + 1) == 7 || (fecha.getMonth() + 1) == 8 || (fecha.getMonth() + 1) == 10 
-    || (fecha.getMonth() + 1) == 12){
-        if(fecha.getDate() + 4 > 31){
+    if ((fecha.getMonth() + 1) == 1 || (fecha.getMonth() + 1) == 3 || (fecha.getMonth() + 1) == 5 ||
+        (fecha.getMonth() + 1) == 7 || (fecha.getMonth() + 1) == 8 || (fecha.getMonth() + 1) == 10
+        || (fecha.getMonth() + 1) == 12) {
+        if (fecha.getDate() + 4 > 31) {
             let contador = 0;
             let diaEntrega = 30;
-            
-            while(contador < 5){
-                if(diaEntrega != 31){
+
+            while (contador < 5) {
+                if (diaEntrega != 31) {
                     diaEntrega = diaEntrega + 1;
-                }else{
+                } else {
                     diaEntrega = 0;
                 }
                 contador++;
             }
             return (diaEntrega + "/" + (fecha.getMonth() + 2) + "/" + fecha.getFullYear()).toString();
 
-        }else{
+        } else {
             return ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
         }
-    }else if ((fecha.getMonth() + 1) == 4 || (fecha.getMonth() + 1) == 6 || (fecha.getMonth() + 1) == 9
-    || (fecha.getMonth() + 1) == 11){
-        if(fecha.getDate() + 4 > 30){
+    } else if ((fecha.getMonth() + 1) == 4 || (fecha.getMonth() + 1) == 6 || (fecha.getMonth() + 1) == 9
+        || (fecha.getMonth() + 1) == 11) {
+        if (fecha.getDate() + 4 > 30) {
             let contador = 0;
             let diaEntrega = fecha.getDate();
-            
-            while(contador < 5){
-                if(diaEntrega != 30){
+
+            while (contador < 5) {
+                if (diaEntrega != 30) {
                     diaEntrega = diaEntrega + 1;
-                }else{
+                } else {
                     diaEntrega = 0;
                 }
                 contador++;
             }
             return (diaEntrega + "/" + (fecha.getMonth() + 2) + "/" + fecha.getFullYear()).toString();
 
-        }else{
+        } else {
             return ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
         }
-    } else { 
-        if(fecha.getDate() + 4 > 28){
+    } else {
+        if (fecha.getDate() + 4 > 28) {
             let contador = 0;
             let diaEntrega = fecha.getDate();
-            
-            while(contador < 5){
-                if(diaEntrega != 28){
+
+            while (contador < 5) {
+                if (diaEntrega != 28) {
                     diaEntrega = diaEntrega + 1;
-                }else{
+                } else {
                     diaEntrega = 0;
                 }
                 contador++;
             }
             return (diaEntrega + "/" + (fecha.getMonth() + 2) + "/" + fecha.getFullYear()).toString();
 
-        }else{
+        } else {
             return ((fecha.getDate() + 4) + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString();
         }
     }
@@ -82,7 +82,7 @@ export const Mutation = {
 
                 const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
                 const fechaRecogida = calcularFechaEntrega();
-                
+
                 console.log(fecha.getFullYear(), (fecha.getMonth() + 1))
 
                 const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
@@ -97,8 +97,8 @@ export const Mutation = {
                         let newStock = parseInt(productStock?.stock) - parseInt(p.Cantidad);
 
                         await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(p.Id_producto) }, { $set: { stock: newStock.toString() } })
-                    
-                        if(newStock < 5){
+
+                        if (newStock < 5) {
                             await db.collection("Carritos").deleteMany({ Id_producto: p.Id_producto })
                         }
                     })
@@ -106,7 +106,7 @@ export const Mutation = {
                     await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
                     await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
 
-                    
+
 
 
                     return {
@@ -411,32 +411,17 @@ export const Mutation = {
     borraUser: async (parent: any, args: any, context: { db: Db, user: any }) => {
         const db = context.db;
         const user = context.user;
-        let productos = [];
+        let productos: any;
         try {
 
             if (user) {
-                const pActivos = await db.collection("Pedidos_Activos").find({ Id_user: user._id.toString() }).toArray();
                 const pRecogidos = await db.collection("Pedidos_Recogidos").find({ Id_user: user._id.toString() }).toArray();
                 const pCancelados = await db.collection("Pedidos_Cancelados").find({ Id_user: user._id.toString() }).toArray();
-                const pPendientes = await db.collection("Pedidos_Pendientes").find({ Id_user: user._id.toString() }).toArray();
 
                 let fecha = new Date();
                 let fechaEliminación = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear())
 
-                pActivos.map(async (a) => {
-                    a.Productos.map(async (e: any) => {
-                        let newStock: any;
-                        const producto = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(e.Id_producto) })
-
-                        if (producto) {
-                            newStock = parseInt(producto.stock) + parseInt(e.Cantidad);
-                            await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(e.Id_producto) }, { $set: { stock: newStock.toString() } })
-                        } else {
-                            throw new ApolloError("Ese producto no existe");
-                        }
-
-                    })
-
+                pRecogidos.map(async (a) => {
                     productos = a.Productos;
 
                     productos.map((e: any) => {
@@ -446,78 +431,21 @@ export const Mutation = {
                     await db.collection("Pedidos_Eliminados").insertOne({ Id_user: "usuario eliminado", Estado: "Eliminado", Nombre: a.Nombre, Apellido: a.Apellido, Email: a.Email, Telefono: a.Telefono, Direccion: a.Direccion, MasInformacion: a.MasInformacion, CodigoPostal: a.CodigoPostal, Ciudad: a.Ciudad, Pais: a.Pais, FechaPedido: fechaEliminación, FechaRecogida: "", ImportePedido: a.ImportePedido, ImporteFreeIvaPedido: a.ImporteFreeIvaPedido, Productos: productos })
                 })
 
-                pRecogidos.map(async (a) => {
-                    a.Productos.map(async (e: any) => {
-                        let newStock: any;
-                        const producto = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(e.Id_producto) })
-
-                        if (producto) {
-                            newStock = parseInt(producto.stock) + parseInt(e.Cantidad);
-                            await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(e.Id_producto) }, { $set: { stock: newStock.toString() } })
-                        } else {
-                            throw new ApolloError("Ese producto no existe");
-                        }
-
-                        productos = a.Productos;
-
-                        productos.map((e: any) => {
-                            e.Id_user = "usuario eliminado";
-                        })
-
-                    })
-                    await db.collection("Pedidos_Eliminados").insertOne({ Id_user: "usuario eliminado", Estado: "Eliminado", Nombre: a.Nombre, Apellido: a.Apellido, Email: a.Email, Telefono: a.Telefono, Direccion: a.Direccion, MasInformacion: a.MasInformacion, CodigoPostal: a.CodigoPostal, Ciudad: a.Ciudad, Pais: a.Pais, FechaPedido: fechaEliminación, FechaRecogida: "", ImportePedido: a.ImportePedido, ImporteFreeIvaPedido: a.ImporteFreeIvaPedido, Productos: a.Productos })
-                })
-
                 pCancelados.map(async (a) => {
-                    a.Productos.map(async (e: any) => {
-                        let newStock: any;
-                        const producto = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(e.Id_producto) })
+                    productos = a.Productos;
 
-                        if (producto) {
-                            newStock = parseInt(producto.stock) + parseInt(e.Cantidad);
-                            await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(e.Id_producto) }, { $set: { stock: newStock.toString() } })
-                        } else {
-                            throw new ApolloError("Ese producto no existe");
-                        }
-
-                        productos = a.Productos;
-
-                        productos.map((e: any) => {
-                            e.Id_user = "usuario eliminado";
-                        })
-
+                    productos.map((e: any) => {
+                        e.Id_user = "usuario eliminado";
                     })
-                    await db.collection("Pedidos_Eliminados").insertOne({ Id_user: "usuario eliminado", Estado: "Eliminado", Nombre: a.Nombre, Apellido: a.Apellido, Email: a.Email, Telefono: a.Telefono, Direccion: a.Direccion, MasInformacion: a.MasInformacion, CodigoPostal: a.CodigoPostal, Ciudad: a.Ciudad, Pais: a.Pais, FechaPedido: fechaEliminación, FechaRecogida: "", ImportePedido: a.ImportePedido, ImporteFreeIvaPedido: a.ImporteFreeIvaPedido, Productos: a.Productos })
+
+                    await db.collection("Pedidos_Eliminados").insertOne({ Id_user: "usuario eliminado", Estado: "Eliminado", Nombre: a.Nombre, Apellido: a.Apellido, Email: a.Email, Telefono: a.Telefono, Direccion: a.Direccion, MasInformacion: a.MasInformacion, CodigoPostal: a.CodigoPostal, Ciudad: a.Ciudad, Pais: a.Pais, FechaPedido: fechaEliminación, FechaRecogida: "", ImportePedido: a.ImportePedido, ImporteFreeIvaPedido: a.ImporteFreeIvaPedido, Productos: productos })
                 })
 
-                pPendientes.map(async (a) => {
-                    a.Productos.map(async (e: any) => {
-                        let newStock: any;
-                        const producto = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(e.Id_producto) })
-
-                        if (producto) {
-                            newStock = parseInt(producto.stock) + parseInt(e.Cantidad);
-                            await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(e.Id_producto) }, { $set: { stock: newStock.toString() } })
-                        } else {
-                            throw new ApolloError("Ese producto no existe");
-                        }
-
-                        productos = a.Productos;
-
-                        productos.map((e: any) => {
-                            e.Id_user = "usuario eliminado";
-                        })
-
-                    })
-                    await db.collection("Pedidos_Eliminados").insertOne({ Id_user: "usuario eliminado", Estado: "Eliminado", Nombre: a.Nombre, Apellido: a.Apellido, Email: a.Email, Telefono: a.Telefono, Direccion: a.Direccion, MasInformacion: a.MasInformacion, CodigoPostal: a.CodigoPostal, Ciudad: a.Ciudad, Pais: a.Pais, FechaPedido: a.FechaPedido, FechaRecogida: "", ImportePedido: a.ImportePedido, ImporteFreeIvaPedido: a.ImporteFreeIvaPedido, Productos: a.Productos })
-                })
-
-                await db.collection("Pedidos_Activos").deleteMany({ Id_user: user._id.toString() });
                 await db.collection("Pedidos_Recogidos").deleteMany({ Id_user: user._id.toString() });
                 await db.collection("Pedidos_Cancelados").deleteMany({ Id_user: user._id.toString() });
-                await db.collection("Pedidos_Pendientes").deleteMany({ Id_user: user._id.toString() });
+                await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() })
                 await db.collection("Usuarios").deleteOne({ _id: user._id });
-                
+
                 return {
                     _id: user._id.toString(),
                     nombre: user.Nombre,
