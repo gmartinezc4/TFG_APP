@@ -97,9 +97,17 @@ export const Mutation = {
                         let newStock = parseInt(productStock?.stock) - parseInt(p.Cantidad);
 
                         await db.collection("Productos_Venta").updateOne({ _id: new ObjectId(p.Id_producto) }, { $set: { stock: newStock.toString() } })
+                    
+                        if(newStock < 5){
+                            await db.collection("Carritos").deleteMany({ Id_producto: p.Id_producto })
+                        }
                     })
+
                     await db.collection("Carritos").deleteMany({ Id_user: user._id.toString() });
                     await db.collection("Pedidos_Activos").insertOne({ Id_user: user._id.toString(), Estado: "Activo", Nombre: nombre, Apellido: apellido, Email: correo, Telefono: telefono, Direccion: direccion, MasInformacion: masInformacion, CodigoPostal: codigoPostal, Ciudad: ciudad, Pais: pais, FechaPedido: fechaHoy, FechaRecogida: fechaRecogida, ImportePedido: importeFinalPedido, ImporteFreeIvaPedido: importe_freeIVAFinalPedido, Productos: productosPedido });
+
+                    
+
 
                     return {
                         id_user: user._id.toString(),
