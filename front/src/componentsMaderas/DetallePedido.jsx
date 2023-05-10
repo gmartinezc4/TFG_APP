@@ -16,13 +16,18 @@ function DetallePedido(props) {
 
         <div className="border border-gray-200 mt-5"></div>
 
-        <div className="flex flex-col font-bold mt-5">
-          Fecha de recogida
-          <span className="font-extralight">{props.pedido.fechaRecogida}</span>
-        </div>
+        {props.pedido.estado == "Cancelado" && (
+          <div className="flex flex-col font-bold mt-5">
+            Fecha de Cancelación
+            <span className="font-extralight">{props.pedido.fechaRecogida}</span>
+          </div>
+        )}
 
-        {props.pedido.estado == "Finalizado" && (
-          <div className="flex flex-col font-bold mt-5">Recogido</div>
+        {props.pedido.estado != "Cancelado" && (
+          <div className="flex flex-col font-bold mt-5">
+            Fecha de recogida
+            <span className="font-extralight">{props.pedido.fechaRecogida}</span>
+          </div>
         )}
 
         <div className="border border-gray-200 mt-5"></div>
@@ -47,7 +52,7 @@ function DetallePedido(props) {
           <div className="mt-1">
             <p className="grid grid-cols-2 gap-10 mb-3">
               <span>Subtotal:</span>{" "}
-              <span>{props.pedido.importeFreeIvaPedido.substr(0, 6)}€</span>
+              <span>{props.pedido.importeFreeIvaPedido.substr(0, 5)}€</span>
             </p>
             <p className="grid grid-cols-2 gap-10 font-bold">
               <span>Total:</span> <span>{props.pedido.importePedido}€</span>

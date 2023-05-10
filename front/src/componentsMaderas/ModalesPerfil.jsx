@@ -338,7 +338,7 @@ function ModalesPerfil(props) {
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Submit
+              Aceptar
             </button>
           </div>
         </form>
@@ -472,7 +472,7 @@ function ModalesPerfil(props) {
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Submit
+              Aceptar
             </button>
           </div>
         </form>
@@ -636,7 +636,7 @@ function ModalesPerfil(props) {
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Submit
+              Aceptar
             </button>
           </div>
         </form>

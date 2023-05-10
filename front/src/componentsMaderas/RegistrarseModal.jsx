@@ -22,8 +22,18 @@ const customStyles = {
 };
 
 const REGISTRAR_USER = gql`
-  mutation Mutation($nombre: String!, $apellido: String!, $correo: String!, $password: String!) {
-    RegistrarUser(nombre: $nombre, apellido: $apellido, correo: $correo, password: $password)
+  mutation Mutation(
+    $nombre: String!
+    $apellido: String!
+    $correo: String!
+    $password: String!
+  ) {
+    RegistrarUser(
+      nombre: $nombre
+      apellido: $apellido
+      correo: $correo
+      password: $password
+    )
   }
 `;
 
@@ -58,40 +68,35 @@ function RegistrarseModal(props) {
   const [passView, setPassView] = useState(false);
   const [repPassView, setRepPassView] = useState(false);
 
-  const { changeReload, changeViewSession, changeViewProductos } =
-    useContext(Context);
+  const { changeReload, changeViewSession, changeViewProductos } = useContext(Context);
 
   const [register] = useMutation(REGISTRAR_USER, {
     onCompleted: (data) => {
-      localStorage.setItem("token", data.RegistrarUser); //cuando se complete la mutation guardar el token
-      console.log("me loggeo, token: " + localStorage.getItem("token"));
-
       if (props.productIdSelect && props.productCantidadSelect) {
-        addToCarrito();
-        changeViewSession(false);
-        changeViewProductos(true);
+        addToCarrito(data.RegistrarUser);
+      } else {
+        localStorage.setItem("token", data.RegistrarUser); //cuando se complete la mutation guardar el token
+        console.log("me loggeo, token: " + localStorage.getItem("token"));
+        props.closeModalRegistro();
+        changeReload();
+        mostrarConfirmación();
       }
-
-      props.closeModalRegistro();
-      changeReload();
-      mostrarConfirmación();
     },
     onError: (error) => {
       //si hay un error, borrar el token
       console.log(error);
       localStorage.removeItem("token");
-
       setErrorCorreo(true);
     },
   });
 
   const [addProductoCarrito] = useMutation(ADD_PRODUCTO_CARRITO);
 
-  function addToCarrito() {
+  function addToCarrito(token) {
     addProductoCarrito({
       context: {
         headers: {
-          authorization: localStorage.getItem("token"),
+          authorization: token,
         },
       },
       variables: {
@@ -99,7 +104,12 @@ function RegistrarseModal(props) {
         cantidad: props.productCantidadSelect,
       },
     }).then(() => {
-      changeReload(), console.log("despues de mutation");
+      localStorage.setItem("token", token);
+      console.log("me loggeo, token: " + token);
+      changeViewSession(false);
+      changeViewProductos(true);
+      changeReload();
+      console.log("despues de mutation");
     });
   }
 
@@ -165,11 +175,11 @@ function RegistrarseModal(props) {
 
   function mostrarConfirmación() {
     Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: '¡Se ha registrado correctamente!',
+      position: "center",
+      icon: "success",
+      title: "¡Se ha registrado correctamente!",
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
   }
 
@@ -194,9 +204,7 @@ function RegistrarseModal(props) {
             comprobarUser();
           }}
         >
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Nombre
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
           <input
             className={
               noHayNombre
@@ -236,9 +244,7 @@ function RegistrarseModal(props) {
             </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">
-            Email
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mt-5 mb-2">Email</label>
           <input
             className={
               noHayCorreo || errorCorreoIncompleto
@@ -307,8 +313,8 @@ function RegistrarseModal(props) {
           )}
           {errorPassword && (
             <p className="text-red-500 text-xs italic mt-3">
-              Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula
-              y un número
+              Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un
+              número
             </p>
           )}
 
@@ -357,7 +363,7 @@ function RegistrarseModal(props) {
             <a
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
               onClick={() => {
-                props.closeModalRegistro(), props.openModalInicioSesion(); 
+                props.closeModalRegistro(), props.openModalInicioSesion();
               }}
             >
               Esta registrado? Inicie sessión

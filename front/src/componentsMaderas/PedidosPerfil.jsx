@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import Swal from "sweetalert2";
@@ -132,8 +132,8 @@ const GET_PEDIDOS_CANCELADOS_USER = gql`
 `;
 
 const CANCELAR_PEDIDO = gql`
-  mutation Mutation($idPedido: ID!) {
-    cancelarPedido(id_pedido: $idPedido) {
+  mutation Mutation($idPedido: ID!, $bbdd: String!) {
+  cancelarPedido(id_pedido: $idPedido, bbdd: $bbdd) {
       _id
       apellido
       ciudad
@@ -259,7 +259,7 @@ function PedidosPerfil() {
   if (loadingCancelados) return <div></div>;
   if (errorCancelados) return console.log(errorCancelados);
 
-  function modalCancelarPedido(idPedido) {
+  function modalCancelarPedido(idPedido, bbddCancelacion) {
     Swal.fire({
       icon: "warning",
       title: "¿Confirmar cambios?",
@@ -269,6 +269,8 @@ function PedidosPerfil() {
       confirmButtonColor: "#DF0000",
     }).then((result) => {
       if (result.isConfirmed) {
+        console.log(idPedido);
+        console.log(bbddCancelacion)
         cancelarPedido({
           context: {
             headers: {
@@ -277,6 +279,7 @@ function PedidosPerfil() {
           },
           variables: {
             idPedido: idPedido,
+            bbdd: bbddCancelacion,
           },
         });
       }
@@ -364,7 +367,7 @@ function PedidosPerfil() {
                     <button
                       className="border rounded text-black bg-red-600 hover:bg-red-500 mt-10 p-2"
                       onClick={() => {
-                        modalCancelarPedido(pedido._id);
+                        modalCancelarPedido(pedido._id, "Pedidos_Activos");
                       }}
                     >
                       Cancelar pedido
@@ -430,6 +433,15 @@ function PedidosPerfil() {
                         </div>
                       ))}
                     </div>
+                    <button
+                      className="border rounded text-black bg-red-600 hover:bg-red-500 mt-10 p-2"
+                      onClick={() => {
+                        setBbddCancelacion("Pedidos_Pendientes")
+                        modalCancelarPedido(pedido._id, "Pedidos_Pendientes");
+                      }}
+                    >
+                      Cancelar pedido
+                    </button>
                   </div>
                 </div>
               ))}

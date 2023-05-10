@@ -68,18 +68,15 @@ function IniciarSesionModal(props) {
 
   const [login] = useMutation(LOG_IN, {
     onCompleted: (data) => {
-      localStorage.setItem("token", data.logIn); //cuando se complete la mutation guardar el token
-      console.log("me loggeo, token: " + localStorage.getItem("token"));
-
       if (props.productIdSelect && props.productCantidadSelect) {
-        addToCarrito();
-        changeViewSession(false);
-        changeViewProductos(true);
+        addToCarrito(data.logIn);
+      }else{
+        localStorage.setItem("token", data.logIn); //cuando se complete la mutation guardar el token
+        console.log("me loggeo, token: " + localStorage.getItem("token"));
+        props.closeModalInicioSesion();
+        changeReload();
+        mostrarConfirmación();
       }
-
-      props.closeModalInicioSesion();
-      changeReload();
-      mostrarConfirmación();
     },
     onError: (error) => {
       //si hay un error, borrar el token
@@ -91,11 +88,11 @@ function IniciarSesionModal(props) {
 
   const [addProductoCarrito] = useMutation(ADD_PRODUCTO_CARRITO);
 
-  function addToCarrito() {
+  function addToCarrito(token) {
     addProductoCarrito({
       context: {
         headers: {
-          authorization: localStorage.getItem("token"),
+          authorization: token,
         },
       },
       variables: {
@@ -103,7 +100,12 @@ function IniciarSesionModal(props) {
         cantidad: props.productCantidadSelect,
       },
     }).then(() => {
-      changeReload(), console.log("despues de mutation");
+      localStorage.setItem("token", token);
+      console.log("me loggeo, token: " + token);
+      changeViewSession(false);
+      changeViewProductos(true);
+      changeReload();
+      console.log("despues de mutation");
     });
   }
 

@@ -32,7 +32,7 @@ function PieDePagina() {
             <h1>Ayuda y contacto</h1>
           </div>
           <h1
-            className="hover:underline mb-2"
+            className="hover:underline mb-2 cursor-pointer"
             onClick={() => {
               changeViewOrigen(true),
                 changeViewInicio(false),
@@ -53,7 +53,7 @@ function PieDePagina() {
             Conocenos
           </h1>
           <h1
-            className="hover:underline"
+            className="hover:underline cursor-pointer"
             onClick={() => {
               changeViewContacto(true),
                 changeViewInicio(false),

@@ -8,7 +8,6 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import ModalesPerfil from "./ModalesPerfil";
 import Swal from "sweetalert2";
 
-
 const GET_USER = gql`
   query Query {
     getUser {
@@ -17,6 +16,72 @@ const GET_USER = gql`
       apellido
       correo
       password
+    }
+  }
+`;
+
+const GET_PEDIDOS_ACTIVOS_USER = gql`
+  query GetPedidosActivosUser {
+    getPedidosActivosUser {
+      _id
+      apellido
+      ciudad
+      codigoPostal
+      direccion
+      email
+      estado
+      fechaPedido
+      fechaRecogida
+      id_user
+      importeFreeIvaPedido
+      importePedido
+      masInformacion
+      nombre
+      pais
+      telefono
+      productos {
+        _id
+        cantidad
+        id_producto
+        id_user
+        img
+        name
+        precioTotal
+        precioTotal_freeIVA
+      }
+    }
+  }
+`;
+
+const GET_PEDIDOS_PENDIENTES_USER = gql`
+  query GetPedidosPendientesUser {
+    getPedidosPendientesUser {
+      _id
+      id_user
+      estado
+      nombre
+      apellido
+      email
+      telefono
+      direccion
+      masInformacion
+      codigoPostal
+      ciudad
+      pais
+      fechaPedido
+      fechaRecogida
+      importePedido
+      importeFreeIvaPedido
+      productos {
+        _id
+        cantidad
+        id_producto
+        id_user
+        img
+        name
+        precioTotal
+        precioTotal_freeIVA
+      }
     }
   }
 `;
@@ -35,7 +100,8 @@ const BORRAR_USER = gql`
 `;
 
 function Perfil() {
-  const { changeErrorTrue, changeCodigoError, changeMensajeError, changeReload } = useContext(Context);
+  const { changeErrorTrue, changeCodigoError, changeMensajeError, changeReload, changeViewInicio, changeViewPerfil } =
+    useContext(Context);
 
   const [modalIsOpenNombreApellido, setIsOpenNombreApellido] = useState(false);
   const [modalIsOpenCorreo, setIsOpenCorreo] = useState(false);
@@ -63,15 +129,17 @@ function Perfil() {
 
   const [borrarUser] = useMutation(BORRAR_USER, {
     onCompleted: () => {
-      console.log("Se ha borrado su usuario admininstrador");
+      console.log("Se ha borrado su usuario");
       localStorage.removeItem("token");
-      localStorage.removeItem("nivel_auth");
+     
+      changeViewPerfil(false);
+      changeViewInicio(true);
       changeReload();
 
       Swal.fire({
         position: "center",
         icon: "success",
-        title: "Se ha borrado su usuario admininstrador",
+        title: "Se ha borrado su usuario",
         showConfirmButton: false,
         timer: 2000,
       });
@@ -94,7 +162,11 @@ function Perfil() {
     setIsOpenPassword(false);
   }
 
-  const { data, loading, error } = useQuery(GET_USER, {
+  const {
+    data: dataGetUser,
+    loading: loadingGetUser,
+    error: errorGetUser,
+  } = useQuery(GET_USER, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -102,8 +174,32 @@ function Perfil() {
     },
   });
 
-  if (loading) return <div></div>;
-  if (error)
+  const {
+    data: dataGetPedidosActivos,
+    loading: loadingGetPedidosActivos,
+    error: errorGetPedidosActivos,
+  } = useQuery(GET_PEDIDOS_ACTIVOS_USER, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+  });
+
+  const {
+    data: dataGetPedidosPendientes,
+    loading: loadingGetPedidosPendientes,
+    error: errorGetPedidosPendientes,
+  } = useQuery(GET_PEDIDOS_PENDIENTES_USER, {
+    context: {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+    },
+  });
+
+  if (loadingGetUser) return <div></div>;
+  if (errorGetUser)
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
@@ -111,16 +207,40 @@ function Perfil() {
       </div>
     );
 
-    function modalDarBajaUser(AdminId) {
-      Swal.fire({
-        icon: "warning",
-        title: "¿Quieres borrar tu perfil?",
-        text: "Los cambios serán irreversibles",
-        showCancelButton: true,
-        confirmButtonText: "Si, borrar",
-        confirmButtonColor: "#DF0000",
-      }).then((result) => {
-        if (result.isConfirmed) {
+  if (loadingGetPedidosActivos) return <div></div>;
+  if (errorGetPedidosActivos)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
+
+  if (loadingGetPedidosPendientes) return <div></div>;
+  if (errorGetPedidosPendientes)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError("Not Found")}
+      </div>
+    );
+
+    function modalDarBajaUser() {
+    Swal.fire({
+      icon: "warning",
+      title: "¿Quieres borrar tu perfil?",
+      text: "Los cambios serán irreversibles",
+      showCancelButton: true,
+      confirmButtonText: "Si, borrar",
+      confirmButtonColor: "#DF0000",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        if (
+          dataGetPedidosActivos.getPedidosActivosUser.length == 0 &&
+          dataGetPedidosPendientes.getPedidosPendientesUser.length == 0
+        ) {
           borrarUser({
             context: {
               headers: {
@@ -128,9 +248,19 @@ function Perfil() {
               },
             },
           });
+        } else {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "No se puede borrar el perfil",
+            text: "Tienes pedidos Activos o Pendientes de recoger",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "#3BD630"
+          });
         }
-      });
-    }
+      }
+    });
+  }
 
   return (
     <div>
@@ -149,11 +279,11 @@ function Perfil() {
                 <div className="grid grid-cols-3 gap-32">
                   <p className="flex flex-col">
                     <span className="font-bold mb-1">Nombre</span>
-                    <span className="font-light">{data.getUser.nombre}</span>
+                    <span className="font-light">{dataGetUser.getUser.nombre}</span>
                   </p>
                   <p className="flex flex-col">
                     <span className="font-bold mb-1">Apellido</span>
-                    <span className="font-light">{data.getUser.apellido}</span>
+                    <span className="font-light">{dataGetUser.getUser.apellido}</span>
                   </p>
                 </div>
               </div>
@@ -165,7 +295,7 @@ function Perfil() {
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
                     <span className="font-bold mb-1">Email</span>
-                    <span className="font-light">{data.getUser.correo}</span>
+                    <span className="font-light">{dataGetUser.getUser.correo}</span>
                   </p>
                 </div>
               </div>
@@ -224,7 +354,7 @@ function Perfil() {
         <button
           className="rounded border-2 border-red-800 bg-red-600 p-5 font-bold hover:bg-red-800 hover:border-red-400"
           onClick={() => {
-            modalDarBajaUser(data.getUser._id);
+            modalDarBajaUser(dataGetUser.getUser._id);
           }}
         >
           Darse de baja
