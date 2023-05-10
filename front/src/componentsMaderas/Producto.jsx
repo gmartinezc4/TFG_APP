@@ -232,7 +232,7 @@ function Producto(props) {
 
           {cantidadProdCarrito != 0 && (
               <div>
-                {dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito < 4 && (
+                {(dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito) < 4 && (
                   <div className="mt-10">Sin Stock</div>
                 )}
 
@@ -257,7 +257,7 @@ function Producto(props) {
                     }
                   }}
                 >
-                  {dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito <= 4 && (
+                  {(dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
                     <input
                       className="w-64 border border-black mt-4 bg-red-200"
                       placeholder="Sin Stock"
@@ -280,7 +280,7 @@ function Producto(props) {
                     ></input>
                   )}
 
-                  {dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito <= 4 && (
+                  {(dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
                     <button
                       className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
                       type="submit"
