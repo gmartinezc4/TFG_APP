@@ -23,7 +23,7 @@ export const dataInicio2 = [
     {
       id: 0,
       title: "Nuestra Historia",
-      description: "Se caracteriza por ser una leña muy dura y de quemado lento, que da lugar a formar ascuas duraderas, lo que añadido a su aroma, resulta especial para lumbre y barbacoas."
+      description: "Se caracteriza por ser una leña muy dura y de quemado lento, que da lugar a formar ascuas duraderas, lo que añadido a su aroma, resulta especial para lumbre."
     },
   ];
 

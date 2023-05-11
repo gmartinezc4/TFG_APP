@@ -332,7 +332,7 @@ function ContenedorMaderas() {
               </div>
             )}
           </div>
-          <Inicio />
+          {viewInicio && <Inicio />}
           <Maderas />
           <Contacto />
           <Origen />

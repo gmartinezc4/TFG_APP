@@ -73,7 +73,6 @@ function HacerPedido(props) {
 
   let importe = 0;
   let importeFreeIva = 0;
-  const fechaRecogida = new Date();
 
   const [confirmarPedido] = useMutation(VENDER_PRODUCTOS, {
     onCompleted: () => {
