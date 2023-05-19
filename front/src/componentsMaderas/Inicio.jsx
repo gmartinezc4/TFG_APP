@@ -1,12 +1,14 @@
-import React, { useContext } from "react";
-import { gql, useQuery } from "@apollo/client";
-import { Context } from "../context/Context";
+import React from "react";
 import { dataInicio, dataInicio2 } from "../data/InicioData";
 
-
+// 
+// * Componente página Inicio.
+// * Muestra los datos del archivo InicioData.
+//
 function Inicio() {
   return (
     <div>
+      {/* Datos del array de dataInicio */}
       <div className="font-serif text-2xl flex flex-col p-10">
         {dataInicio.map((d) => (
           <div key={d.id} className="flex  flex-col ml-40 mr-40">
@@ -15,6 +17,8 @@ function Inicio() {
           </div>
         ))}
       </div>
+
+      {/* Datos del array de dataInicio2 */}
       <div className="bg-slate-200 font-serif  text-2xl flex flex-col p-10">
         {dataInicio2.map((d) => (
           <div key={d.id} className="flex flex-col mb-60">

@@ -45,7 +45,12 @@ const GET_PRODUCTO_CARRITO_USER = gql`
   }
 `;
 
+//
+// * Componente Producto.
+// * Muestra el producto selecionado por el usuario
+//
 function Producto(props) {
+  // Variables del contexto usadas
   const {
     changeReload,
     token,
@@ -60,8 +65,10 @@ function Producto(props) {
   const [cantidad, setCantidad] = useState("");
   let cantidadProdCarrito = 0;
 
+  //recarga la págin cada vez que cambia reload
   useEffect(() => {}), [reload];
 
+  // Mutation para añadir un producto al carrito del user
   const [addProductoCarrito] = useMutation(ADD_PRODUCTO_CARRITO, {
     context: {
       headers: {
@@ -70,6 +77,7 @@ function Producto(props) {
     },
   });
 
+  // Query para traer un producto de la bbdd
   const {
     data: dataProd,
     loading: loadingProd,
@@ -85,6 +93,7 @@ function Producto(props) {
     },
   });
 
+  // Query para traer los productos del carrito del user de la bbdd
   const {
     data: dataProductosCarrito,
     loading: loadingProductosCarrito,
@@ -100,18 +109,23 @@ function Producto(props) {
     },
   });
 
-  if (loadingProd)
+  if (loadingProd || loadingProductosCarrito)
     return (
       <div>
         <Cargando />
       </div>
     );
-  if (errorProd) return console.log(errorProd)
+  if (errorProd || errorProductosCarrito)
+    return console.log(errorProd + " " + errorProductosCarrito);
 
   if (dataProductosCarrito) {
     cantidadProdCarrito = dataProductosCarrito.getProductoCarritoUser.cantidad;
   }
 
+  //
+  // * Función para actualizar el carrito del usuario.
+  // * Realiza la Mutation addProductoCarrito.
+  //
   function actualizarCarrito() {
     console.log("haciendo mutation");
     addProductoCarrito({
@@ -124,6 +138,7 @@ function Producto(props) {
     });
   }
 
+  //modal de confirmación al añadir un producto al carrito
   function mostrarConfirmación() {
     Swal.fire({
       icon: "success",
@@ -137,6 +152,7 @@ function Producto(props) {
   return (
     <div>
       <div className="flex justify-center mb-96">
+        {/* Boton de volver */}
         <div className="bg-no-repeat bg-contain -ml-96">
           <img className="h-80 w-100 border rounded" src={dataProd.getProducto.img}></img>
           <button
@@ -149,6 +165,7 @@ function Producto(props) {
           </button>
         </div>
 
+        {/* Mostrar producto */}
         <div className="ml-20 w-60 flex flex-col">
           <div className="font-serif text-5xl mb-10 underline">
             {dataProd.getProducto.name}
@@ -161,7 +178,6 @@ function Producto(props) {
 
           {cantidadProdCarrito == 0 && (
             <div>
-              
               {dataProd.getProducto.stock <= 4 && <div className="mt-10">Sin Stock</div>}
 
               {dataProd.getProducto.stock > 4 && (
@@ -231,41 +247,45 @@ function Producto(props) {
           )}
 
           {cantidadProdCarrito != 0 && (
-              <div>
-                {(dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito) < 4 && (
-                  <div className="mt-10">Sin Stock</div>
-                )}
+            <div>
+              {(dataProd.getProducto.stock <= 4 ||
+                dataProd.getProducto.stock - cantidadProdCarrito) < 4 && (
+                <div className="mt-10">Sin Stock</div>
+              )}
 
-                {dataProd.getProducto.stock > 4 && dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+              {dataProd.getProducto.stock > 4 &&
+                dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
                   <div className="mt-10">
                     Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
                   </div>
                 )}
 
-                <form
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    if (cantidad != 0 && token) {
-                      actualizarCarrito();
-                      mostrarConfirmación();
-                    } else {
-                      changeViewSession(true);
-                      changeViewProductSelect(false);
-                      changeViewProductos(false);
-                      changeProductIdSelect(props.productId);
-                      changeProductCantidadSelect(cantidad);
-                    }
-                  }}
-                >
-                  {(dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
-                    <input
-                      className="w-64 border border-black mt-4 bg-red-200"
-                      placeholder="Sin Stock"
-                      disabled
-                    ></input>
-                  )}
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  if (cantidad != 0 && token) {
+                    actualizarCarrito();
+                    mostrarConfirmación();
+                  } else {
+                    changeViewSession(true);
+                    changeViewProductSelect(false);
+                    changeViewProductos(false);
+                    changeProductIdSelect(props.productId);
+                    changeProductCantidadSelect(cantidad);
+                  }
+                }}
+              >
+                {(dataProd.getProducto.stock <= 4 ||
+                  dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
+                  <input
+                    className="w-64 border border-black mt-4 bg-red-200"
+                    placeholder="Sin Stock"
+                    disabled
+                  ></input>
+                )}
 
-                  {dataProd.getProducto.stock > 4 && dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                {dataProd.getProducto.stock > 4 &&
+                  dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
                     <input
                       className="w-64 border border-black mt-4"
                       placeholder="Pedido mínimo 5kg"
@@ -280,17 +300,19 @@ function Producto(props) {
                     ></input>
                   )}
 
-                  {(dataProd.getProducto.stock <= 4 || dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
-                    <button
-                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
-                      type="submit"
-                      disabled
-                    >
-                      Sin stock
-                    </button>
-                  )}
+                {(dataProd.getProducto.stock <= 4 ||
+                  dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
+                  <button
+                    className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
+                    type="submit"
+                    disabled
+                  >
+                    Sin stock
+                  </button>
+                )}
 
-                  {dataProd.getProducto.stock > 4 && dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                {dataProd.getProducto.stock > 4 &&
+                  dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
                     <button
                       className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
                       type="submit"
@@ -298,9 +320,9 @@ function Producto(props) {
                       Añadir a la cesta
                     </button>
                   )}
-                </form>
-              </div>
-            )}
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </div>

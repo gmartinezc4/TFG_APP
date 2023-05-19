@@ -19,7 +19,10 @@ import ForgotPassword from "./ForgotPassword";
 import ForgotPassword2 from "./ForgotPassword2";
 import PaginasErrores from "./PaginasErrores";
 
-
+// 
+// * Componente contenedor de todos los demás componentes.
+// * Dede aqui se renderiazan los demás componentes de la web.
+// 
 function ContenedorMaderas() {
   const client = new ApolloClient({
     uri: "http://localhost:4000/",
@@ -27,6 +30,7 @@ function ContenedorMaderas() {
   });
   //localStorage.removeItem("token");
 
+  // Variables del contexto usadas
   const {
     viewMaderas,
     changeViewMaderas,
@@ -68,10 +72,13 @@ function ContenedorMaderas() {
 
   return (
     <ApolloProvider client={client}>
-
+      {/* Mostrar los errores */}
       {viewError && <PaginasErrores codigo={codigoError} mensaje={mensajeError} />}
+
+      {/* Si no hay errores */}
       {!viewError && (
         <div>
+          {/* Cabecera con logo y botones */}
           <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')] bg-no-repeat bg-cover h-56">
             <div className="flex justify-between text-white font-bold border-b-2 border-white p-5">
               <button
@@ -332,11 +339,13 @@ function ContenedorMaderas() {
               </div>
             )}
           </div>
+
+          {/* Componente a renderizar dependiendo de la condición*/}
           {viewInicio && <Inicio />}
-          <Maderas />
-          <Contacto />
-          <Origen />
-          <ProductosVenta />
+          {viewMaderas && <Maderas />}
+          {viewContacto && <Contacto />}
+          {viewOrigen && <Origen />}
+          {viewProductos && <ProductosVenta />}
           {viewSession && (
             <Session
               productIdSelect={productIdSelect}
@@ -344,15 +353,10 @@ function ContenedorMaderas() {
             />
           )}
           {token && viewShoppingCart && <ShoppingCart />}
-          {token && viewHacerPedido && (
-            <HacerPedido productos={productosShoppingCart} />
-          )}
+          {token && viewHacerPedido && <HacerPedido productos={productosShoppingCart} />}
           {token && viewPedidosPerfil && <PedidosPerfil />}
-          {token && viewDetallePedido && (
-            <DetallePedido pedido={pedidoDetallado} />
-          )}
+          {token && viewDetallePedido && <DetallePedido pedido={pedidoDetallado} />}
           {token && viewPerfil && <Perfil />}
-          {/* {token && enviarCorreoConfirmacion && <CorreoConfirmacionPedido/>} */}
           {viewRecuperarPass1 && <ForgotPassword />}
           {viewRecuperarPass2 && <ForgotPassword2 />}
 

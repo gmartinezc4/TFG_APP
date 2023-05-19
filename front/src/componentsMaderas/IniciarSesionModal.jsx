@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import Swal from "sweetalert2";
 
+// Estilo customizado para componente <Modal />
 const customStyles = {
   content: {
     position: "absolute",
@@ -41,6 +42,9 @@ const ADD_PRODUCTO_CARRITO = gql`
   }
 `;
 
+//
+// * Componente modal IniciarSesionModal.
+//
 function IniciarSesionModal(props) {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
@@ -49,6 +53,7 @@ function IniciarSesionModal(props) {
   const [noHayPassword, setNoHayPassword] = useState(false);
   const [passView, setPassView] = useState(false);
 
+  // Varables del contexto usadas
   const {
     changeReload,
     changeViewSession,
@@ -66,11 +71,17 @@ function IniciarSesionModal(props) {
     changeViewRecuperarPass1,
   } = useContext(Context);
 
+  //
+  // * Mutation que loggea al usuario y le concede
+  // * un token para iniciar su sesión.
+  // * Llama a la función addToCarrito() si el usuario se está
+  // * loggeando tras añadir un producto al carrito.
+  //
   const [login] = useMutation(LOG_IN, {
     onCompleted: (data) => {
       if (props.productIdSelect && props.productCantidadSelect) {
         addToCarrito(data.logIn);
-      }else{
+      } else {
         localStorage.setItem("token", data.logIn); //cuando se complete la mutation guardar el token
         console.log("me loggeo, token: " + localStorage.getItem("token"));
         props.closeModalInicioSesion();
@@ -86,8 +97,15 @@ function IniciarSesionModal(props) {
     },
   });
 
+  //
+  // * Mutation para añadir un producto al carrito del usuario.
+  //
   const [addProductoCarrito] = useMutation(ADD_PRODUCTO_CARRITO);
 
+  //
+  // * función que llama a la mutation addProductoCarrito para añadir
+  // * un producto al carrito del usuario.
+  //
   function addToCarrito(token) {
     addProductoCarrito({
       context: {
@@ -109,6 +127,10 @@ function IniciarSesionModal(props) {
     });
   }
 
+  //
+  // * Función que comprueba los datos de loggeo
+  // * introducidos por el usuario.
+  //
   function comprobarUser() {
     if (correo == "") {
       setNoHayCorreo(true);
@@ -130,18 +152,22 @@ function IniciarSesionModal(props) {
     }
   }
 
+  //
+  // * Función que muestra la confirmación del loggeo.
+  //
   function mostrarConfirmación() {
     Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: '¡Sesión iniciada!',
+      position: "center",
+      icon: "success",
+      title: "¡Sesión iniciada!",
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
   }
 
   return (
     <div>
+      {/* Modal utilizado para loggearse */}
       <Modal
         isOpen={props.modalIsOpenInicioSesion}
         onRequestClose={props.closeModalInicioSesion}
@@ -161,9 +187,7 @@ function IniciarSesionModal(props) {
             comprobarUser();
           }}
         >
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Email
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
           <input
             className={
               noHayCorreo

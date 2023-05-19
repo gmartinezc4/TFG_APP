@@ -5,7 +5,11 @@ import { BsCashStack } from "react-icons/bs";
 import { BsCreditCard } from "react-icons/bs";
 import { Context } from "../context/Context";
 
+//
+// * Componente PieDePagina. Se nuestra abajo de todas las páginas.
+//
 function PieDePagina() {
+  // Varables del contexto usadas
   const {
     changeViewMaderas,
     changeViewInicio,
@@ -20,12 +24,13 @@ function PieDePagina() {
     changeViewProductSelect,
     changeViewPerfil,
     changeViewRecuperarPass1,
-    changeViewRecuperarPass2
+    changeViewRecuperarPass2,
   } = useContext(Context);
 
   return (
     <div className="max-w-full h-32 bg-green-500 text-white">
       <div className="flex flex-row justify-evenly">
+        {/* Columna izquierda */}
         <div className="flex flex-col">
           <div className="flex flex-row mb-3 mt-3">
             <AiOutlineQuestionCircle className=" mr-3 w-6 h-6" />
@@ -75,6 +80,7 @@ function PieDePagina() {
           </h1>
         </div>
 
+        {/* Columna derecha */}
         <div>
           <div className="flex flex-col">
             <div className="flex flex-row mb-3 mt-3">
@@ -84,7 +90,7 @@ function PieDePagina() {
             <div className="flex flex-row">
               <FaCcMastercard className=" mr-6 w-14 h-14" />
               <FaCcVisa className="mr-6 w-14 h-14" />
-              <BsCashStack className="w-14 h-14"/>
+              <BsCashStack className="w-14 h-14" />
             </div>
           </div>
         </div>

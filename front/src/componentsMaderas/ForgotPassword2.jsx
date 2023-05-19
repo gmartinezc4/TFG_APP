@@ -11,7 +11,19 @@ const RECUPERAR_PASS_2 = gql`
   }
 `;
 
+//
+// * Componenete ForgotPassword2. Segunda página para recuperar la contraseña.
+// * El usuario introduce su nueva contraseña y el código de recuperación.
+//
 function ForgotPassword2() {
+  // Varables del contexto usadas
+  const {
+    changeReload,
+    emailUserRecuperaPass,
+    changeViewInicio,
+    changeViewRecuperarPass2,
+  } = useContext(Context);
+
   const [password, setPassword] = useState("");
   const [repPassword, setRepPassword] = useState("");
   const [codigo, setCodigo] = useState("");
@@ -25,12 +37,13 @@ function ForgotPassword2() {
   const [repPassView, setRepPassView] = useState(false);
 
   const [errorCaptcha, setErrorCaptcha] = useState(false);
-  const captchaRef = useRef(null)
+  const captchaRef = useRef(null);
   let tokenCaptcha;
 
-  const { changeReload, emailUserRecuperaPass, changeViewInicio, changeViewRecuperarPass2 } =
-    useContext(Context);
-
+  //
+  // * Mutation para recuperar la contraseña del usuario.
+  // * Actualiza la contraseña del usuario.
+  //
   const [recuperarPassword] = useMutation(RECUPERAR_PASS_2, {
     onCompleted: () => {
       mostrarConfirmación();
@@ -41,6 +54,9 @@ function ForgotPassword2() {
     },
   });
 
+  //
+  // * Función que muestra la confirmación del cambio de contraeña.
+  //
   function mostrarConfirmación() {
     Swal.fire({
       icon: "success",
@@ -53,6 +69,10 @@ function ForgotPassword2() {
     changeReload();
   }
 
+  //
+  // * Función que comprueba que la nueva contraseña, el código de recuperción
+  // * y el captcha son correctos.
+  //
   function comprobarUser() {
     if (password == "") {
       setNoHayPassword(true);
@@ -83,7 +103,7 @@ function ForgotPassword2() {
       setErrorPassword(false);
       setNoHayCodigo(false);
       setErrorCaptcha(false);
-    }else if (tokenCaptcha == ""){
+    } else if (tokenCaptcha == "") {
       setErrorCaptcha(true);
       setNoHayPassword(false);
       setErrorPassword(false);
@@ -108,6 +128,7 @@ function ForgotPassword2() {
 
   return (
     <div className="mt-20 mb-60">
+      {/* Form para introducir los datos */}
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -158,8 +179,7 @@ function ForgotPassword2() {
         )}
         {errorPassword && (
           <p className="text-red-500 text-xs italic flex justify-center">
-            Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y
-            un número
+            Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un número
           </p>
         )}
 

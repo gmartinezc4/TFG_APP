@@ -139,7 +139,6 @@ function correoRegistroAdmin(emailCorreoRegistro: any, contraseñaCorreoRegistro
   <!--[if !mso]><!--><td class=t25 style="width:600px;padding:0 0 22px 0;">
   <!--<![endif]-->
   <!--[if mso]><td class=t25 style="width:600px;padding:0 0 22px 0;"><![endif]-->
-  <p class=t31 style="font-family:BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif, 'Albert Sans';line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.56px;direction:ltr;color:#333333;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">Estas son tus claves de acceso de administrador:</p></td>
   </tr></table>
   </td></tr><tr><td>
   <table class=t54 role=presentation cellpadding=0 cellspacing=0 align=center><tr>
