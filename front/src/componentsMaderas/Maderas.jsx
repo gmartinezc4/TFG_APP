@@ -1,17 +1,16 @@
-import React, { useContext } from "react";
-import { Context } from "../context/Context";
+import React from "react";
 import MaderaCards from "./MaderaCards";
 
+// 
+// * Componente página Nuestra Madera.
+// * Renderiza el componente <MderaCards />
+// 
 function Maderas() {
-  const { viewMaderas } = useContext(Context);
-
-  if (viewMaderas == true) {
-    return (
-      <div>
-        <MaderaCards />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <MaderaCards />
+    </div>
+  );
 }
 
 export default Maderas;

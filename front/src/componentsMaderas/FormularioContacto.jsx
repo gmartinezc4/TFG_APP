@@ -1,6 +1,12 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
+// 
+// * Componente que muestra el formulario de contacto.
+// * Utiliza EmailJs para realizar el envio de correos.
+//
+// * props: setOpenConfirmacion & setOpenError
+//
 function FormularioContacto(props) {
   const form = useRef();
 
@@ -8,6 +14,9 @@ function FormularioContacto(props) {
   const [email, setEmail] = useState("");
   const [texto, setTexto] = useState("")
 
+  //
+  // * Función que envia el email de contacto al gmail de la empresa
+  //
   const sendEmail = (e) => {
     e.preventDefault();
 
@@ -23,7 +32,6 @@ function FormularioContacto(props) {
         },
         (error) => {
           console.log(error.text);
-          props.setError(true);
           props.setOpenError(true);
         }
       );
@@ -32,6 +40,7 @@ function FormularioContacto(props) {
 
   return (
     <div className="flex justify-center">
+      {/* form que utiliza EmailJs para recoger los datos y enviarlos en el correo */}
       <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
         <label className="flex justify-center text-white  font-bold mb-2 font-mono">Name</label>
         <input

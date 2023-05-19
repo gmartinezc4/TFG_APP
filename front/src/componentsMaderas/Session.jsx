@@ -3,13 +3,29 @@ import RegistrarseModal from "./RegistrarseModal";
 import IniciarSesionModal from "./IniciarSesionModal";
 import { Context } from "../context/Context";
 
+// 
+// * Componente página inicio de sesión o registro.
+// * Solo se accede a este componente si el usuario añade un 
+// * producto al carrito sin estar loggeado.
+// * Después de iniciar sesión o registrarse el user tiene
+// * guardado el producto en el carrito.
+//
+// * Renderiza los componentes <IniciarSesionModal /> y <RegistrarseModal />
+// 
 function Session(props) {
+  // Variables del contexto usadas
+  const { reload } = useContext(Context);
+  
   const [modalIsOpenRegistro, setIsOpenRegistro] = useState(false);
   const [modalIsOpenInicioSesion, setIsOpenInicioSesion] = useState(false);
-  const { reload } = useContext(Context);
 
+  // Recargar la página cuando cambie reload 
   useEffect(() => {}), [reload];
 
+  //
+  // * Funciones encargadas de abrir y cerrar los
+  // * modales de inicio de sesión y registro.
+  //
   function openModalRegistro() {
     setIsOpenRegistro(true);
   }
@@ -50,6 +66,7 @@ function Session(props) {
         </div>
       </div>
 
+      {/* Renderización del componente <RegistrarseModal /> si se cumple la condición */}
       {modalIsOpenRegistro && (
         <RegistrarseModal
           closeModalRegistro={closeModalRegistro}
@@ -59,6 +76,7 @@ function Session(props) {
         />
       )}
 
+      {/* Renderización del componente <IniciarSesionModal /> si se cumple la condición */}
       {modalIsOpenInicioSesion && (
         <IniciarSesionModal
           closeModalInicioSesion={closeModalInicioSesion}

@@ -4,13 +4,17 @@ import Maps from "./Maps";
 import FormularioContacto from "./FormularioContacto";
 import Swal from "sweetalert2";
 
+//
+// * Componente página Contacto
+// * Renderiza los componentes <Maps /> y <<FormularioContacto />
+//
 function Contacto() {
-  const { viewContacto, modalIsOpenConfirmacion } = useContext(Context);
-
-  const [error, setError] = useState(false);
   const [openConfirmacion, setOpenConfirmacion] = useState(false);
   const [openError, setOpenError] = useState(false);
 
+  //
+  // * Mostrar confirmación al enviar correo de contacto si no hay error
+  //
   function mostrarConfirmación() {
     Swal.fire({
       icon: "info",
@@ -22,6 +26,9 @@ function Contacto() {
     setOpenConfirmacion(false);
   }
 
+  //
+  // * Mostrar error al enviar correo de contacto si hay error.
+  //
   function mostrarError() {
     Swal.fire({
       icon: "error",
@@ -33,36 +40,25 @@ function Contacto() {
     setOpenError(false);
   }
 
-  if (viewContacto == true) {
-    return (
-      <div>
-        {!error && openConfirmacion && <div>{mostrarConfirmación()}</div>}
+  return (
+    <div>
+      {/* Invocación de las funciones para mostrar confirmación o error si se cumplen las condiciones */}
+      {openConfirmacion && <div>{mostrarConfirmación()}</div>}
+      {openError && <div>{mostrarError()}</div>}
 
-        {error && openError && <div>{mostrarError()}</div>}
-
-        <div
-          className={
-            !modalIsOpenConfirmacion
-              ? "bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')]  bg-repeat-y  flex justify-center p-10"
-              : "bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')]  h-screen flex justify-center p-10"
-          }
-        >
-          <div className="flex flex-col">
-            {!modalIsOpenConfirmacion && (
-              <div>
-                <Maps />
-                <FormularioContacto
-                  setError={setError}
-                  setOpenConfirmacion={setOpenConfirmacion}
-                  setOpenError={setOpenError}
-                />
-              </div>
-            )}
+      <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')]  bg-repeat-y  flex justify-center p-10">
+        <div className="flex flex-col">
+          <div>
+            <Maps />
+            <FormularioContacto
+              setOpenConfirmacion={setOpenConfirmacion}
+              setOpenError={setOpenError}
+            />
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default Contacto;

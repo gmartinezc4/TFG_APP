@@ -38,7 +38,12 @@ const DELETE_PRODUCTO_CARRITO = gql`
   }
 `;
 
+// 
+// * Componente página ShoppingCart.
+// * Renderiza el componente <CorreoConfirmacionPedido />
+// 
 function ShoppingCart() {
+  // Varables del contexto usadas
   const {
     changeReload,
     changeViewShoppingCart,
@@ -48,8 +53,6 @@ function ShoppingCart() {
     changeViewMaderas,
     changeViewContacto,
     changeViewHacerPedido,
-    modalIsOpenConfirmacionCorreo,
-    closeModalConfirmacionCorreo,
     changeProductosShoppingCart,
     changeViewProductSelect,
     enviarCorreoConfirmacion,
@@ -62,6 +65,9 @@ function ShoppingCart() {
   let importe = 0;
   let importeFreeIva = 0;
 
+  //
+  // * Mutation para eliminar un producto al carrito del usuario.
+  //
   const [deleteProductoCarrito] = useMutation(DELETE_PRODUCTO_CARRITO, {
     onCompleted: () => {
       console.log("despues de mutation");
@@ -72,7 +78,14 @@ function ShoppingCart() {
     },
   });
 
-  const { data: dataGetProductos, loading: loadingGetProductos, error: errorGetPoductos } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
+  //
+  // * Query para traer los productos del carrito del usuario.
+  //
+  const {
+    data: dataGetProductos,
+    loading: loadingGetProductos,
+    error: errorGetPoductos,
+  } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -80,7 +93,14 @@ function ShoppingCart() {
     },
   });
 
-  const { data: dataGetUser, loading: loadingGetUser, error: errorGetUser } = useQuery(GET_USER, {
+  //
+  // * Query para traer el usuario que está con la sesión iniciada.
+  //
+  const {
+    data: dataGetUser,
+    loading: loadingGetUser,
+    error: errorGetUser,
+  } = useQuery(GET_USER, {
     context: {
       headers: {
         authorization: localStorage.getItem("token"),
@@ -97,13 +117,21 @@ function ShoppingCart() {
       </div>
     );
 
-    if (loadingGetUser) return <div></div>;
-    if (errorGetUser) return console.log(error);
-  
-    localStorage.setItem("nombreUser", dataGetUser.getUser.nombre);
-    localStorage.setItem("apellidoUser", dataGetUser.getUser.apellido);
-    localStorage.setItem("emailUser", dataGetUser.getUser.correo);
+  if (loadingGetUser) return <div></div>;
+  if (errorGetUser) return console.log(error);
 
+  //
+  // * Añadir al localStorage estas variables, usadas en el
+  // * componente <HacerPedido />
+  //
+  localStorage.setItem("nombreUser", dataGetUser.getUser.nombre);
+  localStorage.setItem("apellidoUser", dataGetUser.getUser.apellido);
+  localStorage.setItem("emailUser", dataGetUser.getUser.correo);
+
+  //
+  // * Función que realiza la mutation deleteProductoCarrito para
+  // * borrar un producto del carrito del usuario.
+  //
   function actualizarCarrito() {
     console.log("haciendo mutation");
     console.log("prodId " + idProd);
@@ -254,13 +282,9 @@ function ShoppingCart() {
         )}
       </div>
 
-      {enviarCorreoConfirmacion && (
-        <CorreoConfirmacionPedido
-          closeModalConfirmacionCorreo={closeModalConfirmacionCorreo}
-          modalIsOpenConfirmacionCorreo={modalIsOpenConfirmacionCorreo}
-          mensaje={"Pedido confirmadoooo"}
-        />
-      )}
+      {/* Si se cumple la condición renderizar el componente <CorreoConfirmaciónPedido.
+      Ocurre tras confirmar el pedido en el componente <HacerPeido /> */}
+      {enviarCorreoConfirmacion && <CorreoConfirmacionPedido />}
     </div>
   );
 }

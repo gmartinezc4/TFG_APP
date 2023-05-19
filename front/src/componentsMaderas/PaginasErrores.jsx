@@ -1,5 +1,8 @@
 import React from 'react'
 
+// 
+// * Componente para mostrar pñagina de errores.
+// 
 function PaginasErrores(props) {
   return (
     <div className='text-6xl'>
