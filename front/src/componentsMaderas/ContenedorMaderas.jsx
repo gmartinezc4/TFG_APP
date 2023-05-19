@@ -341,7 +341,6 @@ function ContenedorMaderas() {
           </div>
 
           {/* Componente a renderizar dependiendo de la condición*/}
-
           {viewInicio && <Inicio />}
           {viewMaderas && <Maderas />}
           {viewContacto && <Contacto />}
