@@ -83,8 +83,6 @@ export const Mutation = {
                 const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
                 const fechaRecogida = calcularFechaEntrega();
 
-                console.log(fecha.getFullYear(), (fecha.getMonth() + 1))
-
                 const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
                 if (carritoUser.length > 0) {
                     carritoUser.map(async (p: any) => {

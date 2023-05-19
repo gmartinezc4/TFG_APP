@@ -1,16 +1,22 @@
 import React, { useContext } from "react";
 import { Context } from "../context/Context";
 
+//
+// * Componente DetallePedido. Página donde el usuario puede ver uno de sus pedidos
+// * con mas detalle.
+//
+// * props: pedido
+//
 function DetallePedido(props) {
-    const { changeViewDetallePedido, changeViewPedidosPerfil } =
-    useContext(Context);
+  // Varables del contexto usadas
+  const { changeViewDetallePedido, changeViewPedidosPerfil } = useContext(Context);
 
   return (
     <div className="flex justify-center mt-10">
       <div className="flex flex-col">
         <h1 className="text-2xl font-bold">Numero de pedido: {props.pedido._id}</h1>
         <div className="flex flex-col font-bold mt-5">
-          Fecha del pedido{" "}
+          Fecha del pedido
           <span className="font-extralight">{props.pedido.fechaPedido}</span>
         </div>
 

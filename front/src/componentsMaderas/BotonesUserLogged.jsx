@@ -24,7 +24,12 @@ const GET_PRODUCTOS_CARRITO_USER = gql`
   }
 `;
 
+// 
+// * Componente botones del usuario loggeado.
+// * Botones del perfil y el carrito
+// 
 function BotonesUserLogged() {
+  // Variables del contexto usadas
   const {
     changeReload,
     token,
@@ -47,6 +52,7 @@ function BotonesUserLogged() {
   } = useContext(Context);
   const [OpenSubMenuPerfil, setOpenSubMenuPerfil] = useState(false);
 
+  // Mutation para cerrar sesión
   const [logOut] = useMutation(LOG_OUT, {
     context: {
       headers: {
@@ -66,6 +72,7 @@ function BotonesUserLogged() {
     },
   });
 
+  // Query para traer los productos del carrito del user de la bbdd
   const { data, loading, error } = useQuery(GET_PRODUCTOS_CARRITO_USER, {
     context: {
       headers: {
@@ -83,6 +90,7 @@ function BotonesUserLogged() {
       </div>
     );
 
+    //modal de confirmación al cerrar sesión
     function mostrarConfirmación() {
       Swal.fire({
         position: 'center',
@@ -113,7 +121,7 @@ function BotonesUserLogged() {
                   changeViewDetallePedido(false),
                   changeViewHacerPedido(false),
                   changeViewPerfil(false);
-                  changeErrorFalse(false);
+                changeErrorFalse(false);
               }}
             ></button>
             {data.getProductosCarritoUser.length != 0 && (
@@ -162,12 +170,14 @@ function BotonesUserLogged() {
                         changeViewPedidosPerfil(false),
                         changeViewDetallePedido(false),
                         changeViewHacerPedido(false);
-                        changeErrorFalse(false);
+                      changeErrorFalse(false);
                     }}
                   >
                     Perfil
                   </a>
                 </div>
+
+                {/* pedidos */}
                 <div className="py-1" role="none">
                   <a
                     href="#"
@@ -188,12 +198,14 @@ function BotonesUserLogged() {
                         changeViewHacerPedido(false),
                         changeViewSession(false),
                         changeViewPerfil(false);
-                        changeErrorFalse(false);
+                      changeErrorFalse(false);
                     }}
                   >
                     Pedidos
                   </a>
                 </div>
+
+                {/* cerrar sesión */}
                 <div className="py-1" role="none">
                   <a
                     href="#"
@@ -217,10 +229,14 @@ function BotonesUserLogged() {
                         changeViewHacerPedido(false),
                         changeViewSession(false),
                         changeViewPerfil(false);
-                        changeErrorFalse(false);
-                      console.log("me desloggeo, token: " + localStorage.getItem("token"));
+                      changeErrorFalse(false);
+                      console.log(
+                        "me desloggeo, token: " + localStorage.getItem("token")
+                      );
                       localStorage.removeItem("token");
-                      console.log("me he desloggeado, token: " + localStorage.getItem("token"));
+                      console.log(
+                        "me he desloggeado, token: " + localStorage.getItem("token")
+                      );
                     }}
                   >
                     Cerrar Sesión

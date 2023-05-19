@@ -133,7 +133,7 @@ const GET_PEDIDOS_CANCELADOS_USER = gql`
 
 const CANCELAR_PEDIDO = gql`
   mutation Mutation($idPedido: ID!, $bbdd: String!) {
-  cancelarPedido(id_pedido: $idPedido, bbdd: $bbdd) {
+    cancelarPedido(id_pedido: $idPedido, bbdd: $bbdd) {
       _id
       apellido
       ciudad
@@ -164,7 +164,14 @@ const CANCELAR_PEDIDO = gql`
   }
 `;
 
+//
+// * Componente Pedidos perfil. Página donde se ven los pedidos
+// * realizados por el usuario, pedidos Activos, Pendientes de recoger,
+// * Canceldos o Recogidos.
+// * Permite ver los pedidos en detalle y cancelar productos Activos y Pendientes.
+//
 function PedidosPerfil() {
+  // Varables del contexto usadas
   const {
     changeViewDetallePedido,
     changeViewPedidosPerfil,
@@ -173,6 +180,10 @@ function PedidosPerfil() {
     changeReload,
   } = useContext(Context);
 
+  //
+  // * Mutation para cancelar un pedido del usuario.
+  // * Solo se puede con pedidos Activos o Pendientes.
+  //
   const [cancelarPedido] = useMutation(CANCELAR_PEDIDO, {
     onCompleted: () => {
       console.log("Se ha cancelado el pedido");
@@ -199,6 +210,9 @@ function PedidosPerfil() {
     },
   });
 
+  //
+  // * Query para traer los pedidos Recogidos del usuario.
+  //
   const {
     data: dataRecogidos,
     loading: loadingRecogidos,
@@ -211,6 +225,9 @@ function PedidosPerfil() {
     },
   });
 
+  //
+  // * Query para traer los pedidos Activos del usuario.
+  //
   const {
     data: dataActivos,
     loading: loadingActivos,
@@ -223,6 +240,9 @@ function PedidosPerfil() {
     },
   });
 
+  //
+  // * Query para traer los pedidos Pendientes del usuario.
+  //
   const {
     data: dataPendientes,
     loading: loadingPendientes,
@@ -235,6 +255,9 @@ function PedidosPerfil() {
     },
   });
 
+  //
+  // * Query para traer los pedidos Cancelados del usuario.
+  //
   const {
     data: dataCancelados,
     loading: loadingCancelados,
@@ -259,6 +282,12 @@ function PedidosPerfil() {
   if (loadingCancelados) return <div></div>;
   if (errorCancelados) return console.log(errorCancelados);
 
+  //
+  // * Función que muestra la confirmación de elimnar el pedido.
+  // * Realiza la mutation cancelarPedido.
+  //
+  // * Parametros: idPedido, bbddCancelación
+  //
   function modalCancelarPedido(idPedido, bbddCancelacion) {
     Swal.fire({
       icon: "warning",
@@ -269,8 +298,6 @@ function PedidosPerfil() {
       confirmButtonColor: "#DF0000",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(idPedido);
-        console.log(bbddCancelacion)
         cancelarPedido({
           context: {
             headers: {
@@ -288,6 +315,7 @@ function PedidosPerfil() {
 
   return (
     <div>
+      {/* Si el usuario no tiene ningún pedido */}
       {dataActivos.getPedidosActivosUser.length == 0 &&
         dataPendientes.getPedidosPendientesUser.length == 0 &&
         dataCancelados.getPedidosCanceladosUser.length == 0 &&
@@ -310,6 +338,8 @@ function PedidosPerfil() {
             </div>
           </div>
         )}
+
+      {/* Si el usuario tiene pedido Activos */}
       <div className="flex justify-center flex-col px-96 mt-20">
         {dataActivos.getPedidosActivosUser.length != 0 && (
           <div className="flex flex-col bg-slate-200 p-20 mb-5">
@@ -378,6 +408,8 @@ function PedidosPerfil() {
             </div>
           </div>
         )}
+
+        {/* Si el usuario tiene pedido Pendientes */}
         {dataPendientes.getPedidosPendientesUser.length != 0 && (
           <div className="flex flex-col bg-slate-200 p-20 mb-5">
             <div>
@@ -436,7 +468,7 @@ function PedidosPerfil() {
                     <button
                       className="border rounded text-black bg-red-600 hover:bg-red-500 mt-10 p-2"
                       onClick={() => {
-                        setBbddCancelacion("Pedidos_Pendientes")
+                        setBbddCancelacion("Pedidos_Pendientes");
                         modalCancelarPedido(pedido._id, "Pedidos_Pendientes");
                       }}
                     >
@@ -448,6 +480,8 @@ function PedidosPerfil() {
             </div>
           </div>
         )}
+
+        {/* Si el usuario tiene pedido Cancelados */}
         {dataCancelados.getPedidosCanceladosUser.length != 0 && (
           <div className="flex flex-col bg-slate-200 p-20 mb-5">
             <div>
@@ -507,6 +541,8 @@ function PedidosPerfil() {
             </div>
           </div>
         )}
+
+        {/* Si el usuario tiene pedido Recogidos */}
         {dataRecogidos.getPedidosRecogidos.length != 0 && (
           <div className="flex flex-col bg-slate-200 p-20 mb-5">
             <div>

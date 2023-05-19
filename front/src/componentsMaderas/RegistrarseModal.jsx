@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import Swal from "sweetalert2";
 
+// Estilo customizado para componente <Modal />
 const customStyles = {
   content: {
     position: "absolute",
@@ -51,6 +52,9 @@ const ADD_PRODUCTO_CARRITO = gql`
   }
 `;
 
+//
+// * Componente modal RegistrarseModal.
+//
 function RegistrarseModal(props) {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -68,8 +72,15 @@ function RegistrarseModal(props) {
   const [passView, setPassView] = useState(false);
   const [repPassView, setRepPassView] = useState(false);
 
+  // Varables del contexto usadas
   const { changeReload, changeViewSession, changeViewProductos } = useContext(Context);
 
+  //
+  // * Mutation que registra al usuario en la bbdd y le concede
+  // * un token para que se inicie su sesión.
+  // * Llama a la función addToCarrito() si el usuario se está
+  // * registrando tras añadir un producto al carrito.
+  //
   const [register] = useMutation(REGISTRAR_USER, {
     onCompleted: (data) => {
       if (props.productIdSelect && props.productCantidadSelect) {
@@ -90,8 +101,15 @@ function RegistrarseModal(props) {
     },
   });
 
+  //
+  // * Mutation para añadir un producto al carrito del nuevo usuario.
+  //
   const [addProductoCarrito] = useMutation(ADD_PRODUCTO_CARRITO);
 
+  //
+  // * función que llama a la mutation addProductoCarrito para añadir
+  // * un producto al carrito del nuevo usuario.
+  //
   function addToCarrito(token) {
     addProductoCarrito({
       context: {
@@ -113,6 +131,10 @@ function RegistrarseModal(props) {
     });
   }
 
+  //
+  // * Función que comprueba los datos de registro
+  // * introducidos por el usuario.
+  //
   function comprobarUser() {
     if (nombre == "") {
       setNoHayNombre(true);
@@ -173,6 +195,9 @@ function RegistrarseModal(props) {
     }
   }
 
+  //
+  // * Función que muestra la confirmación del registro.
+  //
   function mostrarConfirmación() {
     Swal.fire({
       position: "center",
@@ -185,6 +210,7 @@ function RegistrarseModal(props) {
 
   return (
     <div>
+      {/* Modal utilizado para registrarse */}
       <Modal
         isOpen={props.modalIsOpenRegistro}
         onRequestClose={props.closeModalRegistro}
