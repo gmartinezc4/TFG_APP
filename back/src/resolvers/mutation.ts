@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
 import correoRegistroAdmin from '/home/guillermo/App_TFG/back/data/htmlCorreos'
 
-function calcularFechaEntrega() {
+export function calcularFechaEntrega() {
     const fecha = new Date();
 
     if ((fecha.getMonth() + 1) == 1 || (fecha.getMonth() + 1) == 3 || (fecha.getMonth() + 1) == 5 ||
