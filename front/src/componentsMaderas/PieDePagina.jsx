@@ -28,7 +28,7 @@ function PieDePagina() {
   } = useContext(Context);
 
   return (
-    <div className="max-w-full h-32 bg-green-500 text-white">
+    <div className="max-w-full h-32 bg-gray-900 text-white">
       <div className="flex flex-row justify-evenly">
         {/* Columna izquierda */}
         <div className="flex flex-col">

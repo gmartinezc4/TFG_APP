@@ -57,7 +57,7 @@ function ProductosVenta() {
     );
 
   return (
-    <div className="mb-96">
+    <div className="mb-20">
       {/* Si no se ha seleccionado ningun producto, mostrar todos los productos recogidos de la bbdd */}
       <div className="grid grid-cols-3 gap-1 mt-10">
         {!viewProductSelect &&

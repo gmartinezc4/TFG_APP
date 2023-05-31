@@ -288,13 +288,13 @@ function Perfil() {
     <div>
       <div className="flex justify-center">
         <div className="flex flex-col mt-10">
-          <h1 className="font-bold text-4xl mb-3">Tus datos</h1>
+          <h1 className="font-bold text-4xl mb-3 text-white">Tus datos</h1>
           <span className="mb-5">
             Aquí puedes revisar y actualizar tus datos de usuario y gestionar tu email y
             contraseña
           </span>
 
-          <div className="grid grid-rows-1 grid-flow-col">
+          <div className="grid grid-rows-1 grid-flow-col text-white">
             {/* Columna izquierda, datos */}
             <div>
               <div className="mt-10 flex flex-row">
@@ -302,11 +302,11 @@ function Perfil() {
                 <div className="grid grid-cols-3 gap-32">
                   <p className="flex flex-col">
                     <span className="font-bold mb-1">Nombre</span>
-                    <span className="font-light">{dataGetUser.getUser.nombre}</span>
+                    <span className="text-black">{dataGetUser.getUser.nombre}</span>
                   </p>
                   <p className="flex flex-col">
                     <span className="font-bold mb-1">Apellido</span>
-                    <span className="font-light">{dataGetUser.getUser.apellido}</span>
+                    <span className="text-black">{dataGetUser.getUser.apellido}</span>
                   </p>
                 </div>
               </div>
@@ -318,7 +318,7 @@ function Perfil() {
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
                     <span className="font-bold mb-1">Email</span>
-                    <span className="font-light">{dataGetUser.getUser.correo}</span>
+                    <span className="text-black">{dataGetUser.getUser.correo}</span>
                   </p>
                 </div>
               </div>
@@ -330,7 +330,7 @@ function Perfil() {
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
                     <span className="font-bold mb-1">Contraseña</span>
-                    <span className="font-light">*************</span>
+                    <span className="text-black">*************</span>
                   </p>
                 </div>
               </div>
@@ -339,7 +339,7 @@ function Perfil() {
             {/* Columna derecha, botones */}
             <div>
               <button
-                className="border border-black h-14 w-40 hover:bg-slate-500 hover:text-white -ml-20 mt-9"
+                className="border border-black h-14 w-40 hover:bg-black -ml-20 mt-9"
                 onClick={() => openModalNombreApellido()}
               >
                 <div className="flex flex-row justify-center font-semibold">
@@ -351,7 +351,7 @@ function Perfil() {
               <div className="border border-gray-200  mt-10 -ml-96"></div>
 
               <button
-                className="border border-black h-14 w-40 hover:bg-slate-500 hover:text-white -ml-20 mt-9"
+                className="border border-black h-14 w-40 hover:bg-black -ml-20 mt-9"
                 onClick={() => openModalCorreo()}
               >
                 <div className="flex flex-row justify-center font-semibold">
@@ -362,7 +362,7 @@ function Perfil() {
               <div className="border border-gray-200  mt-10 -ml-96"></div>
 
               <button
-                className="border border-black h-14 w-40 hover:bg-slate-500 hover:text-white -ml-20 mt-9"
+                className="border border-black h-14 w-40 hover:bg-black -ml-20 mt-9"
                 onClick={() => openModalPassword()}
               >
                 <div className="flex flex-row justify-center font-semibold">
@@ -375,7 +375,7 @@ function Perfil() {
       </div>
 
       {/* Boton darse de baja */}
-      <div className="flex justify-center mt-32 mb-52">
+      <div className="flex justify-center mt-32 mb-12">
         <button
           className="rounded border-2 border-red-800 bg-red-600 p-5 font-bold hover:bg-red-800 hover:border-red-400"
           onClick={() => {

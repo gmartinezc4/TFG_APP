@@ -1,11 +1,8 @@
 import { expect } from "chai";
 import { ApolloError, ApolloServer, gql } from "apollo-server";
-import { connectDB } from "../src/connectmongo"
-import { typeDefs } from "../src/schema"
 import { Db, MongoClient, Collection, ObjectId } from "mongodb";
 import { describe, it } from 'mocha';
-import sinon, { SinonStub } from "sinon";
-import { Query } from '../src/resolvers/query'
+
 
 describe("Query - getMaderas", () => {
     let server: ApolloServer;
@@ -65,7 +62,6 @@ describe("Query - getMaderas", () => {
     });
   
     after(async () => {
-      await db.dropDatabase();
       await server.stop();
     });
   
@@ -173,7 +169,6 @@ describe("Query - getMaderas", () => {
     });
   
     after(async () => {
-      await db.dropDatabase();
       await server.stop();
     });
   
@@ -217,3 +212,4 @@ describe("Query - getMaderas", () => {
       expect(response.errors?.[0].extensions?.code).to.equal("403");
     });
   });
+  

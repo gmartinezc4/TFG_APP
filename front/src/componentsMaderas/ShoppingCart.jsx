@@ -4,6 +4,8 @@ import { Context } from "../context/Context";
 import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
 import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
+import styled from "styled-components";
+
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
   query GetProductosCarritoUser {
@@ -153,14 +155,14 @@ function ShoppingCart() {
         {/* si no hay productos */}
         {dataGetProductos?.getProductosCarritoUser.length == 0 && (
           <div className="flex justify-center mb-96">
-            <div className="flex flex-col mt-3 mb-7 bg-slate-200 p-5 container">
-              <div className="bg-white">
+            <FondoGrand className="flex flex-col mt-3 mb-7  p-5 container">
+              <FondoPeque>
                 <span className="flex justify-center p-5">
                   <FaShopify className="w-32 h-32 mb-5" />
                 </span>
                 <span className="flex justify-center text-3xl">Tu cesta está vacia</span>
                 <div className="flex justify-center p-5">
-                  <button
+                  <Button
                     className="w-64 bg-orange-600 text-white p-2 mt-8 hover:bg-orange-500"
                     onClick={() => {
                       changeViewProductos(true),
@@ -173,10 +175,10 @@ function ShoppingCart() {
                     }}
                   >
                     Volver a la tienda
-                  </button>
+                  </Button>
                 </div>
-              </div>
-            </div>
+              </FondoPeque>
+            </FondoGrand>
           </div>
         )}
 
@@ -290,3 +292,20 @@ function ShoppingCart() {
 }
 
 export default ShoppingCart;
+
+
+const FondoPeque = styled.div`
+  background-color: #fef1c7;
+`
+
+const FondoGrand = styled.div`
+  background-color: #f5be0b;
+`
+
+const Button = styled.div`
+  background: #f5be0b;
+  
+  display: flex;
+  justify-items: center;
+  align-items: center;
+`
