@@ -19,10 +19,10 @@ import ForgotPassword from "./ForgotPassword";
 import ForgotPassword2 from "./ForgotPassword2";
 import PaginasErrores from "./PaginasErrores";
 
-// 
+//
 // * Componente contenedor de todos los demás componentes.
 // * Dede aqui se renderiazan los demás componentes de la web.
-// 
+//
 function ContenedorMaderas() {
   const client = new ApolloClient({
     uri: "http://localhost:4000/",
@@ -79,7 +79,7 @@ function ContenedorMaderas() {
       {!viewError && (
         <div>
           {/* Cabecera con logo y botones */}
-          <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')] bg-no-repeat bg-cover h-56">
+          <div className="bg-gray-900 bg-no-repeat bg-cover h-56">
             <div className="flex justify-between text-white font-bold border-b-2 border-white p-5">
               <button
                 onClick={() => {
