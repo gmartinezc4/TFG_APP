@@ -89,7 +89,7 @@ function CorreoConfirmacionPedido() {
   let importeFreeIva_string =
     data.getPedidosActivosUser[index].importeFreeIvaPedido.toString();
 
-     //
+  //
   // * Función que enviar el correo y muestra la confirmación.
   //
   function mostrarModal() {

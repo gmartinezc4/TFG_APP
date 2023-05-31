@@ -109,14 +109,14 @@ function Producto(props) {
     },
   });
 
-  if (loadingProd || loadingProductosCarrito)
+  if (loadingProd)
     return (
       <div>
         <Cargando />
       </div>
     );
-  if (errorProd || errorProductosCarrito)
-    return console.log(errorProd + " " + errorProductosCarrito);
+  if (errorProd)
+    return console.log(errorProd);
 
   if (dataProductosCarrito) {
     cantidadProdCarrito = dataProductosCarrito.getProductoCarritoUser.cantidad;
