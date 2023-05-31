@@ -573,15 +573,31 @@ export const Mutation = {
                     throw new ApolloError("ID invalido");
                 } else {
                     let pedidoUserCambiado: any;
+                    let stockProductoBorrado: any;
                     const fecha = new Date();
                     const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear())
 
                     const pedidoUser = await db.collection(bbdd).findOne({ _id: new ObjectId(id_pedido) });
 
                     if (pedidoUser) {
+                        
+                        pedidoUser.Productos.map(async(e: any) => {
+                            stockProductoBorrado = e.Cantidad;
+                            const producto = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(e.Id_producto) });
+
+                            if(producto){
+                            console.log(stockProductoBorrado)
+                                const nuevoStock = parseInt(producto.stock) + parseInt(stockProductoBorrado);
+                                await db.collection("Productos_Venta").findOneAndUpdate({ _id: new ObjectId(e.Id_producto) }, { $set: {stock: nuevoStock.toString() }})                                
+                            }else{
+                                throw new ApolloError("Ha ocurrido un error al recuperar los productos del pedido");
+                            }
+                        })
+
                         pedidoUserCambiado = pedidoUser;
                         await db.collection("Pedidos_Cancelados").insertOne({ Id_user: pedidoUser.Id_user.toString(), Estado: "Cancelado", Nombre: pedidoUser.Nombre, Apellido: pedidoUser.Apellido, Email: pedidoUser.Email, Telefono: pedidoUser.Telefono, Direccion: pedidoUser.Direccion, MasInformacion: pedidoUser.MasInformacion, CodigoPostal: pedidoUser.CodigoPostal, Ciudad: pedidoUser.Ciudad, Pais: pedidoUser.Pais, FechaPedido: pedidoUser.FechaPedido, FechaRecogida: fechaHoy, ImportePedido: pedidoUser.ImportePedido, ImporteFreeIvaPedido: pedidoUser.ImporteFreeIvaPedido, Productos: pedidoUser.Productos });
                         await db.collection(bbdd).findOneAndDelete({ _id: new ObjectId(id_pedido) });
+
                     } else {
                         throw new ApolloError("Ha ocurrido un error al recuperar el pedido");
                     }

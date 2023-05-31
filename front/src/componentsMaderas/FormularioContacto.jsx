@@ -42,7 +42,7 @@ function FormularioContacto(props) {
     <div className="flex justify-center">
       {/* form que utiliza EmailJs para recoger los datos y enviarlos en el correo */}
       <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Name</label>
+        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Nombre</label>
         <input
           type="text"
           name="user_name"
@@ -50,7 +50,7 @@ function FormularioContacto(props) {
           onChange={(e) => setNombre(e.target.value)}
           className="shadow appearance-none border rounded p-2 mb-10"
         />
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Email</label>
+        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Correo</label>
         <input
           type="email"
           name="user_email"

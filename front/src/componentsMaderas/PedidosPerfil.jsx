@@ -182,7 +182,7 @@ function PedidosPerfil() {
 
   //
   // * Mutation para cancelar un pedido del usuario.
-  // * Solo se puede con pedidos Activos o Pendientes.
+  // * Solo se puede sin pedidos Activos o Pendientes.
   //
   const [cancelarPedido] = useMutation(CANCELAR_PEDIDO, {
     onCompleted: () => {
