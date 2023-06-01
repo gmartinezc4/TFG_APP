@@ -1,6 +1,9 @@
 import React from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
+// 
+// * Componente para mostrar el icono de cargando.
+// 
 function Cargando() {
   return (
     <div className="flex justify-center">

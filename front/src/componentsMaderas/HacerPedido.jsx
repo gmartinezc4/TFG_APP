@@ -3,6 +3,8 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
+import styled from "styled-components";
+
 
 const VENDER_PRODUCTOS = gql`
   mutation Mutation(
@@ -45,8 +47,15 @@ const VENDER_PRODUCTOS = gql`
     }
   }
 `;
-
+// 
+// * Componente HaceraPedido. Pagína donde se introducen los
+// * datos de facturación, se confirma el pedido y permite 
+// * que se envie el correo de confirmación.
+//
+// * Props: productos
+// 
 function HacerPedido(props) {
+  // Varables del contexto usadas
   const {
     changeReload,
     changeViewMaderas,
@@ -57,7 +66,6 @@ function HacerPedido(props) {
     changeViewProductos,
     changeViewPedidosPerfil,
     changeViewHacerPedido,
-    openModalConfirmacionCorreo,
     changeEnviarCorreoConfirmacion,
   } = useContext(Context);
 
@@ -73,8 +81,10 @@ function HacerPedido(props) {
 
   let importe = 0;
   let importeFreeIva = 0;
-  const fechaRecogida = new Date();
 
+  //
+  // * Mutation para realizar el pedido del usuario.
+  //
   const [confirmarPedido] = useMutation(VENDER_PRODUCTOS, {
     onCompleted: () => {
       console.log("despues de mutation");
@@ -86,17 +96,18 @@ function HacerPedido(props) {
         changeViewContacto(false);
       changeViewPedidosPerfil(false);
       changeViewHacerPedido(false);
-      
-      openModalConfirmacionCorreo();
+
       changeEnviarCorreoConfirmacion(true);
-      
       changeReload();
     },
     onError: (error) => {
       console.log(error.toString());
     },
   });
-  
+
+  //
+  // * Función que realiza la mutation confirmarPedido
+  //
   function tramitarDatos() {
     console.log("antes de mutation vender productos");
     confirmarPedido({
@@ -122,11 +133,11 @@ function HacerPedido(props) {
   return (
     <div>
       <div className="flex justify-center ">
-        <div className="grid grid-cols-2 gap-20 mt-3 mb-10 bg-slate-100 p-5">
-          {/* columna izquierda */}
+        <FondoGrande className="grid grid-cols-2 gap-20 mt-3 mb-10 p-5">
           <div>
+            {/* Columna izquierda */}
             {props.productos.map((p) => (
-              <div key={p._id} className="grid grid-cols-3 p-4 mx-auto bg-white ">
+              <FondoPeque key={p._id} className="grid grid-cols-3 p-4 mx-auto">
                 <div className="bg-no-repeat bg-contain ">
                   <img className="h-30 w-40 border rounded mb-5 " src={p.img}></img>
                 </div>
@@ -146,9 +157,10 @@ function HacerPedido(props) {
                   {(importe = importe + parseFloat(p.precioTotal))}
                   {(importeFreeIva = importeFreeIva + parseFloat(p.precioTotal_freeIVA))}
                 </div>
-              </div>
+              </FondoPeque>
             ))}
-            <div className="bg-white mt-5 p-5">
+
+            <FondoPeque className="mt-5 p-5">
               <h1 className="font-bold text-2xl mb-7">Total</h1>
               <p className="flex justify-between mb-5">
                 <span>Subtotal</span>
@@ -159,30 +171,32 @@ function HacerPedido(props) {
                 <span>Total (IVA incluido)</span>
                 <span>{importe.toString().substr(0, 5)}€</span>
               </p>
-            </div>
+            </FondoPeque>
           </div>
 
+          {/* Columna derecha */}
           <div>
-            <div className="flex flex-col bg-white h-48 p-5 ">
+            <FondoPeque className="flex flex-col h-48 p-5 ">
               <span className="font-bold text-xl mb-7">Fecha de recogida prevista</span>
               <span>
                 Aproximadamente cuatro días laborables.
                 <br></br> <br></br>
                 Después dispone de 7 días habiles para recoger el pedido
               </span>
-            </div>
+            </FondoPeque>
 
-            <div className="flex flex-col bg-white mt-5 p-5">
+            <FondoPeque className="flex flex-col mt-5 p-5">
               <div className="flex flex-row">
                 <FaCcVisa className="w-9 h-9 mr-3" />
                 <FaCcMastercard className="w-9 h-9 ml-3 mr-3" />
                 <BsCashStack className="w-9 h-9 ml-3" />
               </div>
-            </div>
+            </FondoPeque>
           </div>
-        </div>
+        </FondoGrande>
       </div>
 
+      {/* Formulario datos porsonales y dirección de facturación */}
       <div className="flex justify-center">
         <form
           className="grid grid-cols-3 gap-20  mt-3 mb-20 bg-slate-100 p-5 items-start"
@@ -191,6 +205,7 @@ function HacerPedido(props) {
             tramitarDatos();
           }}
         >
+          {/* Columna izquierda */}
           <div className="flex justify-center flex-col">
             <h1 className="text-2xl mb-5 font-bold">Datos personales</h1>
 
@@ -237,6 +252,7 @@ function HacerPedido(props) {
             ></input>
           </div>
 
+          {/* Columna derecha */}
           <div className="flex justify-center flex-col">
             <h1 className="text-2xl mb-5 font-bold">Dirección de facturación</h1>
             <label>Calle*</label>
@@ -289,7 +305,7 @@ function HacerPedido(props) {
             ></input>
           </div>
           <button
-            className="w-64 bg-orange-600 text-white p-2  hover:bg-orange-500 mt-16"
+            className="w-64 bg-yellow-500 text-white p-2  hover:bg-yellow-400 mt-16"
             type="submit"
           >
             Confirmar pedido
@@ -301,3 +317,11 @@ function HacerPedido(props) {
 }
 
 export default HacerPedido;
+
+const FondoGrande = styled.div`
+  background-color: #E0E2E5;
+`
+
+const FondoPeque = styled.div`
+  background-color: #f5f5f4;
+`

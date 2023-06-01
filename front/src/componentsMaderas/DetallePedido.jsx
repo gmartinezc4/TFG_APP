@@ -1,16 +1,24 @@
 import React, { useContext } from "react";
 import { Context } from "../context/Context";
+import styled from "styled-components";
 
+
+//
+// * Componente DetallePedido. Página donde el usuario puede ver uno de sus pedidos
+// * con mas detalle.
+//
+// * props: pedido
+//
 function DetallePedido(props) {
-    const { changeViewDetallePedido, changeViewPedidosPerfil } =
-    useContext(Context);
+  // Varables del contexto usadas
+  const { changeViewDetallePedido, changeViewPedidosPerfil } = useContext(Context);
 
   return (
-    <div className="flex justify-center mt-10">
-      <div className="flex flex-col">
+    <div className="flex justify-center mt-10 mb-32">
+      <Fondo className="flex flex-col p-5">
         <h1 className="text-2xl font-bold">Numero de pedido: {props.pedido._id}</h1>
         <div className="flex flex-col font-bold mt-5">
-          Fecha del pedido{" "}
+          Fecha del pedido
           <span className="font-extralight">{props.pedido.fechaPedido}</span>
         </div>
 
@@ -82,19 +90,33 @@ function DetallePedido(props) {
           </div>
         </div>
 
-        <div className="flex justify-start mb-32">
-          <button
-            className="border border-black p-2 bg-black text-white hover:bg-slate-700"
+        <div className="flex justify-start">
+          <ButtonVolver
+            className="p-2 bg-black text-white hover:bg-slate-700"
             onClick={() => {
               changeViewDetallePedido(false), changeViewPedidosPerfil(true);
             }}
           >
             Volver
-          </button>
+          </ButtonVolver>
         </div>
-      </div>
+      </Fondo>
     </div>
   );
 }
 
 export default DetallePedido;
+
+const Fondo = styled.div`
+  background-color: #e0e2e5;
+`;
+
+const ButtonVolver = styled.div`
+  text-aling: center;
+  cursor: pointer;
+  width: 63px;
+  &:hover {
+    background-color: #f5be0b;
+    color: black;
+  }
+`

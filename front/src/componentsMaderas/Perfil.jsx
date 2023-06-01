@@ -7,6 +7,7 @@ import { BsPencil } from "react-icons/bs";
 import { RiLockPasswordLine } from "react-icons/ri";
 import ModalesPerfil from "./ModalesPerfil";
 import Swal from "sweetalert2";
+import Cargando from "./Cargando";
 
 const GET_USER = gql`
   query Query {
@@ -98,15 +99,31 @@ const BORRAR_USER = gql`
     }
   }
 `;
-
+//
+// * Componente Perfi. Página del perfil del usuario.
+// * El usuario puede modificar sus datos y darse de baja
+// * si no tiene pedidos Activos o Pendientes.
+// * Renderiza el componente <ModalesPerfil />
+//
 function Perfil() {
-  const { changeErrorTrue, changeCodigoError, changeMensajeError, changeReload, changeViewInicio, changeViewPerfil } =
-    useContext(Context);
+  // Varables del contexto usadas
+  const {
+    changeErrorTrue,
+    changeCodigoError,
+    changeMensajeError,
+    changeReload,
+    changeViewInicio,
+    changeViewPerfil,
+  } = useContext(Context);
 
   const [modalIsOpenNombreApellido, setIsOpenNombreApellido] = useState(false);
   const [modalIsOpenCorreo, setIsOpenCorreo] = useState(false);
   const [modalIsOpenPassword, setIsOpenPassword] = useState(false);
 
+  //
+  // * Funciones encargadas de abrir y cerrar los
+  // * modales de inicio de sesión y registro.
+  //
   function openModalNombreApellido() {
     setIsOpenNombreApellido(true);
   }
@@ -127,11 +144,19 @@ function Perfil() {
     setIsOpenPassword(true);
   }
 
+  function closeModalPassword() {
+    setIsOpenPassword(false);
+  }
+
+  //
+  // * Mutation para borrar la cuenta del usuario.
+  // * Solo se puede sin pedidos Activos o Pendientes.
+  //
   const [borrarUser] = useMutation(BORRAR_USER, {
     onCompleted: () => {
       console.log("Se ha borrado su usuario");
       localStorage.removeItem("token");
-     
+
       changeViewPerfil(false);
       changeViewInicio(true);
       changeReload();
@@ -158,10 +183,9 @@ function Perfil() {
     },
   });
 
-  function closeModalPassword() {
-    setIsOpenPassword(false);
-  }
-
+  //
+  // * Query para traer los datos del usuario.
+  //
   const {
     data: dataGetUser,
     loading: loadingGetUser,
@@ -174,6 +198,9 @@ function Perfil() {
     },
   });
 
+  //
+  // * Query para traer los pedidos Activos del usuario.
+  //
   const {
     data: dataGetPedidosActivos,
     loading: loadingGetPedidosActivos,
@@ -186,6 +213,9 @@ function Perfil() {
     },
   });
 
+  //
+  // * Query para traer los pedidos Pendientes del usuario.
+  //
   const {
     data: dataGetPedidosPendientes,
     loading: loadingGetPedidosPendientes,
@@ -198,8 +228,13 @@ function Perfil() {
     },
   });
 
-  if (loadingGetUser) return <div></div>;
-  if (errorGetUser)
+  if (loadingGetUser || loadingGetPedidosActivos || loadingGetPedidosPendientes)
+    return (
+      <div className="mb-96">
+        <Cargando />
+      </div>
+    );
+  if (errorGetUser || errorGetPedidosActivos || errorGetPedidosPendientes)
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
@@ -207,25 +242,13 @@ function Perfil() {
       </div>
     );
 
-  if (loadingGetPedidosActivos) return <div></div>;
-  if (errorGetPedidosActivos)
-    return (
-      <div>
-        {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
-      </div>
-    );
-
-  if (loadingGetPedidosPendientes) return <div></div>;
-  if (errorGetPedidosPendientes)
-    return (
-      <div>
-        {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
-      </div>
-    );
-
-    function modalDarBajaUser() {
+  //
+  // * Función que muestra la confirmación de elimnar el perfil.
+  // * Caompreueba que el usuario no tenga pedidos Activos o pendientes
+  // * y si es así realiza la mutation borrarUser.
+  //
+  //
+  function modalDarBajaUser() {
     Swal.fire({
       icon: "warning",
       title: "¿Quieres borrar tu perfil?",
@@ -233,10 +256,9 @@ function Perfil() {
       showCancelButton: true,
       confirmButtonText: "Si, borrar",
       confirmButtonColor: "#DF0000",
-      cancelButtonText: "Cancelar"
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        
         if (
           dataGetPedidosActivos.getPedidosActivosUser.length == 0 &&
           dataGetPedidosPendientes.getPedidosPendientesUser.length == 0
@@ -255,7 +277,7 @@ function Perfil() {
             title: "No se puede borrar el perfil",
             text: "Tienes pedidos Activos o Pendientes de recoger",
             confirmButtonText: "Aceptar",
-            confirmButtonColor: "#3BD630"
+            confirmButtonColor: "#3BD630",
           });
         }
       }
@@ -266,24 +288,25 @@ function Perfil() {
     <div>
       <div className="flex justify-center">
         <div className="flex flex-col mt-10">
-          <h1 className="font-bold text-4xl mb-3">Tus datos</h1>
-          <span className="mb-5">
+          <h1 className="font-PTserif font-bold text-4xl mb-3 text-white">Tus datos</h1>
+          <span className="mb-5 font-gentium">
             Aquí puedes revisar y actualizar tus datos de usuario y gestionar tu email y
             contraseña
           </span>
 
-          <div className="grid grid-rows-1 grid-flow-col">
+          <div className="grid grid-rows-1 grid-flow-col text-white">
+            {/* Columna izquierda, datos */}
             <div>
               <div className="mt-10 flex flex-row">
                 <CgProfile className="w-10 h-10 mr-16 " />
                 <div className="grid grid-cols-3 gap-32">
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Nombre</span>
-                    <span className="font-light">{dataGetUser.getUser.nombre}</span>
+                    <span className="font-bold mb-1 font-PTserif">Nombre</span>
+                    <span className="text-black">{dataGetUser.getUser.nombre}</span>
                   </p>
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Apellido</span>
-                    <span className="font-light">{dataGetUser.getUser.apellido}</span>
+                    <span className="font-bold mb-1 font-PTserif">Apellido</span>
+                    <span className="text-black">{dataGetUser.getUser.apellido}</span>
                   </p>
                 </div>
               </div>
@@ -294,8 +317,8 @@ function Perfil() {
                 <TfiEmail className="w-10 h-10 mr-16" />
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Email</span>
-                    <span className="font-light">{dataGetUser.getUser.correo}</span>
+                    <span className="font-bold mb-1 font-PTserif">Email</span>
+                    <span className="text-black">{dataGetUser.getUser.correo}</span>
                   </p>
                 </div>
               </div>
@@ -306,16 +329,17 @@ function Perfil() {
                 <RiLockPasswordLine className="w-10 h-10 mr-16" />
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Contraseña</span>
-                    <span className="font-light">*************</span>
+                    <span className="font-bold mb-1 font-PTserif">Contraseña</span>
+                    <span className="text-black">*************</span>
                   </p>
                 </div>
               </div>
             </div>
 
+            {/* Columna derecha, botones */}
             <div>
               <button
-                className="border border-black h-14 w-40 hover:bg-slate-500 hover:text-white -ml-20 mt-9"
+                className="border border-black h-14 w-40 hover:bg-black -ml-20 mt-9"
                 onClick={() => openModalNombreApellido()}
               >
                 <div className="flex flex-row justify-center font-semibold">
@@ -327,7 +351,7 @@ function Perfil() {
               <div className="border border-gray-200  mt-10 -ml-96"></div>
 
               <button
-                className="border border-black h-14 w-40 hover:bg-slate-500 hover:text-white -ml-20 mt-9"
+                className="border border-black h-14 w-40 hover:bg-black -ml-20 mt-9"
                 onClick={() => openModalCorreo()}
               >
                 <div className="flex flex-row justify-center font-semibold">
@@ -338,7 +362,7 @@ function Perfil() {
               <div className="border border-gray-200  mt-10 -ml-96"></div>
 
               <button
-                className="border border-black h-14 w-40 hover:bg-slate-500 hover:text-white -ml-20 mt-9"
+                className="border border-black h-14 w-40 hover:bg-black -ml-20 mt-9"
                 onClick={() => openModalPassword()}
               >
                 <div className="flex flex-row justify-center font-semibold">
@@ -350,9 +374,10 @@ function Perfil() {
         </div>
       </div>
 
-      <div className="flex justify-center mt-32 mb-52">
+      {/* Boton darse de baja */}
+      <div className="flex justify-center mt-32 mb-12">
         <button
-          className="rounded border-2 border-red-800 bg-red-600 p-5 font-bold hover:bg-red-800 hover:border-red-400"
+          className="rounded border-2 border-red-800 bg-red-600 p-5 font-bold hover:bg-red-700"
           onClick={() => {
             modalDarBajaUser(dataGetUser.getUser._id);
           }}
@@ -361,6 +386,7 @@ function Perfil() {
         </button>
       </div>
 
+      {/* Si se cumple la condición renderiza el componente <ModalesPerfil /> */}
       {modalIsOpenNombreApellido && (
         <ModalesPerfil
           closeModalNombreApellido={closeModalNombreApellido}
@@ -368,6 +394,7 @@ function Perfil() {
         />
       )}
 
+      {/* Si se cumple la condición renderiza el componente <ModalesPerfil /> */}
       {modalIsOpenCorreo && (
         <ModalesPerfil
           closeModalCorreo={closeModalCorreo}
@@ -375,6 +402,7 @@ function Perfil() {
         />
       )}
 
+      {/* Si se cumple la condición renderiza el componente <ModalesPerfil /> */}
       {modalIsOpenPassword && (
         <ModalesPerfil
           closeModalPassword={closeModalPassword}

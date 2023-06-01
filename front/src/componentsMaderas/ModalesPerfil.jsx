@@ -5,7 +5,6 @@ import { gql, useMutation } from "@apollo/client";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import Swal from "sweetalert2";
 
-
 const customStyles = {
   content: {
     position: "absolute",
@@ -47,7 +46,18 @@ const MODIFICAR_USER = gql`
   }
 `;
 
+//
+// * Componente ModalesPerfil. Modales para utilizados para
+// * cambiar los datos del usuario en el perfil.
+//
+// * props: closeModalNombreApellido, modalIsOpenNombreApellido
+//          closeModalCorreo, modalIsOpenCorreo
+//          closeModalPassword, modalIsOpenPassword
+//
 function ModalesPerfil(props) {
+  // Varable del contexto usada
+  const { changeReload } = useContext(Context);
+
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [noHayNombre, setNoHayNombre] = useState(false);
@@ -78,8 +88,10 @@ function ModalesPerfil(props) {
   const [passViewNew, setPassViewNew] = useState(false);
   const [passViewNewRep, setPassViewNewRep] = useState(false);
 
-  const { changeReload } = useContext(Context);
-
+  //
+  // * Mutation para modificar el usuario.
+  // * Solo se puede con pedidos Activos o Pendientes.
+  //
   const [modificarUser] = useMutation(MODIFICAR_USER, {
     onCompleted: () => {
       setErrorPasswordIcorrecta(true);
@@ -90,7 +102,7 @@ function ModalesPerfil(props) {
       if (props.modalIsOpenPassword) props.closeModalPassword();
 
       changeReload();
-      mostrarConfirmación() 
+      mostrarConfirmación();
     },
     onError: (error) => {
       console.log(error.toString());
@@ -104,6 +116,10 @@ function ModalesPerfil(props) {
     },
   });
 
+  //
+  // * Función para modificar el nombre, apellido o ambos del usuario.
+  // * Realiza la mutation modicarUser.
+  //
   function comprobarUserNombreApellido() {
     if (nombre == "" && apellido == "") {
       setNoHayNombre(true);
@@ -129,7 +145,10 @@ function ModalesPerfil(props) {
     }
   }
 
-  //falta el caso de cuando el correo existe y el de cuando la contraseña no es correcta
+  //
+  // * Función para modificar el correo del usuario.
+  // * Realiza la mutation modicarUser.
+  //
   function comprobarUserCorreo() {
     if (correo == "") {
       setNoHayCorreo(true);
@@ -196,6 +215,10 @@ function ModalesPerfil(props) {
     }
   }
 
+  //
+  // * Función para modificar la contraseña del usuario.
+  // * Realiza la mutation modicarUser.
+  //
   function comprobarUserPassword() {
     if (password == "") {
       setNoHayPassword(true);
@@ -270,14 +293,17 @@ function ModalesPerfil(props) {
     }
   }
 
+  //
+  // * Función que muestra un modal de confirmación.
+  //
   function mostrarConfirmación() {
     Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Cambios guardados con éxito',
+      position: "center",
+      icon: "success",
+      title: "Cambios guardados con éxito",
       showConfirmButton: false,
-      timer: 1500
-    })
+      timer: 1500,
+    });
   }
 
   return (
@@ -310,10 +336,14 @@ function ModalesPerfil(props) {
             name="nombre"
           ></input>
           {noHayNombre && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca el nuevo nombre</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca el nuevo nombre
+            </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">apellido</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
+            apellido
+          </label>
           <input
             className={
               noHayApellido
@@ -376,10 +406,14 @@ function ModalesPerfil(props) {
             comprobarUserCorreo();
           }}
         >
-          <label className="block text-gray-700 text-sm font-bold mb-2">Nuevo Correo</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Nuevo Correo
+          </label>
           <input
             className={
-              noHayCorreo || (noCoincidenCorreos && correoRep != "") || errorCorreoExistente
+              noHayCorreo ||
+              (noCoincidenCorreos && correoRep != "") ||
+              errorCorreoExistente
                 ? "shadow appearance-none border rounded p-2 border-red-500"
                 : "shadow appearance-none border rounded p-2"
             }
@@ -401,7 +435,9 @@ function ModalesPerfil(props) {
             }}
           ></input>
           {noHayCorreo && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca el nuevo email</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca el nuevo email
+            </p>
           )}
 
           {invalidCorreo && (
@@ -422,7 +458,9 @@ function ModalesPerfil(props) {
             placeholder="Correo electrónico..."
             value={correoRep}
             onChange={(e) => {
-              setCorreoRep(e.target.value), setNoCoincidenCorreos(false), setNoHayCorreoRep(false);
+              setCorreoRep(e.target.value),
+                setNoCoincidenCorreos(false),
+                setNoHayCorreoRep(false);
             }}
             type="text"
             name="correoRep"
@@ -433,7 +471,9 @@ function ModalesPerfil(props) {
             </p>
           )}
 
-          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">Contraseña</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
+            Contraseña
+          </label>
           <div className="flex flex-row items-center">
             <input
               className={
@@ -464,7 +504,9 @@ function ModalesPerfil(props) {
           </div>
 
           {noHayPassword && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca una contraseña
+            </p>
           )}
 
           <div className="flex justify-between items-center mt-5">
@@ -510,7 +552,9 @@ function ModalesPerfil(props) {
             comprobarUserPassword();
           }}
         >
-          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">Contraseña</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
+            Contraseña
+          </label>
           <div className="flex flex-row items-center">
             <input
               className={
@@ -542,7 +586,9 @@ function ModalesPerfil(props) {
           </div>
 
           {noHayPassword && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca una contraseña
+            </p>
           )}
 
           <label className="block text-gray-700 text-sm font-bold mb-2 mt-5">
@@ -551,7 +597,9 @@ function ModalesPerfil(props) {
           <div className="flex flex-row items-center">
             <input
               className={
-                noHayNewPassword || errorNoCoincidenPasswords || errorOldNewPasswordsEquals
+                noHayNewPassword ||
+                errorNoCoincidenPasswords ||
+                errorOldNewPasswordsEquals
                   ? "shadow appearance-none border rounded p-2 border-red-500"
                   : "shadow appearance-none border rounded p-2"
               }
@@ -586,12 +634,15 @@ function ModalesPerfil(props) {
           </div>
 
           {noHayNewPassword && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca una contraseña
+            </p>
           )}
 
           {invalidNewPassword && (
             <p className="text-red-500 text-xs italic mt-3">
-              Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un número
+              Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un
+              número
             </p>
           )}
 
@@ -628,7 +679,9 @@ function ModalesPerfil(props) {
           </div>
 
           {noHayNewPasswordRep && (
-            <p className="text-red-500 text-xs italic mt-3">Porfavor introduzca una contraseña</p>
+            <p className="text-red-500 text-xs italic mt-3">
+              Porfavor introduzca una contraseña
+            </p>
           )}
 
           <div className="flex justify-between items-center mt-5">

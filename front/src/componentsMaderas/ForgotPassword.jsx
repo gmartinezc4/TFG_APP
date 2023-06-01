@@ -8,20 +8,34 @@ const RECUPERAR_PASS = gql`
   }
 `;
 
+//
+// * Componenete ForgotPassword. Primera página para recuperar la contraseña.
+// * El usuario introduce su correo electrónico y recibe un código de recupración.
+//
 function ForgotPassword() {
+  // Varables del contexto usadas
+  const {
+    changeReload,
+    changeViewRecuperarPass1,
+    changeViewRecuperarPass2,
+    changeEmailUserRecuperaPass,
+  } = useContext(Context);
+
   const [correo, setCorreo] = useState("");
   const [errorEmailNotExist, setErrorEmailNotExist] = useState(false);
   const [noHayCorreo, setNoHayCorreo] = useState(false);
 
-  const { changeReload, changeViewRecuperarPass1, changeViewRecuperarPass2, changeEmailUserRecuperaPass } = useContext(Context);
-
+  //
+  // * Mutation para recuperar la contraseña del usuario.
+  // * Envia correo con código de recuperación si el correo existe.
+  //
   const [recuperarPassword] = useMutation(RECUPERAR_PASS, {
     onCompleted: (data) => {
       localStorage.setItem("codigoRecuperacion", data.forgotPassword); //cuando se complete la mutation guardar el código
       changeEmailUserRecuperaPass(correo);
       setCorreo("");
       changeViewRecuperarPass1(false);
-      changeViewRecuperarPass2(true);    
+      changeViewRecuperarPass2(true);
       changeReload();
     },
     onError: (error) => {
@@ -33,6 +47,9 @@ function ForgotPassword() {
     },
   });
 
+  //
+  // * Función que comprueba el correo introducido por el usuario.
+  //
   function comprobarUser() {
     if (correo == "") {
       setNoHayCorreo(true);
@@ -48,7 +65,8 @@ function ForgotPassword() {
   }
 
   return (
-    <div className="mt-36 mb-80">
+    <div className="mt-52 mb-96">
+      {/* Form para introducir el correo */}
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -61,7 +79,9 @@ function ForgotPassword() {
           </p>
         )}
 
-        <label className="text-gray-700 text-sm font-bold mb-2 flex justify-center">Email</label>
+        <label className="text-gray-700 text-sm font-bold mb-2 flex justify-center">
+          Email
+        </label>
         <div className="flex justify-center">
           <input
             className={

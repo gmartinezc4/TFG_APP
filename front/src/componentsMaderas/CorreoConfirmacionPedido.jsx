@@ -37,13 +37,19 @@ const GET_PEDIDOS_ACTIVOS_USER = gql`
   }
 `;
 
-function CorreoConfirmacionPedido(props) {
+//
+// * Componente que se encarga de enviar un corro de
+// * confirmación tras realizar un pedido exitosamente.
+//
+function CorreoConfirmacionPedido() {
   const form = useRef();
 
-  const {
-    changeEnviarCorreoConfirmacion,
-  } = useContext(Context);
+  // Variables del contexto usadas
+  const { changeEnviarCorreoConfirmacion } = useContext(Context);
 
+  //
+  // * Query para traer los pedidos activos del usuario.
+  //
   const { data, loading, error } = useQuery(GET_PEDIDOS_ACTIVOS_USER, {
     context: {
       headers: {
@@ -51,15 +57,21 @@ function CorreoConfirmacionPedido(props) {
       },
     },
   });
-  
+
   if (loading) return <div></div>;
-  if (error)
-    return <div>{console.log(error)}</div>;
+  if (error) return <div>{console.log(error)}</div>;
 
+  //
+  // * Función que envia el email de confirmación al gmail de la empresa.
+  //
   const sendEmail = () => {
-
     emailjs
-      .sendForm("Maderas_Cobo_Gmail", "template_a9o7nvu", form.current, "ePa31yfxHKL_zHYnH")
+      .sendForm(
+        "Maderas_Cobo_Gmail",
+        "template_a9o7nvu",
+        form.current,
+        "ePa31yfxHKL_zHYnH"
+      )
       .then(
         (result) => {
           console.log(result.text);
@@ -72,24 +84,29 @@ function CorreoConfirmacionPedido(props) {
       );
   };
 
+  // index = último pedido activo del usuario (pedido que acaba de realizar)
   const index = data.getPedidosActivosUser.length - 1;
-  let importeFreeIva_redonded = data.getPedidosActivosUser[index].importeFreeIvaPedido.toString();
+  let importeFreeIva_string =
+    data.getPedidosActivosUser[index].importeFreeIvaPedido.toString();
 
-
-function mostrarModal(){
-  Swal.fire({
-    title: "¡Pedido confirmado!",
-    text: "Le hemos enviado la confirmación al correo electrónico",
-    icon: "success",
-    confirmButtonColor: "#3085d6",
-    confirmButtonText: "Aceptar",
-  }).then(() => {
+  //
+  // * Función que enviar el correo y muestra la confirmación.
+  //
+  function mostrarModal() {
+    Swal.fire({
+      title: "¡Pedido confirmado!",
+      text: "Le hemos enviado la confirmación al correo electrónico",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1000,
+    }).then(() => {
       sendEmail();
-  });
-}
+    });
+  }
 
   return (
     <div>
+      {/* form que utiliza EmailJs para recoger los datos y enviarlos en el correo */}
       <form
         ref={form}
         onSubmit={(e) => {
@@ -130,9 +147,7 @@ function mostrarModal(){
           <input
             type="text"
             name="d_adicional"
-            defaultValue={
-              ", " + data.getPedidosActivosUser[index].masInformacion
-            }
+            defaultValue={", " + data.getPedidosActivosUser[index].masInformacion}
             hidden
           />
         )}
@@ -164,7 +179,7 @@ function mostrarModal(){
         <input
           type="text"
           name="subtotal"
-          defaultValue={importeFreeIva_redonded.substring(0, 5)}
+          defaultValue={importeFreeIva_string.substring(0, 5)}
           hidden
         />
         <input

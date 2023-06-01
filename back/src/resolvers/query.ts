@@ -49,8 +49,6 @@ export const Query = {
         } catch (e: any) {
             throw new ApolloError(e, e.extensions.code);
         }
-
-
     },
 
     getProductosCarritoUser: async (parent: any, args: any, context: { db: Db, user: any }) => {

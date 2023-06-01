@@ -1,6 +1,14 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
+import styled from "styled-components";
 
+
+// 
+// * Componente que muestra el formulario de contacto.
+// * Utiliza EmailJs para realizar el envio de correos.
+//
+// * props: setOpenConfirmacion & setOpenError
+//
 function FormularioContacto(props) {
   const form = useRef();
 
@@ -8,6 +16,9 @@ function FormularioContacto(props) {
   const [email, setEmail] = useState("");
   const [texto, setTexto] = useState("")
 
+  //
+  // * Función que envia el email de contacto al gmail de la empresa
+  //
   const sendEmail = (e) => {
     e.preventDefault();
 
@@ -23,7 +34,6 @@ function FormularioContacto(props) {
         },
         (error) => {
           console.log(error.text);
-          props.setError(true);
           props.setOpenError(true);
         }
       );
@@ -32,8 +42,9 @@ function FormularioContacto(props) {
 
   return (
     <div className="flex justify-center">
+      {/* form que utiliza EmailJs para recoger los datos y enviarlos en el correo */}
       <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Name</label>
+        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Nombre</label>
         <input
           type="text"
           name="user_name"
@@ -41,7 +52,7 @@ function FormularioContacto(props) {
           onChange={(e) => setNombre(e.target.value)}
           className="shadow appearance-none border rounded p-2 mb-10"
         />
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Email</label>
+        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Correo</label>
         <input
           type="email"
           name="user_email"
@@ -51,10 +62,19 @@ function FormularioContacto(props) {
         />
         <label className="flex justify-center text-white  font-bold mb-2 font-mono">Mensaje</label>
         <textarea name="message" className="shadow appearance-none border rounded p-2 mb-10" value={texto} onChange={(e) => setTexto(e.target.value)}/>
-        <input type="submit" value="Enviar" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12" />
+        <Input type="submit" value="Enviar" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12" />
       </form>
     </div>
   );
 }
 
 export default FormularioContacto;
+
+const Input = styled.input`
+  background: black;
+  text-aling: center;
+  &:hover {
+    background-color: #f5be0b;
+    color: black;
+  }
+`
