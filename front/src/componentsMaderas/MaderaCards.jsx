@@ -41,13 +41,13 @@ function MaderaCards() {
     );
 
   return (
-    <div className=" bg-slate-200">
+    <div>
       {/* Datos del array de dataMaderaCards */}
       <div className="flex flex-col font-serif text-2xl p-10 border-b-2 border-black w-auto">
         {dataMaderaCards.map((d) => (
           <div key={d.id} className="flex flex-col mb-5">
-            <h1 className="mb-8 text-4xl font-bold font-mono">{d.title}</h1>
-            <p className="flex justify-center">{d.description}</p>
+            <h1 className="mb-8 text-4xl font-bold font-PTserif">{d.title}</h1>
+            <p className="flex justify-center font-gentium">{d.description}</p>
           </div>
         ))}
       </div>
@@ -60,10 +60,10 @@ function MaderaCards() {
               <img className="h-60 w-80" src={e.img}></img>
             </div>
             <div className="flex flex-col ml-4">
-              <div className="font-bold mb-1"> {e.name}</div>
+              <div className="font-bold mb-1 font-PTserif"> {e.name}</div>
 
               <div className="border-b-2 border-black mb-2"></div>
-              <span className="w-96">{e.description}</span>
+              <span className="w-96 font-gentium">{e.description}</span>
             </div>
           </div>
         ))}

@@ -288,8 +288,8 @@ function Perfil() {
     <div>
       <div className="flex justify-center">
         <div className="flex flex-col mt-10">
-          <h1 className="font-bold text-4xl mb-3 text-white">Tus datos</h1>
-          <span className="mb-5">
+          <h1 className="font-PTserif font-bold text-4xl mb-3 text-white">Tus datos</h1>
+          <span className="mb-5 font-gentium">
             Aquí puedes revisar y actualizar tus datos de usuario y gestionar tu email y
             contraseña
           </span>
@@ -301,11 +301,11 @@ function Perfil() {
                 <CgProfile className="w-10 h-10 mr-16 " />
                 <div className="grid grid-cols-3 gap-32">
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Nombre</span>
+                    <span className="font-bold mb-1 font-PTserif">Nombre</span>
                     <span className="text-black">{dataGetUser.getUser.nombre}</span>
                   </p>
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Apellido</span>
+                    <span className="font-bold mb-1 font-PTserif">Apellido</span>
                     <span className="text-black">{dataGetUser.getUser.apellido}</span>
                   </p>
                 </div>
@@ -317,7 +317,7 @@ function Perfil() {
                 <TfiEmail className="w-10 h-10 mr-16" />
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Email</span>
+                    <span className="font-bold mb-1 font-PTserif">Email</span>
                     <span className="text-black">{dataGetUser.getUser.correo}</span>
                   </p>
                 </div>
@@ -329,7 +329,7 @@ function Perfil() {
                 <RiLockPasswordLine className="w-10 h-10 mr-16" />
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1">Contraseña</span>
+                    <span className="font-bold mb-1 font-PTserif">Contraseña</span>
                     <span className="text-black">*************</span>
                   </p>
                 </div>
@@ -377,7 +377,7 @@ function Perfil() {
       {/* Boton darse de baja */}
       <div className="flex justify-center mt-32 mb-12">
         <button
-          className="rounded border-2 border-red-800 bg-red-600 p-5 font-bold hover:bg-red-800 hover:border-red-400"
+          className="rounded border-2 border-red-800 bg-red-600 p-5 font-bold hover:bg-red-700"
           onClick={() => {
             modalDarBajaUser(dataGetUser.getUser._id);
           }}

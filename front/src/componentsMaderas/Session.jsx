@@ -45,20 +45,20 @@ function Session(props) {
 
   return (
     <div>
-      <div className="flex flex-col mb-96">
-        <div className="grid font-serif text-4xl justify-center bg-slate-100 h-40 content-center">
+      <div className="flex flex-col mb-96 mt-32">
+        <div className="grid font-serif text-4xl justify-center  h-40 content-center">
           Para añadir los productos a tu cesta registrate o inicia sesión
         </div>
 
         <div className="flex justify-center mt-10">
           <button
-            className="border border-black rounded p-5 mr-5 text-white bg-black h-16 w-36 hover:bg-transparent hover:text-black"
+            className="rounded p-5 mr-5 text-white bg-black h-16 w-36 hover:bg-yellow-500 hover:text-black font-bold"
             onClick={() => openModalInicioSesion()}
           >
             Iniciar sesion
           </button>
           <button
-            className="border border-black rounded p-5 ml-5 text-white bg-black h-16 w-36 hover:bg-transparent hover:text-black"
+            className="rounded p-5 ml-5 text-white bg-black h-16 w-36 hover:bg-yellow-500 hover:text-black font-bold"
             onClick={() => openModalRegistro()}
           >
             Registrarse

@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import IniciarSesionModal from "./IniciarSesionModal";
 import RegistrarseModal from "./RegistrarseModal";
+import styled from "styled-components";
+
 
 // 
 // * Componente botones del usuario no loggeado.
@@ -34,24 +36,24 @@ function BotonesUserNotLogged() {
   return (
     <div className="flex flex-row justify-end -mt-10 text-white font-bold mr-8">
       {/* Boton iniciar sesión */}
-      <button
-        className="mr-5 bg-black hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      <Button
+        className="mr-5 bg-black text-white font-bold py-2 px-4 rounded"
         onClick={() => {
           openModalInicioSesion();
         }}
       >
         Iniciar Sesión
-      </button>
+      </Button>
 
       {/* Boton registrarse */}
-      <button
-        className="ml-5 bg-black hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      <Button
+        className="ml-5 bg-black text-white font-bold py-2 px-4 rounded"
         onClick={() => {
           openModalRegistro();
         }}
       >
         Registrarse
-      </button>
+      </Button>
 
       {/* Renderización del componente <RegistrarseModal /> si se cumple la condición */}
       {modalIsOpenRegistro && (
@@ -74,3 +76,12 @@ function BotonesUserNotLogged() {
 }
 
 export default BotonesUserNotLogged;
+
+const Button = styled.button`
+  text-aling: center;
+  cursor: pointer;
+  &:hover {
+    background-color: #f5be0b;
+    color: black;
+  }
+`

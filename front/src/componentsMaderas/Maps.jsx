@@ -33,7 +33,7 @@ function Maps() {
       <div className="mr-10 -mt-16 text-white">
         <div className="flex flex-col font-mono ">
           <h1 className="flex justify-center m-3 text-xl">A S E R A D E R O</h1>
-          <p className="flex justify-center m-3 text-2xl">+34 626105849</p>
+          <p className="flex justify-center m-3 text-2xl">626105849</p>
           <p className="flex justify-center m-3 text-2xl">
             maderas.cobo.cuenca@gmail.com
           </p>
@@ -68,7 +68,7 @@ function Maps() {
         {/* Mapa oficina */}
         <div className="flex flex-col font-mono ">
           <h1 className="flex justify-center m-3 text-xl">O F I C I N A</h1>
-          <p className="flex justify-center m-3 text-2xl">+34 969214585</p>
+          <p className="flex justify-center m-3 text-2xl">969214585</p>
           <p className="flex justify-center m-3 text-2xl">
             maderas.cobo.cuenca@gmail.com
           </p>

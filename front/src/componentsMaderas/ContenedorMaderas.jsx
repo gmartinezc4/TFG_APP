@@ -18,6 +18,9 @@ import PieDePagina from "./PieDePagina";
 import ForgotPassword from "./ForgotPassword";
 import ForgotPassword2 from "./ForgotPassword2";
 import PaginasErrores from "./PaginasErrores";
+import styled from "styled-components";
+
+
 
 //
 // * Componente contenedor de todos los demás componentes.
@@ -77,10 +80,10 @@ function ContenedorMaderas() {
 
       {/* Si no hay errores */}
       {!viewError && (
-        <div>
+        <Fondo>
           {/* Cabecera con logo y botones */}
-          <div className="bg-gray-900 bg-no-repeat bg-cover h-56">
-            <div className="flex justify-between text-white font-bold border-b-2 border-white p-5">
+          <div>
+            <div className="flex justify-between text-white font-bold border-b-2 border-white p-5 mb-20">
               <button
                 onClick={() => {
                   changeViewInicio(true),
@@ -123,8 +126,8 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewInicio
-                      ? "text-orange-600  rounded m-3 p-1"
-                      : "hover:text-orange-600 m-3 p-1"
+                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
                   Inicio
@@ -150,8 +153,8 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewOrigen
-                      ? "text-orange-600  rounded m-3 p-1"
-                      : "hover:text-orange-600 m-3 p-1"
+                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
                   Origen
@@ -177,8 +180,8 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewMaderas
-                      ? "text-orange-600  rounded m-3 p-1"
-                      : "hover:text-orange-600 m-3 p-1"
+                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
                   Nuestra Madera
@@ -204,8 +207,8 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewContacto
-                      ? "text-orange-600  rounded m-3 p-1"
-                      : "hover:text-orange-600 m-3 p-1"
+                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
                   Contacto
@@ -231,8 +234,8 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewProductos
-                      ? "text-orange-600  rounded m-3 p-1"
-                      : "hover:text-orange-600 m-3 p-1"
+                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
                   Productos
@@ -240,103 +243,9 @@ function ContenedorMaderas() {
               </div>
             </div>
 
-            {viewInicio && (
-              <div className="">
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Conocenos
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-            {viewMaderas && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Maderas
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewContacto && (
-              <div>
-                <h1 className="flex justify-center font-serif text-white font-blond text-7xl mt-8 ml-5">
-                  Contacto
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewOrigen && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Origen
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewProductos && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Productos
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewShoppingCart && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Carrito
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewPedidosPerfil && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Pedidos
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewHacerPedido && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Proceso de Compra
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewDetallePedido && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Pedido
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
-            )}
-
-            {viewPerfil && (
-              <div>
-                <h1 className="text-white font-serif font-blond text-5xl mt-8 ml-5">
-                  Perfil
-                </h1>
-                {token && <BotonesUserLogged />}
-                {!token && <BotonesUserNotLogged />}
-              </div>
+            {token && <BotonesUserLogged />}
+            {!token && !viewRecuperarPass1 && !viewRecuperarPass2 && !viewSession && (
+              <BotonesUserNotLogged />
             )}
           </div>
 
@@ -361,10 +270,15 @@ function ContenedorMaderas() {
           {viewRecuperarPass2 && <ForgotPassword2 />}
 
           <PieDePagina />
-        </div>
+        </Fondo>
       )}
     </ApolloProvider>
   );
 }
 
 export default ContenedorMaderas;
+
+const Fondo = styled.div`
+background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1684%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='url(%23SvgjsLinearGradient1685)'%3e%3c/rect%3e%3cpath d='M1440 0L814.2 0L1440 77.57z' fill='rgba(255%2c 255%2c 255%2c .1)'%3e%3c/path%3e%3cpath d='M814.2 0L1440 77.57L1440 200.70999999999998L580.3000000000001 0z' fill='rgba(255%2c 255%2c 255%2c .075)'%3e%3c/path%3e%3cpath d='M580.3000000000001 0L1440 200.70999999999998L1440 242.61999999999998L508.6600000000001 0z' fill='rgba(255%2c 255%2c 255%2c .05)'%3e%3c/path%3e%3cpath d='M508.6600000000001 0L1440 242.61999999999998L1440 402.45L180.0700000000001 0z' fill='rgba(255%2c 255%2c 255%2c .025)'%3e%3c/path%3e%3cpath d='M0 560L212.69 560L0 333.15999999999997z' fill='rgba(0%2c 0%2c 0%2c .1)'%3e%3c/path%3e%3cpath d='M0 333.15999999999997L212.69 560L344.75 560L0 176.64999999999998z' fill='rgba(0%2c 0%2c 0%2c .075)'%3e%3c/path%3e%3cpath d='M0 176.64999999999998L344.75 560L432.79 560L0 171.92z' fill='rgba(0%2c 0%2c 0%2c .05)'%3e%3c/path%3e%3cpath d='M0 171.91999999999996L432.79 560L979.01 560L0 166.05999999999995z' fill='rgba(0%2c 0%2c 0%2c .025)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1684'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='100%25' x2='50%25' y2='0%25' gradientUnits='userSpaceOnUse' id='SvgjsLinearGradient1685'%3e%3cstop stop-color='rgba(134%2c 239%2c 172%2c 1)' offset='0.02'%3e%3c/stop%3e%3cstop stop-color='rgba(25%2c 114%2c 93%2c 1)' offset='0.99'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+background-size: cover;
+`

@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
+import styled from "styled-components";
+
 
 // 
 // * Componente que muestra el formulario de contacto.
@@ -60,10 +62,19 @@ function FormularioContacto(props) {
         />
         <label className="flex justify-center text-white  font-bold mb-2 font-mono">Mensaje</label>
         <textarea name="message" className="shadow appearance-none border rounded p-2 mb-10" value={texto} onChange={(e) => setTexto(e.target.value)}/>
-        <input type="submit" value="Enviar" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12" />
+        <Input type="submit" value="Enviar" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12" />
       </form>
     </div>
   );
 }
 
 export default FormularioContacto;
+
+const Input = styled.input`
+  background: black;
+  text-aling: center;
+  &:hover {
+    background-color: #f5be0b;
+    color: black;
+  }
+`
