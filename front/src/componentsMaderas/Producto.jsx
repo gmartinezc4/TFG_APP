@@ -3,6 +3,8 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import Cargando from "./Cargando";
 import Swal from "sweetalert2";
+import styled from "styled-components";
+
 
 const ADD_PRODUCTO_CARRITO = gql`
   mutation Mutation($idProducto: String!, $cantidad: String!) {
@@ -111,7 +113,7 @@ function Producto(props) {
 
   if (loadingProd)
     return (
-      <div>
+      <div className="mb-96">
         <Cargando />
       </div>
     );
@@ -155,33 +157,35 @@ function Producto(props) {
         {/* Boton de volver */}
         <div className="bg-no-repeat bg-contain -ml-96">
           <img className="h-80 w-100 border rounded" src={dataProd.getProducto.img}></img>
-          <button
-            className="border rounded text-white bg-black mt-10 p-2"
+          <ButtonVolver
+            className="text-white bg-black mt-10 p-2"
             onClick={() => {
               changeViewProductSelect();
             }}
           >
-            volver
-          </button>
+            Volver
+          </ButtonVolver>
         </div>
 
         {/* Mostrar producto */}
-        <div className="ml-20 w-60 flex flex-col">
-          <div className="font-serif text-5xl mb-10 underline">
+        <div className="ml-20  flex flex-col">
+          <div className="font-PTserif text-5xl mb-10 underline">
             {dataProd.getProducto.name}
           </div>
 
-          <div className="font-serif text-2xl flex flex-row items-baseline">
+          <div className="font-PTserif text-2xl flex flex-row items-baseline">
             {dataProd.getProducto.precio} €/kg
-            <div className="font-serif text-sm text-gray-400 ml-3">IVA incluido</div>
+            <div className="font-serif text-sm text-white ml-3">IVA incluido</div>
           </div>
 
           {cantidadProdCarrito == 0 && (
             <div>
-              {dataProd.getProducto.stock <= 4 && <div className="mt-10">Sin Stock</div>}
+              {dataProd.getProducto.stock <= 4 && (
+                <div className="mt-5 font-PTserif">Sin Stock</div>
+              )}
 
               {dataProd.getProducto.stock > 4 && (
-                <div className="mt-10">
+                <div className="mt-10 font-PTserif">
                   Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
                 </div>
               )}
@@ -201,47 +205,49 @@ function Producto(props) {
                   }
                 }}
               >
-                {dataProd.getProducto.stock <= 4 && (
-                  <input
-                    className="w-64 border border-black mt-4 bg-red-200"
-                    placeholder="Sin Stock"
-                    disabled
-                  ></input>
-                )}
+                <div className="flex flex-col">
+                  {dataProd.getProducto.stock <= 4 && (
+                    <input
+                      className="w-64 border border-black mt-4 bg-red-200"
+                      placeholder="Sin Stock"
+                      disabled
+                    ></input>
+                  )}
 
-                {dataProd.getProducto.stock > 4 && (
-                  <input
-                    className="w-64 border border-black mt-4"
-                    placeholder="Pedido mínimo 5kg"
-                    type="number"
-                    name="cantidad"
-                    min="5"
-                    max={dataProd.getProducto.stock - cantidadProdCarrito}
-                    value={cantidad}
-                    onChange={(e) => setCantidad(e.target.value)}
-                    required
-                    autoFocus
-                  ></input>
-                )}
+                  {dataProd.getProducto.stock > 4 && (
+                    <input
+                      className="w-64 border border-black mt-4"
+                      placeholder="Pedido mínimo 5kg"
+                      type="number"
+                      name="cantidad"
+                      min="5"
+                      max={dataProd.getProducto.stock - cantidadProdCarrito}
+                      value={cantidad}
+                      onChange={(e) => setCantidad(e.target.value)}
+                      required
+                      autoFocus
+                    ></input>
+                  )}
 
-                {dataProd.getProducto.stock <= 4 && (
-                  <button
-                    className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
-                    type="submit"
-                    disabled
-                  >
-                    Sin stock
-                  </button>
-                )}
+                  {dataProd.getProducto.stock <= 4 && (
+                    <button
+                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
+                      type="submit"
+                      disabled
+                    >
+                      Sin stock
+                    </button>
+                  )}
 
-                {dataProd.getProducto.stock > 4 && (
-                  <button
-                    className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
-                    type="submit"
-                  >
-                    Añadir a la cesta
-                  </button>
-                )}
+                  {dataProd.getProducto.stock > 4 && (
+                    <Button
+                      className="w-64 bg-black text-white p-2 mt-8 active:bg-green-600"
+                      type="submit"
+                    >
+                      Añadir a la cesta
+                    </Button>
+                  )}
+                </div>
               </form>
             </div>
           )}
@@ -250,12 +256,12 @@ function Producto(props) {
             <div>
               {(dataProd.getProducto.stock <= 4 ||
                 dataProd.getProducto.stock - cantidadProdCarrito) < 4 && (
-                <div className="mt-10">Sin Stock</div>
+                <div className="mt-5 font-PTserif">Sin Stock</div>
               )}
 
               {dataProd.getProducto.stock > 4 &&
                 dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
-                  <div className="mt-10">
+                  <div className="mt-10 font-PTserif">
                     Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
                   </div>
                 )}
@@ -275,51 +281,53 @@ function Producto(props) {
                   }
                 }}
               >
-                {(dataProd.getProducto.stock <= 4 ||
-                  dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
-                  <input
-                    className="w-64 border border-black mt-4 bg-red-200"
-                    placeholder="Sin Stock"
-                    disabled
-                  ></input>
-                )}
-
-                {dataProd.getProducto.stock > 4 &&
-                  dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                <div>
+                  {(dataProd.getProducto.stock <= 4 ||
+                    dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
                     <input
-                      className="w-64 border border-black mt-4"
-                      placeholder="Pedido mínimo 5kg"
-                      type="number"
-                      name="cantidad"
-                      min="5"
-                      max={dataProd.getProducto.stock - cantidadProdCarrito}
-                      value={cantidad}
-                      onChange={(e) => setCantidad(e.target.value)}
-                      required
-                      autoFocus
+                      className="w-64 border border-black mt-4 bg-red-200"
+                      placeholder="Sin Stock"
+                      disabled
                     ></input>
                   )}
 
-                {(dataProd.getProducto.stock <= 4 ||
-                  dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
-                  <button
-                    className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
-                    type="submit"
-                    disabled
-                  >
-                    Sin stock
-                  </button>
-                )}
+                  {dataProd.getProducto.stock > 4 &&
+                    dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                      <input
+                        className="w-64 border border-black mt-4"
+                        placeholder="Pedido mínimo 5kg"
+                        type="number"
+                        name="cantidad"
+                        min="5"
+                        max={dataProd.getProducto.stock - cantidadProdCarrito}
+                        value={cantidad}
+                        onChange={(e) => setCantidad(e.target.value)}
+                        required
+                        autoFocus
+                      ></input>
+                    )}
 
-                {dataProd.getProducto.stock > 4 &&
-                  dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                  {(dataProd.getProducto.stock <= 4 ||
+                    dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
                     <button
-                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
+                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
                       type="submit"
+                      disabled
                     >
-                      Añadir a la cesta
+                      Sin stock
                     </button>
                   )}
+
+                  {dataProd.getProducto.stock > 4 &&
+                    dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+                      <Button
+                        className="w-64 bg-black text-white p-2 mt-8 hover:bg-slate-700 active:bg-green-600"
+                        type="submit"
+                      >
+                        Añadir a la cesta
+                      </Button>
+                    )}
+                </div>
               </form>
             </div>
           )}
@@ -330,3 +338,21 @@ function Producto(props) {
 }
 
 export default Producto;
+
+const Button = styled.button`
+  text-aling: center;
+  cursor: pointer;
+  &:hover {
+    background-color: #f5be0b;
+    color: black;
+  }
+`
+const ButtonVolver = styled.div`
+  text-aling: center;
+  cursor: pointer;
+  width: 63px;
+  &:hover {
+    background-color: #f5be0b;
+    color: black;
+  }
+`

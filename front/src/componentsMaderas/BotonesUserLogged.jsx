@@ -125,7 +125,7 @@ function BotonesUserLogged() {
               }}
             ></button>
             {data.getProductosCarritoUser.length != 0 && (
-              <span className="-ml-3 mr-4 bg-orange-500 rounded-full  px-3 py-2">
+              <span className="-ml-3 mr-4 bg-yellow-500 rounded-full  px-3 py-2">
                 <span className="">{data.getProductosCarritoUser.length}</span>
               </span>
             )}
@@ -171,6 +171,7 @@ function BotonesUserLogged() {
                         changeViewDetallePedido(false),
                         changeViewHacerPedido(false);
                       changeErrorFalse(false);
+                      setOpenSubMenuPerfil(false);
                     }}
                   >
                     Perfil
@@ -199,6 +200,7 @@ function BotonesUserLogged() {
                         changeViewSession(false),
                         changeViewPerfil(false);
                       changeErrorFalse(false);
+                      setOpenSubMenuPerfil(false);
                     }}
                   >
                     Pedidos
@@ -230,6 +232,7 @@ function BotonesUserLogged() {
                         changeViewSession(false),
                         changeViewPerfil(false);
                       changeErrorFalse(false);
+                      setOpenSubMenuPerfil(false);
                       console.log(
                         "me desloggeo, token: " + localStorage.getItem("token")
                       );

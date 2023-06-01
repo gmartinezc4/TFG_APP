@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
-import { Context } from "../context/Context";
 import Maps from "./Maps";
 import FormularioContacto from "./FormularioContacto";
 import Swal from "sweetalert2";
+
 
 //
 // * Componente página Contacto
@@ -46,7 +46,7 @@ function Contacto() {
       {openConfirmacion && <div>{mostrarConfirmación()}</div>}
       {openError && <div>{mostrarError()}</div>}
 
-      <div className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fondoContacto.jpg')]  bg-repeat-y  flex justify-center p-10">
+      <div className="flex justify-center p-10">
         <div className="flex flex-col">
           <div>
             <Maps />

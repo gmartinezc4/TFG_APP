@@ -127,7 +127,7 @@ function ForgotPassword2() {
   }
 
   return (
-    <div className="mt-20 mb-60">
+    <div className="mt-36 mb-60">
       {/* Form para introducir los datos */}
       <form
         onSubmit={(event) => {

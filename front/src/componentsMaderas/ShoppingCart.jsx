@@ -5,6 +5,7 @@ import { FaTrashAlt, FaShopify, FaCcVisa, FaCcMastercard } from "react-icons/fa"
 import { BsCashStack } from "react-icons/bs";
 import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 import styled from "styled-components";
+import Cargando from "./Cargando";
 
 
 const GET_PRODUCTOS_CARRITO_USER = gql`
@@ -110,7 +111,9 @@ function ShoppingCart() {
     },
   });
 
-  if (loadingGetProductos) return <div></div>;
+  if (loadingGetProductos) return <div className="mb-96">
+    <Cargando />
+  </div>;
   if (errorGetPoductos)
     return (
       <div>
@@ -154,16 +157,16 @@ function ShoppingCart() {
       <div>
         {/* si no hay productos */}
         {dataGetProductos?.getProductosCarritoUser.length == 0 && (
-          <div className="flex justify-center mb-96">
-            <FondoGrand className="flex flex-col mt-3 mb-7  p-5 container">
-              <FondoPeque>
+          <div className="flex justify-center mb-80 mt-10">
+            <FondoGrandeNoCarrito className="flex flex-col mt-3 mb-7  p-5 container">
+              <FondoPequeNoCarrito>
                 <span className="flex justify-center p-5">
                   <FaShopify className="w-32 h-32 mb-5" />
                 </span>
                 <span className="flex justify-center text-3xl">Tu cesta está vacia</span>
                 <div className="flex justify-center p-5">
                   <Button
-                    className="w-64 bg-orange-600 text-white p-2 mt-8 hover:bg-orange-500"
+                    className="w-64 text-white font-bold py-2 px-4 rounded"
                     onClick={() => {
                       changeViewProductos(true),
                         changeViewShoppingCart(false),
@@ -177,25 +180,25 @@ function ShoppingCart() {
                     Volver a la tienda
                   </Button>
                 </div>
-              </FondoPeque>
-            </FondoGrand>
+              </FondoPequeNoCarrito>
+            </FondoGrandeNoCarrito>
           </div>
         )}
 
         {/* si hay productos */}
         {dataGetProductos?.getProductosCarritoUser.length != 0 && (
-          <div className="flex justify-center mb-96">
-            <div className="grid grid-cols-2 gap-20 mt-3 mb-10 bg-slate-100 p-5">
+          <div className="flex justify-center mb-44">
+            <FondoGrande className="grid grid-cols-2 gap-20 mt-3 mb-10 p-5">
               {/* columna izquierda */}
               <div>
                 {dataGetProductos?.getProductosCarritoUser.map((p) => (
-                  <div key={p._id} className="grid grid-cols-3 p-4 mx-auto bg-white ">
+                  <FondoPeque key={p._id} className="grid grid-cols-3 p-4 mx-auto bg-white ">
                     <div className="bg-no-repeat bg-contain ">
                       <img className="h-30 w-40 border rounded mb-5 " src={p.img}></img>
                     </div>
 
                     <div className="flex flex-col mb-3 ml-5 ">
-                      <span>{p.name}</span>
+                      <span className="font-bold underline">{p.name}</span>
                       <span>Cantidad: {p.cantidad}kg</span>
                       <button
                         className="flex self-start mt-12 text-gray-400"
@@ -223,7 +226,7 @@ function ShoppingCart() {
                           importeFreeIva + parseFloat(p.precioTotal_freeIVA))
                       }
                     </div>
-                  </div>
+                  </FondoPeque>
                 ))}
 
                 <div className="flex flex-col bg-white mt-5 p-5 ">
@@ -261,7 +264,7 @@ function ShoppingCart() {
                 </p>
                 <div className="flex justify-center">
                   <button
-                    className="w-64 bg-orange-600 text-white p-2 mt-8 hover:bg-orange-500"
+                    className="w-64 bg-yellow-500 text-white p-2 mt-8 hover:bg-yellow-400"
                     onClick={() => {
                       changeViewHacerPedido(true),
                         changeViewProductos(false),
@@ -279,7 +282,7 @@ function ShoppingCart() {
                   </button>
                 </div>
               </div>
-            </div>
+            </FondoGrande>
           </div>
         )}
       </div>
@@ -294,18 +297,30 @@ function ShoppingCart() {
 export default ShoppingCart;
 
 
-const FondoPeque = styled.div`
+const FondoPequeNoCarrito = styled.div`
   background-color: #fef1c7;
 `
 
-const FondoGrand = styled.div`
+const FondoGrandeNoCarrito = styled.div`
   background-color: #f5be0b;
 `
 
-const Button = styled.div`
+const FondoGrande = styled.div`
+  background-color: #E0E2E5;
+`
+
+const FondoPeque = styled.div`
+  background-color: #f5f5f4;
+`
+
+const Button = styled.button`
   background: #f5be0b;
-  
-  display: flex;
-  justify-items: center;
-  align-items: center;
+  text-aling: center;
+  &:hover {
+    background-color: #fef1c7;
+    color: black;
+    border-color: black;
+   border-width: 1px;
+   border-style: solid;
+  }
 `

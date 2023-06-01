@@ -65,7 +65,7 @@ function ForgotPassword() {
   }
 
   return (
-    <div className="mt-36 mb-80">
+    <div className="mt-52 mb-96">
       {/* Form para introducir el correo */}
       <form
         onSubmit={(event) => {

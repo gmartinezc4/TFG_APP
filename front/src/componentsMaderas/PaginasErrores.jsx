@@ -5,7 +5,7 @@ import React from 'react'
 // 
 function PaginasErrores(props) {
   return (
-    <div className='text-6xl'>
+    <div className='text-6xl bg-white h-screen'>
         Error {props.codigo} <br></br>
         <div>
             {props.mensaje}
