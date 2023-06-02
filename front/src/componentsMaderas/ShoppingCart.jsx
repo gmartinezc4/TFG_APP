@@ -67,6 +67,13 @@ function ShoppingCart() {
   let idProd = "";
   let importe = 0;
   let importeFreeIva = 0;
+  const aserraderoMaps = () => {
+    window.open(
+      "https://www.google.com/maps/place/Casa+de+Moya,+16740+La+Almarcha,+Cuenca/@39.6835612,-2.4447486,17z/data=!3m1!4b1!4m6!3m5!1s0xd67e1c0d0129313:0x3118d5409dc9a973!8m2!3d39.6835612!4d-2.4425599!16s%2Fg%2F11_q_47nx",
+      "_blank"
+    );
+  };
+
 
   //
   // * Mutation para eliminar un producto al carrito del usuario.
@@ -192,7 +199,10 @@ function ShoppingCart() {
               {/* columna izquierda */}
               <div>
                 {dataGetProductos?.getProductosCarritoUser.map((p) => (
-                  <FondoPeque key={p._id} className="grid grid-cols-3 p-4 mx-auto bg-white ">
+                  <FondoPeque
+                    key={p._id}
+                    className="grid grid-cols-3 p-4 mx-auto bg-white "
+                  >
                     <div className="bg-no-repeat bg-contain ">
                       <img className="h-30 w-40 border rounded mb-5 " src={p.img}></img>
                     </div>
@@ -201,7 +211,7 @@ function ShoppingCart() {
                       <span className="font-bold underline">{p.name}</span>
                       <span>Cantidad: {p.cantidad}kg</span>
                       <button
-                        className="flex self-start mt-12 text-gray-400"
+                        className="flex self-start mt-10 text-gray-400"
                         onClick={() => {
                           (idProd = p._id), actualizarCarrito();
                         }}
@@ -229,29 +239,51 @@ function ShoppingCart() {
                   </FondoPeque>
                 ))}
 
-                <div className="flex flex-col bg-white mt-5 p-5 ">
+                <FondoPeque className="flex flex-col bg-white mt-5 p-5 ">
                   <span className="font-bold text-xl mb-7">
                     Fecha de recogida prevista
                   </span>
                   <span>
                     Aproximadamente cuatro días laborables.
                     <br></br> <br></br>
-                    Después dispone de 7 días habiles para recoger el pedido
+                    Después dispone de 7 días laborables para recoger el pedido.
                   </span>
-                </div>
+                </FondoPeque>
 
-                <div className="flex flex-col bg-white mt-5 p-5">
+                <FondoPeque className="flex flex-col bg-white mt-5 p-5 ">
+                  <span className="font-bold text-xl mb-7">Dirección de recogida</span>
+                  <span>
+                    <a onClick={aserraderoMaps} className="hover:cursor-pointer underline">
+                      Casa de Moya, 16740 La Almarcha, Cuenca
+                    </a>
+                    <br></br> <br></br>
+                    <span className="flex flex-row justify-between">
+                      <p>Lunes - Viernes</p>
+                      <p>09:00 - 20:00</p>
+                    </span>
+                    <span className="flex flex-row justify-between">
+                      <p>Sabados</p>
+                      <p>09:00 - 14:00</p>
+                    </span>
+                    <span className="flex flex-row justify-between">
+                      <p>Domingos</p>
+                      <p>Cerrado</p>
+                    </span>
+                  </span>
+                </FondoPeque>
+
+                <FondoPeque className="flex flex-col bg-white mt-5 p-5">
                   <span className="font-bold text-xl mb-7">Aceptamos</span>
                   <div className="flex flex-row">
                     <FaCcVisa className="w-9 h-9 mr-3" />
                     <FaCcMastercard className="w-9 h-9 ml-3 mr-3" />
                     <BsCashStack className="w-9 h-9 ml-3" />
                   </div>
-                </div>
+                </FondoPeque>
               </div>
 
               {/* columna derecha */}
-              <div className="flex flex-col bg-white h-48 p-5 ">
+              <FondoPeque className="flex flex-col bg-white h-48 p-5 ">
                 <h1 className="font-bold text-2xl mb-7">Total</h1>
                 <p className="flex justify-between mb-5">
                   <span>Subtotal</span>
@@ -281,7 +313,7 @@ function ShoppingCart() {
                     Comenzar pedido
                   </button>
                 </div>
-              </div>
+              </FondoPeque>
             </FondoGrande>
           </div>
         )}

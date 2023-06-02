@@ -1,9 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import Modal from "react-modal";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import Swal from "sweetalert2";
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 // Estilo customizado para componente <Modal />
 const customStyles = {
@@ -71,9 +73,13 @@ function RegistrarseModal(props) {
   const [errorPassword, setErrorPassword] = useState(false);
   const [passView, setPassView] = useState(false);
   const [repPassView, setRepPassView] = useState(false);
+  const [errorCaptcha, setErrorCaptcha] = useState(false);
 
   // Varables del contexto usadas
   const { changeReload, changeViewSession, changeViewProductos } = useContext(Context);
+
+  const captchaRef = useRef(null);
+  let tokenCaptcha;
 
   //
   // * Mutation que registra al usuario en la bbdd y le concede
@@ -144,6 +150,7 @@ function RegistrarseModal(props) {
       setErrorPassword(false);
       setErrorPasswordNoCoinciden(false);
       setErrorCorreoIncompleto(false);
+      setErrorCaptcha(false);
     } else if (apellido == "") {
       setnoHayApellido(true);
       setNoHayNombre(false);
@@ -152,6 +159,7 @@ function RegistrarseModal(props) {
       setErrorPassword(false);
       setErrorPasswordNoCoinciden(false);
       setErrorCorreoIncompleto(false);
+      setErrorCaptcha(false);
     } else if (correo == "") {
       setNoHayCorreo(true);
       setNoHayNombre(false);
@@ -160,6 +168,7 @@ function RegistrarseModal(props) {
       setErrorPassword(false);
       setErrorPasswordNoCoinciden(false);
       setErrorCorreoIncompleto(false);
+      setErrorCaptcha(false);
     } else if (password == "") {
       setNoHayPassword(true);
       setNoHayNombre(false);
@@ -168,6 +177,7 @@ function RegistrarseModal(props) {
       setErrorPassword(false);
       setErrorPasswordNoCoinciden(false);
       setErrorCorreoIncompleto(false);
+      setErrorCaptcha(false);
     } else if (password != repPassword) {
       setErrorPasswordNoCoinciden(true);
       setNoHayNombre(false);
@@ -175,6 +185,16 @@ function RegistrarseModal(props) {
       setErrorCorreo(false);
       setNoHayPassword(false);
       setErrorPassword(false);
+      setErrorCorreoIncompleto(false);
+      setErrorCaptcha(false);
+    } else if (tokenCaptcha == ""){
+      setErrorCaptcha(true);
+      setNoHayNombre(false);
+      setnoHayApellido(false);
+      setNoHayCorreo(false);
+      setNoHayPassword(false);
+      setErrorPassword(false);
+      setErrorPasswordNoCoinciden(false);
       setErrorCorreoIncompleto(false);
     } else if (errorPassword == false) {
       setNoHayNombre(false);
@@ -184,6 +204,7 @@ function RegistrarseModal(props) {
       setErrorPassword(false);
       setErrorPasswordNoCoinciden(false);
       setErrorCorreoIncompleto(false);
+      setErrorCaptcha(false);
       register({
         variables: {
           nombre,
@@ -227,6 +248,7 @@ function RegistrarseModal(props) {
           className="p-3 flex flex-col justify-center"
           onSubmit={(event) => {
             event.preventDefault();
+            tokenCaptcha = captchaRef.current.getValue();
             comprobarUser();
           }}
         >
@@ -245,7 +267,7 @@ function RegistrarseModal(props) {
           ></input>
           {noHayNombre && (
             <p className="text-red-500 text-xs italic mt-3">
-              Porfavor introduzca su nombre
+              por favor introduzca su nombre
             </p>
           )}
 
@@ -266,7 +288,7 @@ function RegistrarseModal(props) {
           ></input>
           {noHayApellido && (
             <p className="text-red-500 text-xs italic mt-3">
-              Porfavor introduzca su apellido
+              por favor introduzca su apellido
             </p>
           )}
 
@@ -289,12 +311,12 @@ function RegistrarseModal(props) {
           ></input>
           {noHayCorreo && (
             <p className="text-red-500 text-xs italic mt-3">
-              Porfavor introduzca su correo electrónico
+              por favor introduzca su correo electrónico
             </p>
           )}
           {errorCorreoIncompleto && (
             <p className="text-red-500 text-xs italic mt-3">
-              Porfavor introduzca un correo electrónico valido
+              por favor introduzca un correo electrónico valido
             </p>
           )}
 
@@ -317,8 +339,7 @@ function RegistrarseModal(props) {
               pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$"
               onInvalid={() => {
                 setErrorPassword(true),
-                  setNoHayPassword(false),
-                  setErrorPasswordNoCoinciden(false);
+                comprobarUser()
               }}
             ></input>
             <div
@@ -334,7 +355,7 @@ function RegistrarseModal(props) {
 
           {noHayPassword && (
             <p className="text-red-500 text-xs italic mt-3">
-              Porfavor elija una contraseña
+              por favor elija una contraseña
             </p>
           )}
           {errorPassword && (
@@ -378,6 +399,19 @@ function RegistrarseModal(props) {
             </p>
           )}
 
+          <div className="flex justify-center mt-6">
+            <ReCAPTCHA
+              sitekey={"6LdjHoElAAAAAOgUQ_f2lvuGG52lSZCEDdcXUqgT"}
+              ref={captchaRef}
+            />
+          </div>
+
+          {errorCaptcha && (
+            <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+              por favor, marque la casilla
+            </p>
+          )}
+
           <div className="flex justify-between items-center mt-5">
             <button
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -392,7 +426,7 @@ function RegistrarseModal(props) {
                 props.closeModalRegistro(), props.openModalInicioSesion();
               }}
             >
-              Esta registrado? Inicie sessión
+              Esta registrado? Inicie sesión
             </a>
           </div>
         </form>

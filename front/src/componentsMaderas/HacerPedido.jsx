@@ -5,7 +5,6 @@ import { FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
 import styled from "styled-components";
 
-
 const VENDER_PRODUCTOS = gql`
   mutation Mutation(
     $nombre: String!
@@ -47,13 +46,13 @@ const VENDER_PRODUCTOS = gql`
     }
   }
 `;
-// 
+//
 // * Componente HaceraPedido. Pagína donde se introducen los
-// * datos de facturación, se confirma el pedido y permite 
+// * datos de facturación, se confirma el pedido y permite
 // * que se envie el correo de confirmación.
 //
 // * Props: productos
-// 
+//
 function HacerPedido(props) {
   // Varables del contexto usadas
   const {
@@ -81,6 +80,12 @@ function HacerPedido(props) {
 
   let importe = 0;
   let importeFreeIva = 0;
+  const aserraderoMaps = () => {
+    window.open(
+      "https://www.google.com/maps/place/Casa+de+Moya,+16740+La+Almarcha,+Cuenca/@39.6835612,-2.4447486,17z/data=!3m1!4b1!4m6!3m5!1s0xd67e1c0d0129313:0x3118d5409dc9a973!8m2!3d39.6835612!4d-2.4425599!16s%2Fg%2F11_q_47nx",
+      "_blank"
+    );
+  };
 
   //
   // * Mutation para realizar el pedido del usuario.
@@ -172,6 +177,16 @@ function HacerPedido(props) {
                 <span>{importe.toString().substr(0, 5)}€</span>
               </p>
             </FondoPeque>
+
+            <ButtonVolver
+            className="text-white bg-black mt-10 p-2"
+            onClick={() => {
+              changeViewHacerPedido(false);
+              changeViewShoppingCart(true);
+            }}
+          >
+            Volver
+          </ButtonVolver>
           </div>
 
           {/* Columna derecha */}
@@ -182,6 +197,28 @@ function HacerPedido(props) {
                 Aproximadamente cuatro días laborables.
                 <br></br> <br></br>
                 Después dispone de 7 días habiles para recoger el pedido
+              </span>
+            </FondoPeque>
+
+            <FondoPeque className="flex flex-col bg-white mt-5 p-5 ">
+              <span className="font-bold text-xl mb-7">Dirección de recogida</span>
+              <span>
+                <a onClick={aserraderoMaps} className="hover:cursor-pointer underline">
+                  Casa de Moya, 16740 La Almarcha, Cuenca
+                </a>
+                <br></br> <br></br>
+                <span className="flex flex-row justify-between">
+                  <p>Lunes - Viernes</p>
+                  <p>09:00 - 20:00</p>
+                </span>
+                <span className="flex flex-row justify-between">
+                  <p>Sabados</p>
+                  <p>09:00 - 14:00</p>
+                </span>
+                <span className="flex flex-row justify-between">
+                  <p>Domingos</p>
+                  <p>Cerrado</p>
+                </span>
               </span>
             </FondoPeque>
 
@@ -199,117 +236,118 @@ function HacerPedido(props) {
       {/* Formulario datos porsonales y dirección de facturación */}
       <div className="flex justify-center">
         <form
-          className="grid grid-cols-3 gap-20  mt-3 mb-20 bg-slate-100 p-5 items-start"
           onSubmit={(event) => {
             event.preventDefault();
             tramitarDatos();
           }}
         >
-          {/* Columna izquierda */}
-          <div className="flex justify-center flex-col">
-            <h1 className="text-2xl mb-5 font-bold">Datos personales</h1>
+          <FondoGrande className="grid grid-cols-3 gap-20  mt-3 mb-20  p-5 items-start">
+            {/* Columna izquierda */}
+            <div className="flex justify-center flex-col">
+              <h1 className="text-2xl mb-5 font-bold">Datos personales</h1>
 
-            <label>Nombre*</label>
-            <input
-              type="text"
-              className="border border-black rounded-md mb-4"
-              placeholder="Pedro..."
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              minLength={2}
-              required
-            ></input>
-            <label>Apellido*</label>
-            <input
-              type="text"
-              className="border border-black rounded-md mb-4"
-              placeholder="Rodriguez..."
-              value={apellido}
-              onChange={(e) => setApellido(e.target.value)}
-              minLength={2}
-              required
-            ></input>
-            <label>Email*</label>
-            <input
-              type="text"
-              className="border border-black rounded-md mb-4"
-              placeholder="Rodriguez..."
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              minLength={2}
-              required
-            ></input>
-            <label>Numero de telefono*</label>
-            <input
-              type="tel"
-              className="border border-black rounded-md mb-4"
-              placeholder="626146783..."
-              value={numTelefono}
-              onChange={(e) => setNumTelefono(e.target.value)}
-              minLength={9}
-              maxLength={9}
-              required
-            ></input>
-          </div>
+              <label>Nombre*</label>
+              <input
+                type="text"
+                className="border border-black rounded-md mb-4"
+                placeholder="Pedro..."
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                minLength={2}
+                required
+              ></input>
+              <label>Apellido*</label>
+              <input
+                type="text"
+                className="border border-black rounded-md mb-4"
+                placeholder="Rodriguez..."
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                minLength={2}
+                required
+              ></input>
+              <label>Email*</label>
+              <input
+                type="text"
+                className="border border-black rounded-md mb-4"
+                placeholder="Rodriguez..."
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                minLength={2}
+                required
+              ></input>
+              <label>Numero de telefono*</label>
+              <input
+                type="tel"
+                className="border border-black rounded-md mb-4"
+                placeholder="626146783..."
+                value={numTelefono}
+                onChange={(e) => setNumTelefono(e.target.value)}
+                minLength={9}
+                maxLength={9}
+                required
+              ></input>
+            </div>
 
-          {/* Columna derecha */}
-          <div className="flex justify-center flex-col">
-            <h1 className="text-2xl mb-5 font-bold">Dirección de facturación</h1>
-            <label>Calle*</label>
-            <input
-              type="text"
-              className="border border-black rounded-md mb-4"
-              placeholder="C/ Gran Via..."
-              value={calle}
-              onChange={(e) => setCalle(e.target.value)}
-              minLength={4}
-              required
-            ></input>
-            <label>Mas información</label>
-            <input
-              className="border border-black rounded-md mb-4"
-              placeholder="Piso, bloque edificio, escalera..."
-              value={masInformacion}
-              onChange={(e) => setmasInformacion(e.target.value)}
-            ></input>
-            <label>Codigo postal*</label>
-            <input
-              type="tel"
-              className="border border-black rounded-md mb-4"
-              placeholder="28013..."
-              value={codigoPostal}
-              onChange={(e) => setCodigoPostal(e.target.value)}
-              minLength={5}
-              maxLength={5}
-              required
-            ></input>
-            <label>Ciudad*</label>
-            <input
-              type="text"
-              className="border border-black rounded-md mb-4"
-              placeholder="Madrid..."
-              value={ciudad}
-              onChange={(e) => setCiudad(e.target.value)}
-              minLength={4}
-              required
-            ></input>
-            <label>Pais*</label>
-            <input
-              type="text"
-              className="border border-black rounded-md mb-4"
-              placeholder="España..."
-              value={pais}
-              onChange={(e) => setPais(e.target.value)}
-              minLength={4}
-              required
-            ></input>
-          </div>
-          <button
-            className="w-64 bg-yellow-500 text-white p-2  hover:bg-yellow-400 mt-16"
-            type="submit"
-          >
-            Confirmar pedido
-          </button>
+            {/* Columna derecha */}
+            <div className="flex justify-center flex-col">
+              <h1 className="text-2xl mb-5 font-bold">Dirección de facturación</h1>
+              <label>Calle*</label>
+              <input
+                type="text"
+                className="border border-black rounded-md mb-4"
+                placeholder="C/ Gran Via..."
+                value={calle}
+                onChange={(e) => setCalle(e.target.value)}
+                minLength={4}
+                required
+              ></input>
+              <label>Mas información</label>
+              <input
+                className="border border-black rounded-md mb-4"
+                placeholder="Piso, bloque edificio, escalera..."
+                value={masInformacion}
+                onChange={(e) => setmasInformacion(e.target.value)}
+              ></input>
+              <label>Codigo postal*</label>
+              <input
+                type="tel"
+                className="border border-black rounded-md mb-4"
+                placeholder="28013..."
+                value={codigoPostal}
+                onChange={(e) => setCodigoPostal(e.target.value)}
+                minLength={5}
+                maxLength={5}
+                required
+              ></input>
+              <label>Ciudad*</label>
+              <input
+                type="text"
+                className="border border-black rounded-md mb-4"
+                placeholder="Madrid..."
+                value={ciudad}
+                onChange={(e) => setCiudad(e.target.value)}
+                minLength={4}
+                required
+              ></input>
+              <label>Pais*</label>
+              <input
+                type="text"
+                className="border border-black rounded-md mb-4"
+                placeholder="España..."
+                value={pais}
+                onChange={(e) => setPais(e.target.value)}
+                minLength={4}
+                required
+              ></input>
+            </div>
+            <button
+              className="w-64 bg-yellow-500 text-white p-2  hover:bg-yellow-400 mt-16"
+              type="submit"
+            >
+              Confirmar pedido
+            </button>
+          </FondoGrande>
         </form>
       </div>
     </div>
@@ -319,9 +357,19 @@ function HacerPedido(props) {
 export default HacerPedido;
 
 const FondoGrande = styled.div`
-  background-color: #E0E2E5;
-`
+  background-color: #e0e2e5;
+`;
 
 const FondoPeque = styled.div`
   background-color: #f5f5f4;
+`;
+
+const ButtonVolver = styled.div`
+  text-aling: center;
+  cursor: pointer;
+  width: 63px;
+  &:hover {
+    background-color: #f5be0b;
+    color: black;
+  }
 `

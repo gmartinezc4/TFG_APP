@@ -111,7 +111,7 @@ function Producto(props) {
     },
   });
 
-  if (loadingProd)
+  if (loadingProd || loadingProductosCarrito)
     return (
       <div className="mb-96">
         <Cargando />
@@ -178,8 +178,10 @@ function Producto(props) {
             <div className="font-serif text-sm text-white ml-3">IVA incluido</div>
           </div>
 
+          {/* Si no tenemos el producto en nuestra cesta */}
           {cantidadProdCarrito == 0 && (
             <div>
+              {/* si el stock es < 4, se muestra sin stock */}
               {dataProd.getProducto.stock <= 4 && (
                 <div className="mt-5 font-PTserif">Sin Stock</div>
               )}
@@ -206,6 +208,7 @@ function Producto(props) {
                 }}
               >
                 <div className="flex flex-col">
+                  {/* si el stock es < 4, se muestra sin stock */}
                   {dataProd.getProducto.stock <= 4 && (
                     <input
                       className="w-64 border border-black mt-4 bg-red-200"
@@ -252,17 +255,14 @@ function Producto(props) {
             </div>
           )}
 
+          {/* Si tenemos el producto en nuestra cesta */}
           {cantidadProdCarrito != 0 && (
             <div>
-              {(dataProd.getProducto.stock <= 4 ||
-                dataProd.getProducto.stock - cantidadProdCarrito) < 4 && (
-                <div className="mt-5 font-PTserif">Sin Stock</div>
-              )}
+              
 
-              {dataProd.getProducto.stock > 4 &&
-                dataProd.getProducto.stock - cantidadProdCarrito > 4 && (
+              {dataProd.getProducto.stock > 4  && (
                   <div className="mt-10 font-PTserif">
-                    Stock: {dataProd.getProducto.stock - cantidadProdCarrito} kg
+                    Stock: {dataProd.getProducto.stock} kg
                   </div>
                 )}
 
@@ -281,14 +281,26 @@ function Producto(props) {
                   }
                 }}
               >
-                <div>
+                <div className="flex flex-col">
+                  {/* si el stock - la cantidad ya pedid es < 4, se muestra sin stock */}
                   {(dataProd.getProducto.stock <= 4 ||
                     dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
                     <input
                       className="w-64 border border-black mt-4 bg-red-200"
-                      placeholder="Sin Stock"
+                      placeholder="No puedes pedir más cantidad"
                       disabled
                     ></input>
+                  )}
+
+                  {(dataProd.getProducto.stock <= 4 ||
+                    dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
+                    <button
+                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
+                      type="submit"
+                      disabled
+                    >
+                      Sin stock
+                    </button>
                   )}
 
                   {dataProd.getProducto.stock > 4 &&
@@ -306,17 +318,6 @@ function Producto(props) {
                         autoFocus
                       ></input>
                     )}
-
-                  {(dataProd.getProducto.stock <= 4 ||
-                    dataProd.getProducto.stock - cantidadProdCarrito) <= 4 && (
-                    <button
-                      className="w-64 bg-black text-white p-2 mt-8 hover:bg-red-400"
-                      type="submit"
-                      disabled
-                    >
-                      Sin stock
-                    </button>
-                  )}
 
                   {dataProd.getProducto.stock > 4 &&
                     dataProd.getProducto.stock - cantidadProdCarrito > 4 && (

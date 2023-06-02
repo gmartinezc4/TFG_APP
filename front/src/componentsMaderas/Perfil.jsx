@@ -302,11 +302,11 @@ function Perfil() {
                 <div className="grid grid-cols-3 gap-32">
                   <p className="flex flex-col">
                     <span className="font-bold mb-1 font-PTserif">Nombre</span>
-                    <span className="text-black">{dataGetUser.getUser.nombre}</span>
+                    <span className="text-black font-PTserif">{dataGetUser.getUser.nombre}</span>
                   </p>
                   <p className="flex flex-col">
                     <span className="font-bold mb-1 font-PTserif">Apellido</span>
-                    <span className="text-black">{dataGetUser.getUser.apellido}</span>
+                    <span className="text-black font-PTserif">{dataGetUser.getUser.apellido}</span>
                   </p>
                 </div>
               </div>
@@ -318,7 +318,7 @@ function Perfil() {
                 <div className="grid grid-cols-2 gap-96">
                   <p className="flex flex-col">
                     <span className="font-bold mb-1 font-PTserif">Email</span>
-                    <span className="text-black">{dataGetUser.getUser.correo}</span>
+                    <span className="text-black font-PTserif">{dataGetUser.getUser.correo}</span>
                   </p>
                 </div>
               </div>

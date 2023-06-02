@@ -464,7 +464,15 @@ export const Mutation = {
     forgotPassword: async (parent: any, args: { email: string }, context: { db: Db }) => {
         const db = context.db;
         const email = args.email;
-        const codigo = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
+        let codigo = "";
+        
+        const banco = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (let i = 0; i < 6; i++) {
+            // Lee más sobre la elección del índice aleatorio en:
+            // https://parzibyte.me/blog/2021/11/30/elemento-aleatorio-arreglo-javascript/
+            codigo += banco.charAt(Math.floor(Math.random() * banco.length));
+        }
 
         try {
             const user = await db.collection("Usuarios").findOne({ Email: email });
@@ -580,16 +588,16 @@ export const Mutation = {
                     const pedidoUser = await db.collection(bbdd).findOne({ _id: new ObjectId(id_pedido) });
 
                     if (pedidoUser) {
-                        
-                        pedidoUser.Productos.map(async(e: any) => {
+
+                        pedidoUser.Productos.map(async (e: any) => {
                             stockProductoBorrado = e.Cantidad;
                             const producto = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(e.Id_producto) });
 
-                            if(producto){
-                            console.log(stockProductoBorrado)
+                            if (producto) {
+                                console.log(stockProductoBorrado)
                                 const nuevoStock = parseInt(producto.stock) + parseInt(stockProductoBorrado);
-                                await db.collection("Productos_Venta").findOneAndUpdate({ _id: new ObjectId(e.Id_producto) }, { $set: {stock: nuevoStock.toString() }})                                
-                            }else{
+                                await db.collection("Productos_Venta").findOneAndUpdate({ _id: new ObjectId(e.Id_producto) }, { $set: { stock: nuevoStock.toString() } })
+                            } else {
                                 throw new ApolloError("Ha ocurrido un error al recuperar los productos del pedido");
                             }
                         })
