@@ -24,7 +24,7 @@ function Inicio() {
           ))}
         </div>
         <img
-          className="self-center mt-10"
+          className="self-center mt-10 rounded-full shadow-2xl"
           src={fotoInicio1}
         ></img>
       </div>
@@ -32,7 +32,7 @@ function Inicio() {
       {/* Datos del array de dataInicio2 */}
       <div className="grid grid-cols-2 mb-20 mr-40 ml-40">
         <img
-          className="self-center mt-20"
+          className="self-center mt-20 rounded-full shadow-2xl"
           src={fotoInicio2}
         ></img>
         <div className="text-2xl flex flex-col p-10">
