@@ -44,7 +44,9 @@ function FormularioContacto(props) {
     <div className="flex justify-center">
       {/* form que utiliza EmailJs para recoger los datos y enviarlos en el correo */}
       <form ref={form} onSubmit={sendEmail} className="flex flex-col mt-8 w-96">
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Nombre</label>
+      <h1 className="flex justify-center text-3xl mt-20 mb-10 font-PTserif underline">¿Tienes alguna Pregunta?</h1>
+
+        <label className="flex justify-center font-bold mb-2 font-PTserif">Nombre</label>
         <input
           type="text"
           name="user_name"
@@ -52,7 +54,7 @@ function FormularioContacto(props) {
           onChange={(e) => setNombre(e.target.value)}
           className="shadow appearance-none border rounded p-2 mb-10"
         />
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Correo</label>
+        <label className="flex justify-center font-bold mb-2 font-PTserif">Correo</label>
         <input
           type="email"
           name="user_email"
@@ -60,9 +62,9 @@ function FormularioContacto(props) {
           onChange={(e) => setEmail(e.target.value)}
           className="shadow appearance-none border rounded p-2 mb-10"
         />
-        <label className="flex justify-center text-white  font-bold mb-2 font-mono">Mensaje</label>
+        <label className="flex justify-center font-bold mb-2 font-PTserif">Mensaje</label>
         <textarea name="message" className="shadow appearance-none border rounded p-2 mb-10" value={texto} onChange={(e) => setTexto(e.target.value)}/>
-        <Input type="submit" value="Enviar" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12" />
+        <Input type="submit" value="Enviar" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded  mb-12 font-PTserif" />
       </form>
     </div>
   );

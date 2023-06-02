@@ -89,7 +89,6 @@ function ForgotPassword2() {
       setNoHayCodigo(false);
       setErrorCaptcha(false);
     } else if (codigo == "") {
-      console.log("hols");
       setNoHayCodigo(true);
       setErrorPasswordNoCoinciden(false);
       setNoHayPassword(false);
@@ -127,7 +126,7 @@ function ForgotPassword2() {
   }
 
   return (
-    <div className="mt-36 mb-60">
+    <div className="mt-36 mb-72">
       {/* Form para introducir los datos */}
       <form
         onSubmit={(event) => {
@@ -173,12 +172,12 @@ function ForgotPassword2() {
         </div>
 
         {noHayPassword && (
-          <p className="text-red-500 text-xs italic flex justify-center">
+          <p className="text-red-700 text-xs italic flex justify-center">
             Porfavor, elija una contraseña
           </p>
         )}
         {errorPassword && (
-          <p className="text-red-500 text-xs italic flex justify-center">
+          <p className="text-red-700 text-xs italic flex justify-center">
             Mínimo 8 caracteres y al menos una letra mayúscula, una minúscula y un número
           </p>
         )}
@@ -190,7 +189,7 @@ function ForgotPassword2() {
           <input
             className={
               errorPasswordNoCoinciden
-                ? "shadow appearance-none border rounded p-2 border-red-500"
+                ? "shadow appearance-none border rounded p-2 border-red-700"
                 : "shadow appearance-none border rounded p-2"
             }
             placeholder="******************"
@@ -212,7 +211,7 @@ function ForgotPassword2() {
         </div>
 
         {errorPasswordNoCoinciden && (
-          <p className="text-red-500 text-xs italic flex justify-center mb-3">
+          <p className="text-red-700 text-xs italic flex justify-center mb-3">
             Las contraseñas no coinciden
           </p>
         )}
@@ -232,19 +231,19 @@ function ForgotPassword2() {
             onChange={(e) => setCodigo(e.target.value)}
             type="text"
             name="codigo"
-            maxLength={4}
+            maxLength={6}
             autoComplete="off"
           ></input>
         </div>
 
         {noHayCodigo && (
-          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+          <p className="text-red-700 text-xs italic mt-3 flex justify-center">
             Porfavor, introduzca el código de recuperción
           </p>
         )}
 
         {errorCodigo && (
-          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+          <p className="text-red-700 text-xs italic mt-3 flex justify-center">
             Porfavor, introduzca el código de recuperción válido
           </p>
         )}
@@ -257,7 +256,7 @@ function ForgotPassword2() {
         </div>
 
         {errorCaptcha && (
-          <p className="text-red-500 text-xs italic mt-3 flex justify-center">
+          <p className="text-red-700 text-xs italic mt-3 flex justify-center">
             Porfavor, marque la casilla
           </p>
         )}

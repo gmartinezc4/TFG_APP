@@ -126,7 +126,7 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewInicio
-                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      ? "text-yellow-500 rounded m-3 p-1 underline"
                       : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
@@ -153,7 +153,7 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewOrigen
-                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      ? "text-yellow-500 rounded m-3 p-1 underline"
                       : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
@@ -180,7 +180,7 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewMaderas
-                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      ? "text-yellow-500 rounded m-3 p-1 underline"
                       : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
@@ -207,7 +207,7 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewContacto
-                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      ? "text-yellow-500 rounded m-3 p-1 underline"
                       : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
@@ -234,7 +234,7 @@ function ContenedorMaderas() {
                   }}
                   className={
                     viewProductos
-                      ? "text-yellow-500 rounded m-3 p-1 text-decoration-line: underline"
+                      ? "text-yellow-500 rounded m-3 p-1 underline"
                       : "hover:text-yellow-300 m-3 p-1"
                   }
                 >
