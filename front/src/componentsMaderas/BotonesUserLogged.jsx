@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Context } from "../context/Context";
 import Swal from "sweetalert2";
+import carrito from "../assets/carrito.png"
+import fotoPerfil from '../assets/fotoPerfil.png'
 
 const LOG_OUT = gql`
   mutation Mutation {
@@ -106,10 +108,10 @@ function BotonesUserLogged() {
       {token && (
         <div className="flex justify-end -mt-10 text-white font-bold mr-8">
           {/* carrito */}
-          <div>
-            <button
-              type="button"
-              className="bg-[url('/home/guillermo/App_TFG/front/src/assets/carrito.png')] bg-no-repeat bg-cover h-12 w-16 p-2 mr-3 hover:opacity-80"
+          <div className="flex flex-row">
+            <img
+              className="h-14 w-14 p-2 mr-3 hover:opacity-80 hover:cursor-pointer"
+              src={carrito}
               onClick={() => {
                 changeViewShoppingCart(true),
                   changeViewProductos(false),
@@ -123,10 +125,11 @@ function BotonesUserLogged() {
                   changeViewPerfil(false);
                 changeErrorFalse(false);
               }}
-            ></button>
+            ></img>
+ 
             {data.getProductosCarritoUser.length != 0 && (
-              <span className="-ml-3 mr-4 bg-yellow-500 rounded-full  px-3 py-2">
-                <span className="">{data.getProductosCarritoUser.length}</span>
+              <span className="rounded-full bg-yellow-500 w-8 h-8 content-center mt-9 -ml-5">
+                <span className="flex justify-center mt-1">{data.getProductosCarritoUser.length}</span>
               </span>
             )}
           </div>
@@ -134,14 +137,14 @@ function BotonesUserLogged() {
           {/* perfil */}
           <div className="relative inline-block text-left">
             <div>
-              <button
-                type="button"
-                className="bg-[url('/home/guillermo/App_TFG/front/src/assets/fotoPerfil.png')] bg-no-repeat bg-cover h-12 w-16 hover:opacity-80"
+              <img
+                className="h-16 w-20 p-2 mr-3 hover:opacity-80 hover:cursor-pointer "
+                src={fotoPerfil}
                 id="menu-button-perfil"
                 aria-expanded="true"
                 aria-haspopup="true"
                 onClick={() => setOpenSubMenuPerfil(!OpenSubMenuPerfil)}
-              ></button>
+              ></img>
             </div>
 
             {OpenSubMenuPerfil && (

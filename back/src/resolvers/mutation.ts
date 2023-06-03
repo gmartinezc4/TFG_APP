@@ -3,9 +3,9 @@ import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
-import correoRegistroAdmin from '/home/guillermo/App_TFG/back/data/htmlCorreos'
+import correoRegistroAdmin from '../../data/htmlCorreos'
 
-export function calcularFechaEntrega() {
+function calcularFechaEntrega() {
     const fecha = new Date();
 
     if ((fecha.getMonth() + 1) == 1 || (fecha.getMonth() + 1) == 3 || (fecha.getMonth() + 1) == 5 ||
@@ -82,6 +82,8 @@ export const Mutation = {
 
                 const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
                 const fechaRecogida = calcularFechaEntrega();
+
+                console.log(fecha.getFullYear(), (fecha.getMonth() + 1))
 
                 const carritoUser = await db.collection("Carritos").find({ Id_user: user._id.toString() }).toArray();
                 if (carritoUser.length > 0) {
@@ -464,15 +466,7 @@ export const Mutation = {
     forgotPassword: async (parent: any, args: { email: string }, context: { db: Db }) => {
         const db = context.db;
         const email = args.email;
-        let codigo = "";
-        
-        const banco = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        for (let i = 0; i < 6; i++) {
-            // Lee más sobre la elección del índice aleatorio en:
-            // https://parzibyte.me/blog/2021/11/30/elemento-aleatorio-arreglo-javascript/
-            codigo += banco.charAt(Math.floor(Math.random() * banco.length));
-        }
+        const codigo = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
 
         try {
             const user = await db.collection("Usuarios").findOne({ Email: email });
@@ -581,31 +575,15 @@ export const Mutation = {
                     throw new ApolloError("ID invalido");
                 } else {
                     let pedidoUserCambiado: any;
-                    let stockProductoBorrado: any;
                     const fecha = new Date();
                     const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear())
 
                     const pedidoUser = await db.collection(bbdd).findOne({ _id: new ObjectId(id_pedido) });
 
                     if (pedidoUser) {
-
-                        pedidoUser.Productos.map(async (e: any) => {
-                            stockProductoBorrado = e.Cantidad;
-                            const producto = await db.collection("Productos_Venta").findOne({ _id: new ObjectId(e.Id_producto) });
-
-                            if (producto) {
-                                console.log(stockProductoBorrado)
-                                const nuevoStock = parseInt(producto.stock) + parseInt(stockProductoBorrado);
-                                await db.collection("Productos_Venta").findOneAndUpdate({ _id: new ObjectId(e.Id_producto) }, { $set: { stock: nuevoStock.toString() } })
-                            } else {
-                                throw new ApolloError("Ha ocurrido un error al recuperar los productos del pedido");
-                            }
-                        })
-
                         pedidoUserCambiado = pedidoUser;
                         await db.collection("Pedidos_Cancelados").insertOne({ Id_user: pedidoUser.Id_user.toString(), Estado: "Cancelado", Nombre: pedidoUser.Nombre, Apellido: pedidoUser.Apellido, Email: pedidoUser.Email, Telefono: pedidoUser.Telefono, Direccion: pedidoUser.Direccion, MasInformacion: pedidoUser.MasInformacion, CodigoPostal: pedidoUser.CodigoPostal, Ciudad: pedidoUser.Ciudad, Pais: pedidoUser.Pais, FechaPedido: pedidoUser.FechaPedido, FechaRecogida: fechaHoy, ImportePedido: pedidoUser.ImportePedido, ImporteFreeIvaPedido: pedidoUser.ImporteFreeIvaPedido, Productos: pedidoUser.Productos });
                         await db.collection(bbdd).findOneAndDelete({ _id: new ObjectId(id_pedido) });
-
                     } else {
                         throw new ApolloError("Ha ocurrido un error al recuperar el pedido");
                     }

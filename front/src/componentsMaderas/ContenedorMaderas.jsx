@@ -19,6 +19,7 @@ import ForgotPassword from "./ForgotPassword";
 import ForgotPassword2 from "./ForgotPassword2";
 import PaginasErrores from "./PaginasErrores";
 import styled from "styled-components";
+import logo_header from '../assets/logo_header.png'
 
 
 
@@ -84,7 +85,7 @@ function ContenedorMaderas() {
           {/* Cabecera con logo y botones */}
           <div>
             <div className="flex justify-between text-white font-bold border-b-2 border-white p-5 mb-20">
-              <button
+              <img
                 onClick={() => {
                   changeViewInicio(true),
                     changeViewOrigen(false),
@@ -102,8 +103,9 @@ function ContenedorMaderas() {
                   changeViewRecuperarPass2(false);
                   changeErrorFalse(false);
                 }}
-                className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"
-              ></button>
+                className="h-16 w-16 hover:cursor-pointer"
+                src={logo_header}
+              ></img>
 
               <div>
                 <button
