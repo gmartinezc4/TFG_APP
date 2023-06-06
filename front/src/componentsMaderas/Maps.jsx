@@ -12,7 +12,7 @@ function Maps() {
   //
   const aserraderoMaps = () => {
     window.open(
-      "https://www.google.com/maps/place/Casa+de+Moya,+16740+La+Almarcha,+Cuenca/@39.6835612,-2.4447486,17z/data=!3m1!4b1!4m6!3m5!1s0xd67e1c0d0129313:0x3118d5409dc9a973!8m2!3d39.6835612!4d-2.4425599!16s%2Fg%2F11_q_47nx",
+      "https://www.google.com/maps/place/Finca+la+Muela/@39.6835612,-2.4425599,17z/data=!4m15!1m8!3m7!1s0xd67e1c0d0129313:0x3118d5409dc9a973!2sCasa+de+Moya,+16740+La+Almarcha,+Cuenca!3b1!8m2!3d39.6835612!4d-2.4425599!16s%2Fg%2F11_q_47nx!3m5!1s0xd67e1eccb627cd7:0x627e991bf8ab8d!8m2!3d39.6835612!4d-2.4425599!16s%2Fg%2F11v0grch4_?entry=ttu",
       "_blank"
     );
   };

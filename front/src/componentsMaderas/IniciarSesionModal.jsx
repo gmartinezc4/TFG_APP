@@ -245,7 +245,7 @@ function IniciarSesionModal(props) {
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Submit
+              Enviar
             </button>
             <a
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"

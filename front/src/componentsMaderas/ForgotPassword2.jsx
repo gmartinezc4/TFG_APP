@@ -161,13 +161,13 @@ function ForgotPassword2() {
             }}
           ></input>
           <div
-            className="shadow appearance-none border rounded p-3 bg-green-300 hover:bg-green-500"
+            className="shadow appearance-none border rounded p-3 bg-black hover:bg-yellow-500"
             onClick={() => {
               setPassView(!passView);
             }}
           >
-            {passView && <AiFillEye />}
-            {!passView && <AiFillEyeInvisible />}
+            {passView && <AiFillEye className="text-white"/>}
+            {!passView && <AiFillEyeInvisible className="text-white"/>}
           </div>
         </div>
 
@@ -200,13 +200,13 @@ function ForgotPassword2() {
             autoComplete="off"
           ></input>
           <div
-            className="shadow appearance-none border rounded p-3 bg-green-300 hover:bg-green-500"
+            className="shadow appearance-none border rounded p-3 bg-black hover:bg-yellow-500"
             onClick={() => {
               setRepPassView(!repPassView);
             }}
           >
-            {repPassView && <AiFillEye />}
-            {!repPassView && <AiFillEyeInvisible />}
+            {repPassView && <AiFillEye className="text-white"/>}
+            {!repPassView && <AiFillEyeInvisible className="text-white"/>}
           </div>
         </div>
 
@@ -263,10 +263,10 @@ function ForgotPassword2() {
 
         <div className="flex justify-center mt-5">
           <button
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
+            className="bg-black hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
             type="submit"
           >
-            Submit
+            Enviar
           </button>
         </div>
       </form>

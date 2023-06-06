@@ -19,7 +19,7 @@ function Origen() {
           </div>
         ))}
       </div>
-      <div className="text-2xl flex flex-col p-10 mb-44">
+      <div className="text-2xl flex flex-col p-10 mb-64">
         {dataOrigen.map((d) => (
           <div key={d.id} className="flex flex-col ml-40 mr-40 text-justify">
             <h1 className="mb-8 text-4xl font-bold flex justify-center">

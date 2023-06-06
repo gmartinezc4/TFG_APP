@@ -104,10 +104,10 @@ function ForgotPassword() {
         )}
         <div className="flex justify-center mt-5">
           <button
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-9"
+            className="bg-black hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-9"
             type="submit"
           >
-            Submit
+            Enviar
           </button>
         </div>
       </form>
