@@ -3,7 +3,7 @@ import { Db, ObjectId } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
-import correoRegistroAdmin from '/home/guillermo/App_TFG/back/data/htmlCorreos'
+import correoRegistroAdmin from '../../data/htmlCorreos'
 
 export function calcularFechaEntrega() {
     const fecha = new Date();
