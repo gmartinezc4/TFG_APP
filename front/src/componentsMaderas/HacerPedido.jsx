@@ -1,5 +1,5 @@
-import React, { useContext, useState, useRef } from "react";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import React, { useContext, useState } from "react";
+import { gql, useMutation } from "@apollo/client";
 import { Context } from "../context/Context";
 import { FaCcVisa, FaCcMastercard } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";

@@ -12,7 +12,7 @@ import styled from "styled-components";
 function BotonesUserNotLogged() {
   const [modalIsOpenRegistro, setIsOpenRegistro] = useState(false);
   const [modalIsOpenInicioSesion, setIsOpenInicioSesion] = useState(false);
-
+  
   //
   // * Funciones encargadas de abrir y cerrar los
   // * modales de inicio de sesión y registro.

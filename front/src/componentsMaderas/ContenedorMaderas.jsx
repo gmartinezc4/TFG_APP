@@ -31,7 +31,6 @@ function ContenedorMaderas() {
     uri: "http://localhost:4000/",
     cache: new InMemoryCache(),
   });
-  //localStorage.removeItem("token");
 
   // Variables del contexto usadas
   const {
@@ -73,6 +72,7 @@ function ContenedorMaderas() {
     mensajeError,
   } = useContext(Context);
 
+
   return (
     <ApolloProvider client={client}>
       {/* Mostrar los errores */}
@@ -102,7 +102,7 @@ function ContenedorMaderas() {
                   changeViewRecuperarPass2(false);
                   changeErrorFalse(false);
                 }}
-                className="bg-[url('/home/guillermo/App_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"
+                className="bg-[url('/home/guillermo/APP_TFG/front/src/assets/logo.png')] bg-no-repeat bg-cover h-36 w-36 -m-10"
               ></button>
 
               <div>
