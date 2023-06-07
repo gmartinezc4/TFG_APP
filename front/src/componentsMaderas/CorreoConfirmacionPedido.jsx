@@ -59,7 +59,12 @@ function CorreoConfirmacionPedido() {
   });
 
   if (loading) return <div></div>;
-  if (error) return <div>{console.log(error)}</div>;
+  if (error) return (
+    <div>
+      {changeErrorTrue()} {changeCodigoError(404)}
+      {changeMensajeError(error.message)}
+    </div>
+  );
 
   //
   // * Función que envia el email de confirmación al gmail de la empresa.

@@ -32,7 +32,7 @@ function Maps() {
       {/* Mapa aserradero */}
       <div className="mr-10 -mt-16 text-white">
         <div className="flex flex-col font-mono ">
-          <h1 className="flex justify-center m-3 text-xl">A S E R A D E R O</h1>
+          <h1 className="flex justify-center m-3 text-xl">A S E R R A D E R O</h1>
           <p className="flex justify-center m-3 text-2xl">626105849</p>
           <p className="flex justify-center m-3 text-2xl">
             maderas.cobo.cuenca@gmail.com

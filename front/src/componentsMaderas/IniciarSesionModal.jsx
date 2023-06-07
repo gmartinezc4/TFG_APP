@@ -202,7 +202,7 @@ function IniciarSesionModal(props) {
           ></input>
           {noHayCorreo && (
             <p className="text-red-500 text-xs italic mt-3">
-              Porfavor introduzca un correo electrónico
+              por favor introduzca un correo electrónico
             </p>
           )}
 
@@ -236,7 +236,7 @@ function IniciarSesionModal(props) {
 
           {noHayPassword && (
             <p className="text-red-500 text-xs italic mt-3">
-              Porfavor introduzca una contraseña
+              por favor introduzca una contraseña
             </p>
           )}
 
