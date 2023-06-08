@@ -338,8 +338,7 @@ function RegistrarseModal(props) {
               autoComplete="off"
               pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$"
               onInvalid={() => {
-                setErrorPassword(true),
-                comprobarUser()
+                setErrorPassword(true)
               }}
             ></input>
             <div
