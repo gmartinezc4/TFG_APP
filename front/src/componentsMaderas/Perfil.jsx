@@ -122,7 +122,7 @@ function Perfil() {
 
   //
   // * Funciones encargadas de abrir y cerrar los
-  // * modales de inicio de sesión y registro.
+  // * modales para modificar los dartos del usuario.
   //
   function openModalNombreApellido() {
     setIsOpenNombreApellido(true);
@@ -312,7 +312,7 @@ function Perfil() {
             contraseña
           </span>
 
-          <div className="grid grid-rows-1 grid-flow-col text-white">
+          <div className="grid grid-flow-col text-white">
             {/* Columna izquierda, datos */}
             <div>
               <div className="mt-10 flex flex-row">

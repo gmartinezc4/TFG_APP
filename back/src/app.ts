@@ -6,7 +6,8 @@ import { Mutation } from "./resolvers/mutation"
 
 
 //
-// * Clase principal. Inicializa ApolloServer
+// * Clase principal. 
+// * Inicializa ApolloServer.
 //
 
 const resolvers = {
