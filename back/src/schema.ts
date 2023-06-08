@@ -2,7 +2,8 @@ import {gql} from "apollo-server"
 
 
 //
-// * Esquema usado por la app. Tipos de datos, querys y mutations.
+// * Esquema usado por la app. 
+// * Tipos de datos, querys y mutations.
 //
 export const typeDefs = gql`
     type Maderas {

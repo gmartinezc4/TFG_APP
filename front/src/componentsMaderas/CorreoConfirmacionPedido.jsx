@@ -67,7 +67,7 @@ function CorreoConfirmacionPedido() {
   );
 
   //
-  // * Función que envia el email de confirmación al gmail de la empresa.
+  // * Función que envia el email de confirmación al email del usuario.
   //
   const sendEmail = () => {
     emailjs
