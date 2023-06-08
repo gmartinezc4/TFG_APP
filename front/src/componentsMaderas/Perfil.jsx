@@ -234,13 +234,31 @@ function Perfil() {
         <Cargando />
       </div>
     );
-  if (errorGetUser || errorGetPedidosActivos || errorGetPedidosPendientes)
+  if (errorGetUser)
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
+        {changeMensajeError(errorGetUser.message)}
       </div>
     );
+
+    if(errorGetPedidosActivos) {
+      return (
+        <div>
+          {changeErrorTrue()} {changeCodigoError(404)}
+          {changeMensajeError(errorGetPedidosActivos.message)}
+        </div>
+      );
+    }
+
+    if(errorGetPedidosPendientes){
+      return (
+        <div>
+          {changeErrorTrue()} {changeCodigoError(404)}
+          {changeMensajeError(errorGetPedidosPendientes.message)}
+        </div>
+      );
+    }
 
   //
   // * Función que muestra la confirmación de elimnar el perfil.

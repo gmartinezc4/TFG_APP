@@ -52,7 +52,7 @@ function ProductosVenta() {
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
+        {changeMensajeError(error.message)}
       </div>
     );
 

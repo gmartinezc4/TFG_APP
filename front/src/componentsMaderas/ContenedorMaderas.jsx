@@ -72,6 +72,7 @@ function ContenedorMaderas() {
     mensajeError,
   } = useContext(Context);
 
+
   return (
     <ApolloProvider client={client}>
       {/* Mostrar los errores */}

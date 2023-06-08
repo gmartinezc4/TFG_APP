@@ -67,9 +67,7 @@ function BotonesUserLogged() {
       changeReload();
     },
     onError: (error) => {
-      //si hay un error, borrar el token
       console.log(error);
-      localStorage.removeItem("token");
       changeReload();
     },
   });
@@ -88,7 +86,7 @@ function BotonesUserLogged() {
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
+        {changeMensajeError(error.message)}
       </div>
     );
 

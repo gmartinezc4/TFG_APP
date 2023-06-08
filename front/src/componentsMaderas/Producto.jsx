@@ -118,7 +118,12 @@ function Producto(props) {
       </div>
     );
   if (errorProd)
-    return console.log(errorProd);
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError(errorProd.message)}
+      </div>
+    );
 
   if (dataProductosCarrito) {
     cantidadProdCarrito = dataProductosCarrito.getProductoCarritoUser.cantidad;
