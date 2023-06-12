@@ -5,7 +5,11 @@ const bcrypt = require('bcrypt');
 var nodemailer = require('nodemailer');
 import correoRegistroAdmin from '../../data/htmlCorreos'
 
-function calcularFechaEntrega() {
+
+//
+// ** Función para calcula la fecha de recogida del pedido
+//
+export function calcularFechaRecogida() {
     const fecha = new Date();
 
     if ((fecha.getMonth() + 1) == 1 || (fecha.getMonth() + 1) == 3 || (fecha.getMonth() + 1) == 5 ||
@@ -68,6 +72,9 @@ function calcularFechaEntrega() {
     }
 }
 
+//
+// * Mutations de la apliación
+//
 export const Mutation = {
     venderProductos: async (parent: any, args: { nombre: string, apellido: string, correo: string, telefono: string, direccion: string, masInformacion: string, codigoPostal: string, ciudad: string, pais: String }, context: { db: Db, user: any }) => {
         const { db, user } = context;
@@ -81,7 +88,7 @@ export const Mutation = {
             if (user) {
 
                 const fechaHoy = (fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear()).toString()
-                const fechaRecogida = calcularFechaEntrega();
+                const fechaRecogida = calcularFechaRecogida();
 
                 console.log(fecha.getFullYear(), (fecha.getMonth() + 1))
 

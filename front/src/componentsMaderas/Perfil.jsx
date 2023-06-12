@@ -122,7 +122,7 @@ function Perfil() {
 
   //
   // * Funciones encargadas de abrir y cerrar los
-  // * modales de inicio de sesión y registro.
+  // * modales para modificar los dartos del usuario.
   //
   function openModalNombreApellido() {
     setIsOpenNombreApellido(true);
@@ -234,13 +234,31 @@ function Perfil() {
         <Cargando />
       </div>
     );
-  if (errorGetUser || errorGetPedidosActivos || errorGetPedidosPendientes)
+  if (errorGetUser)
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
+        {changeMensajeError(errorGetUser.message)}
       </div>
     );
+
+    if(errorGetPedidosActivos) {
+      return (
+        <div>
+          {changeErrorTrue()} {changeCodigoError(404)}
+          {changeMensajeError(errorGetPedidosActivos.message)}
+        </div>
+      );
+    }
+
+    if(errorGetPedidosPendientes){
+      return (
+        <div>
+          {changeErrorTrue()} {changeCodigoError(404)}
+          {changeMensajeError(errorGetPedidosPendientes.message)}
+        </div>
+      );
+    }
 
   //
   // * Función que muestra la confirmación de elimnar el perfil.
@@ -294,7 +312,7 @@ function Perfil() {
             contraseña
           </span>
 
-          <div className="grid grid-rows-1 grid-flow-col text-white">
+          <div className="grid grid-flow-col text-white">
             {/* Columna izquierda, datos */}
             <div>
               <div className="mt-10 flex flex-row">
@@ -305,7 +323,7 @@ function Perfil() {
                     <span className="text-black font-PTserif">{dataGetUser.getUser.nombre}</span>
                   </p>
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1 font-PTserif">Apellido</span>
+                    <span className="font-bold mb-1 font-PTserif">Apellidos</span>
                     <span className="text-black font-PTserif">{dataGetUser.getUser.apellido}</span>
                   </p>
                 </div>

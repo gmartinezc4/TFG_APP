@@ -67,9 +67,7 @@ function BotonesUserLogged() {
       changeReload();
     },
     onError: (error) => {
-      //si hay un error, borrar el token
       console.log(error);
-      localStorage.removeItem("token");
       changeReload();
     },
   });
@@ -88,7 +86,7 @@ function BotonesUserLogged() {
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
+        {changeMensajeError(error.message)}
       </div>
     );
 
@@ -110,7 +108,7 @@ function BotonesUserLogged() {
           {/* carrito */}
           <div className="flex flex-row">
             <img
-              className="h-14 w-14 p-2 mr-3 hover:opacity-80 hover:cursor-pointer"
+              className="h-14 w-14 p-2 mr-3 mt-1 hover:opacity-80 hover:cursor-pointer"
               src={carrito}
               onClick={() => {
                 changeViewShoppingCart(true),
@@ -126,10 +124,13 @@ function BotonesUserLogged() {
                 changeErrorFalse(false);
               }}
             ></img>
- 
+
+
             {data.getProductosCarritoUser.length != 0 && (
               <span className="rounded-full bg-yellow-500 w-8 h-8 content-center mt-9 -ml-5">
-                <span className="flex justify-center mt-1">{data.getProductosCarritoUser.length}</span>
+                <span className="flex justify-center mt-1">
+                  {data.getProductosCarritoUser.length}
+                </span>
               </span>
             )}
           </div>

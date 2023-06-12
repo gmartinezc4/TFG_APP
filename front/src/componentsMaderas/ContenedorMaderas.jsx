@@ -22,7 +22,6 @@ import styled from "styled-components";
 import logo_header from '../assets/logo_header.png'
 
 
-
 //
 // * Componente contenedor de todos los demás componentes.
 // * Dede aqui se renderiazan los demás componentes de la web.
@@ -32,7 +31,6 @@ function ContenedorMaderas() {
     uri: "http://localhost:4000/",
     cache: new InMemoryCache(),
   });
-  //localStorage.removeItem("token");
 
   // Variables del contexto usadas
   const {
@@ -74,6 +72,7 @@ function ContenedorMaderas() {
     mensajeError,
   } = useContext(Context);
 
+
   return (
     <ApolloProvider client={client}>
       {/* Mostrar los errores */}
@@ -85,7 +84,8 @@ function ContenedorMaderas() {
           {/* Cabecera con logo y botones */}
           <div>
             <div className="flex justify-between text-white font-bold border-b-2 border-white p-5 mb-20">
-              <img
+
+            <img
                 onClick={() => {
                   changeViewInicio(true),
                     changeViewOrigen(false),

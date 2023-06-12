@@ -304,7 +304,7 @@ function RegistrarseModal(props) {
             onChange={(e) => setCorreo(e.target.value)}
             type="text"
             name="correo"
-            pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"
+            pattern="^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,4}(\.[a-zA-Z]{2})?$"
             onInvalid={() => {
               setErrorCorreoIncompleto(true);
             }}
@@ -338,8 +338,7 @@ function RegistrarseModal(props) {
               autoComplete="off"
               pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{7,16}$"
               onInvalid={() => {
-                setErrorPassword(true),
-                comprobarUser()
+                setErrorPassword(true)
               }}
             ></input>
             <div

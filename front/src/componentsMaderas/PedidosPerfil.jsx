@@ -272,16 +272,50 @@ function PedidosPerfil() {
     },
   });
 
-  if (loadingRecogidos || loadingPendientes || loadingPendientes || loadingCancelados)
+  if (
+    loadingRecogidos ||
+    loadingActivos ||
+    loadingPendientes ||
+    loadingPendientes ||
+    loadingCancelados
+  )
     return (
       <div className="mb-96">
         <Cargando />
       </div>
     );
-  if (errorRecogidos) return console.log(errorRecogidos);
-  if (errorActivos) return console.log(errorActivos);
-  if (errorPendientes) return console.log(errorPendientes);
-  if (errorCancelados) return console.log(errorCancelados);
+    
+  if (errorRecogidos)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError(errorRecogidos.message)}
+      </div>
+    );
+
+  if (errorActivos)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError(errorActivos.message)}
+      </div>
+    );
+
+  if (errorPendientes)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError(errorPendientes.message)}
+      </div>
+    );
+
+  if (errorCancelados)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError(errorCancelados.message)}
+      </div>
+    );
 
   //
   // * Función que muestra la confirmación de elimnar el pedido.
@@ -333,7 +367,7 @@ function PedidosPerfil() {
                     changeViewProductos(true), changeViewPedidosPerfil(false);
                   }}
                 >
-                  Ver Productos
+                  Ir a la tienda
                 </button>
               </div>
             </div>

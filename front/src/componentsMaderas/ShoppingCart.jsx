@@ -7,7 +7,6 @@ import CorreoConfirmacionPedido from "./CorreoConfirmacionPedido";
 import styled from "styled-components";
 import Cargando from "./Cargando";
 
-
 const GET_PRODUCTOS_CARRITO_USER = gql`
   query GetProductosCarritoUser {
     getProductosCarritoUser {
@@ -41,10 +40,10 @@ const DELETE_PRODUCTO_CARRITO = gql`
   }
 `;
 
-// 
+//
 // * Componente página ShoppingCart.
 // * Renderiza el componente <CorreoConfirmacionPedido />
-// 
+//
 function ShoppingCart() {
   // Varables del contexto usadas
   const {
@@ -73,7 +72,6 @@ function ShoppingCart() {
       "_blank"
     );
   };
-
 
   //
   // * Mutation para eliminar un producto al carrito del usuario.
@@ -118,19 +116,27 @@ function ShoppingCart() {
     },
   });
 
-  if (loadingGetProductos) return <div className="mb-96">
-    <Cargando />
-  </div>;
+  if (loadingGetProductos || loadingGetUser)
+    return (
+      <div className="mb-96">
+        <Cargando />
+      </div>
+    );
   if (errorGetPoductos)
     return (
       <div>
         {changeErrorTrue()} {changeCodigoError(404)}
-        {changeMensajeError("Not Found")}
+        {changeMensajeError(error.message)}
       </div>
     );
 
-  if (loadingGetUser) return <div></div>;
-  if (errorGetUser) return console.log(error);
+  if (errorGetUser)
+    return (
+      <div>
+        {changeErrorTrue()} {changeCodigoError(404)}
+        {changeMensajeError(errorGetUser.message)}
+      </div>
+    );
 
   //
   // * Añadir al localStorage estas variables, usadas en el
@@ -184,7 +190,7 @@ function ShoppingCart() {
                       changeViewProductSelect(false);
                     }}
                   >
-                    Volver a la tienda
+                    Ir a la tienda
                   </Button>
                 </div>
               </FondoPequeNoCarrito>
@@ -253,7 +259,10 @@ function ShoppingCart() {
                 <FondoPeque className="flex flex-col bg-white mt-5 p-5 ">
                   <span className="font-bold text-xl mb-7">Dirección de recogida</span>
                   <span>
-                    <a onClick={aserraderoMaps} className="hover:cursor-pointer underline">
+                    <a
+                      onClick={aserraderoMaps}
+                      className="hover:cursor-pointer underline"
+                    >
                       Casa de Moya, 16740 La Almarcha, Cuenca
                     </a>
                     <br></br> <br></br>
@@ -328,22 +337,21 @@ function ShoppingCart() {
 
 export default ShoppingCart;
 
-
 const FondoPequeNoCarrito = styled.div`
   background-color: #fef1c7;
-`
+`;
 
 const FondoGrandeNoCarrito = styled.div`
   background-color: #f5be0b;
-`
+`;
 
 const FondoGrande = styled.div`
-  background-color: #E0E2E5;
-`
+  background-color: #e0e2e5;
+`;
 
 const FondoPeque = styled.div`
   background-color: #f5f5f4;
-`
+`;
 
 const Button = styled.button`
   background: #f5be0b;
@@ -352,7 +360,7 @@ const Button = styled.button`
     background-color: #fef1c7;
     color: black;
     border-color: black;
-   border-width: 1px;
-   border-style: solid;
+    border-width: 1px;
+    border-style: solid;
   }
-`
+`;

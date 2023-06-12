@@ -1,4 +1,4 @@
-import { calcularFechaEntrega } from '../src/resolvers/mutation';
+import { calcularFechaRecogida } from '../src/resolvers/mutation';
 import { Mutation }  from '../src/resolvers/mutation';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
@@ -7,14 +7,14 @@ import { MongoClient, Db, Collection } from 'mongodb';
 import { connectDB } from '../src/connectmongo';
 
 
-describe('calcularFechaEntrega', () => {
+describe('calcularFechaRecogida', () => {
   it('debería devolver una fecha válida', () => {
     // Arrange
     // Se puede configurar cualquier fecha de prueba para el cálculo de entrega aquí
     const fechaPrueba = new Date('2023-06-01');
 
     // Act
-    const resultado = calcularFechaEntrega();
+    const resultado = calcularFechaRecogida();
 
     // Assert
     expect(resultado).to.be.a('string');

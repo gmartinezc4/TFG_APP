@@ -1,6 +1,10 @@
 import { ApolloError } from "apollo-server";
 import { Db, ObjectId } from "mongodb";
 
+
+//
+// * Querys de la apliación
+//
 export const Query = {
     getMaderas: async (parent: any, args: any, context: { db: Db }) => {
         const db = context.db;
