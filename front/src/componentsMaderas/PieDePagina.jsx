@@ -56,7 +56,7 @@ function PieDePagina() {
               changeViewRecuperarPass2(false);
             }}
           >
-            Conocenos
+            Conócenos
           </h1>
           <h1
             className="hover:underline cursor-pointer"

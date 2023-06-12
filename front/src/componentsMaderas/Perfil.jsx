@@ -323,7 +323,7 @@ function Perfil() {
                     <span className="text-black font-PTserif">{dataGetUser.getUser.nombre}</span>
                   </p>
                   <p className="flex flex-col">
-                    <span className="font-bold mb-1 font-PTserif">Apellido</span>
+                    <span className="font-bold mb-1 font-PTserif">Apellidos</span>
                     <span className="text-black font-PTserif">{dataGetUser.getUser.apellido}</span>
                   </p>
                 </div>
