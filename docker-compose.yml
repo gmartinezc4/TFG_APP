@@ -1,28 +1,40 @@
-version: '3'
+version: "3.6"
+
 services:
   mongodb:
     image: mongo:5
     command: mongod --logpath=/dev/null 
+    environment:
+      - MONGO_DATA_DIR=/data/db
+    volumes:
+      - ./data:/data/db
     ports: 
       - 27017:27017
 
   back:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+    image: node:16
+    volumes:
+      - type: bind
+        source: ./back
+        target: /usr/src
+    command: bash -c "cd /usr/src && npm run dev"
     environment:
-      - MONGO_URL=mongodb+srv://gmartinezc4:cristiano7@cluster0.ltpbs.mongodb.net/?retryWrites=true&w=majority 
+      - MONGO_URL=mongodb+srv://gmartinezc4:cristiano7@cluster0.ltpbs.mongodb.net/TFG?retryWrites=true&w=majority 
     depends_on:
       - mongodb
     ports:
-      - 6005:6005
+      - 6005:4000
 
   front:
-    build:
-      context: ./front
-      dockerfile: Dockerfile
+    image: node:16
     environment:
-      - REACT_APP_API_URL=http://back:6005
+      REACT_APP_API_URL: http://back:6005
+      PORT: 3000
+    command: bash -c "cd /usr/src && npm run dev"
+    volumes:
+      - type: bind
+        source: ./front
+        target: /usr/src
     depends_on:
       - back
     ports:
