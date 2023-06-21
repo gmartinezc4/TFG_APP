@@ -190,7 +190,7 @@ function ShoppingCart() {
                       changeViewProductSelect(false);
                     }}
                   >
-                    Volver a la tienda
+                    Ir a la tienda
                   </Button>
                 </div>
               </FondoPequeNoCarrito>

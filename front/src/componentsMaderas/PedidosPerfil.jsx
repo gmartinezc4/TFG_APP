@@ -272,7 +272,13 @@ function PedidosPerfil() {
     },
   });
 
-  if (loadingRecogidos || loadingPendientes || loadingPendientes || loadingCancelados)
+  if (
+    loadingRecogidos ||
+    loadingActivos ||
+    loadingPendientes ||
+    loadingPendientes ||
+    loadingCancelados
+  )
     return (
       <div className="mb-96">
         <Cargando />
@@ -361,7 +367,7 @@ function PedidosPerfil() {
                     changeViewProductos(true), changeViewPedidosPerfil(false);
                   }}
                 >
-                  Ver Productos
+                  Ir a la tienda
                 </button>
               </div>
             </div>
