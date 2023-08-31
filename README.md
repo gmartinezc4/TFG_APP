@@ -39,7 +39,7 @@ Esta aplicación está desarrollada para el trabajo de fin de curso del grado de
 
 En caso de tener un error persistente que no se arregle al recargar la página el usuario deberá: 
 
-1. Dirigirse al la clase "Contenedor", y pegar la siguiente línea de código:
+1. Dirigirse al la clase "ContenedorMaderas", y pegar la siguiente línea de código:
 
    ```
     localStorage.removeItem("token");
