@@ -11,21 +11,11 @@ function Origen() {
       {/* Datos del array de dataOrigen */}
       <div className="text-2xl flex flex-col p-10">
         {dataOrigen.map((d) => (
-          <div key={d.id} className="flex  flex-col ml-40 mr-40 text-justify">
-            <h1 className="mb-8 text-4xl font-bold flex justify-center">
-              {d.title}
-            </h1>
-            <p className="font-quicksand ">{d.description}</p>
-          </div>
-        ))}
-      </div>
-      <div className="text-2xl flex flex-col p-10 mb-44">
-        {dataOrigen.map((d) => (
           <div key={d.id} className="flex flex-col ml-40 mr-40 text-justify">
-            <h1 className="mb-8 text-4xl font-bold flex justify-center">
+            <h1 className="mb-16 text-4xl font-bold flex justify-center">
               {d.title}
             </h1>
-            <p className="font-quicksand ">{d.description}</p>
+            <p className="font-quicksand mb-10 ">{d.description}</p>
           </div>
         ))}
       </div>
